@@ -33,13 +33,13 @@ async function refreshEisbach(){
   const when=new Date(d.observed_at);
   const age=(Date.now()-when.getTime())/3600000;
   if(!Number.isFinite(age)||age < -2||age>6){el.textContent='Keine aktuellen Messwerte verfügbar · letzte Messung: '+d.observed_at_label;return;}
-  el.innerHTML=`Wasserstand: <b>${d.water_level_cm} cm</b>${typeof d.discharge_m3s==='number'?` · Abfluss: <b>${d.discharge_m3s.toLocaleString('de-DE')} m³/s</b>`:''}<br>Messung: ${d.observed_at_label} · Quelle: HND/GKD Bayern`;
- }catch(e){el.textContent='Automatischer Pegelwert derzeit nicht verfügbar · offizielle Messwerte über den Link öffnen';}
+  el.innerHTML=`Wasserstand: <b>${d.water_level_cm} cm</b>${typeof d.discharge_m3s==='number'?` · Abfluss: <b>${d.discharge_m3s.toLocaleString('de-DE')} m³/s</b>`:''}<br>Messung: ${d.observed_at_label} · Quelle: GKD/HND Bayern`;
+ }catch(e){el.textContent='Noch kein aktueller Pegelwert geladen. Bitte GitHub Actions → Eisbach Pegel aktualisieren → Run workflow ausführen.';}
 }
 async function loadSpecialValues(){
  const set=(i,markup)=>{const el=$('special-'+i);if(el)el.innerHTML=markup};
- const hnd='https://www.hnd.bayern.de/pegel/donau_bis_kelheim/muenchen-himmelreichbruecke-16515005';
- set(0,`<strong>💧 Eisbach-Pegel</strong><a href="${hnd}" target="_blank" rel="noopener noreferrer">Offizielle HND-Messwerte ↗</a><small id="eisbach-reading" style="display:block;color:#8ea5bb">Himmelreichbrücke · Messwerte werden geladen …</small>`);
+ const hnd='https://www.gkd.bayern.de/de/fluesse/wasserstand/kelheim/muenchen-himmelreichbruecke-16515005/messwerte';
+ set(0,`<strong>💧 Eisbach-Pegel</strong><a href="${hnd}" target="_blank" rel="noopener noreferrer">GKD-Messstelle öffnen ↗</a><small id="eisbach-reading" style="display:block;color:#8ea5bb">Himmelreichbrücke · Messwerte werden geladen …</small>`);
  for(const entry of [{i:1,lat:44.17,lon:9.61},{i:2,lat:43.43,lon:-4.04}]){
   try{const r=await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${entry.lat}&longitude=${entry.lon}&current=wave_height&timezone=auto&cell_selection=sea`,{cache:'no-store'});if(!r.ok)throw Error();const d=await r.json();const wave=d.current?.wave_height;
    if(typeof wave!=='number')throw Error();set(entry.i,`<strong>🌊 ${wave.toLocaleString('de-DE',{maximumFractionDigits:1})} m</strong><small style="display:block;color:#8ea5bb">Wellenhöhe · Modellprognose</small>`);
