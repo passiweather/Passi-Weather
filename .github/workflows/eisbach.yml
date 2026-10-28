@@ -1,0 +1,33 @@
+
+name: Eisbach Pegel aktualisieren
+
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Eisbach-Pegel abrufen
+        run: python scripts/update_eisbach.py
+
+      - name: Messwerte speichern
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/eisbach.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update Eisbach Pegeldaten'
+            git push
+          fi
