@@ -24,15 +24,14 @@
  <div class="grid">
   <section class="card"><h2>🌤 Aktuelles Wetter</h2><div class="pad"><div class="current"><div class="icon" id="currentIcon">⛅</div><div><div class="big" id="currentTemp">—°</div><strong id="currentDesc">Wird geladen …</strong><div class="muted" id="feels">Gefühlt —°</div></div></div><div class="parts" id="dayParts"><div class="part">Vormittag</div><div class="part">Nachmittag</div><div class="part">Abend</div></div></div></section>
   <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div><div class="mapnote" style="padding:0 17px 16px">Stündliche Temperatur, Wetterlage und Regenwahrscheinlichkeit</div></section>
+  <section class="card full" id="zehn-tage-verlauf"><h2>📈 10-Tage-Temperaturverlauf mit Wetterbildern</h2><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1040 350" role="img" aria-label="Zehntägige Temperaturvorhersage mit Wettericons, Wettersymbolhintergründen und Temperaturachse"></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>Hintergrund: ☀️ sonnig · ⛅ wechselhaft · Regen (Wolke + Tropfen)</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole orientieren sich am Wetter um 14 Uhr. Die Tagesfärbung berücksichtigt außerdem Niederschlag über den gesamten Tag.</div></section>
   <section class="card full"><h2>🛰️ Satellitenwolken & Regenradar – Windy</h2>
     <div class="satgrid">
       <div><div class="embed-title">Satelliten-Wolkenbild · gewählter Ort</div><iframe class="embed" id="satellite" title="Windy Satellitenwolkenkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Aktuelle Satellitenansicht von Windy. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.137,11.576,7" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div>
       <div><div class="embed-title">Regenradar · gewählter Ort</div><iframe class="embed" id="radar" title="Windy Regenradarkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Niederschlagsradar von Windy; Datenabdeckung je nach Region.</div></div>
     </div>
   </section>
-  <section class="card full"><h2>📈 10-Tage-Temperaturverlauf mit Wetterbildern</h2><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1040 350" role="img" aria-label="Zehntägige Temperaturvorhersage mit Wettericons, Wettersymbolhintergründen und Temperaturachse"></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>Hintergrund: ☀️ sonnig · ⛅ wechselhaft · Regen (Wolke + Tropfen)</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole orientieren sich am Wetter um 14 Uhr. Die Tagesfärbung berücksichtigt außerdem Niederschlag über den gesamten Tag.</div></section>
   <section class="card full"><h2>📍 Meine Orte & Spezialwerte</h2><div class="favorites" id="favorites"></div></section>
-  <section class="card full"><h2>🌧️ Regenradar – große Karte</h2><iframe class="map" id="radarLarge" title="Großes Windy-Regenradar" loading="lazy" allowfullscreen></iframe><div class="mapnote" style="padding:12px 18px">Interaktive Niederschlagskarte · Windy</div></section>
   <section class="card"><h2>🌊 Wellenkarte</h2><iframe class="map" id="waves" loading="lazy" title="Meereswellenkarte"></iframe><div class="mapnote" style="padding:12px 18px">Wellenmodell · Mittelmeeransicht mit Zentrum bei Nizza – Italien und Spanien im Blick</div></section>
  </div>
 </main>
@@ -77,7 +76,6 @@ function updateMaps(){
  $('satellite').src='https://embed.windy.com/embed2.html?'+q+'&product=satellite&overlay=satellite';
  $('satelliteLink').href=`https://www.windy.com/?satellite,${place.lat.toFixed(3)},${place.lon.toFixed(3)},7`;
  $('radar').src='https://embed.windy.com/embed2.html?'+q+'&product=radar&overlay=radar';
- $('radarLarge').src='https://embed.windy.com/embed2.html?'+q+'&product=radar&overlay=radar';
  $('waves').src='https://embed.windy.com/embed2.html?lat=43.7&lon=7.26&detailLat=43.7&detailLon=7.26&width=960&height=600&zoom=3&level=surface&product=ecmwf&overlay=waves&type=map&metricWind=km%2Fh&metricTemp=%C2%B0C';
 }
 
