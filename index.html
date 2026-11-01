@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f4f8fc"><title>Passis Wetter – 14 Tage mit Windhosen, Böen und Tagesdetails</title>
+<meta name="theme-color" content="#f4f8fc"><title>Passis Wetter – 14 Tage mit neuen Windhosen-Stufen und Tagesdetails</title>
 <style>
 :root{--bg:#f4f8fc;--paper:#fff;--ink:#17283d;--muted:#63788f;--stroke:#dbe5ef;--blue:#146da9;--shadow:0 10px 32px rgba(26,57,90,.06)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}header{background:#fff;border-bottom:1px solid var(--stroke);box-shadow:0 3px 15px #18375007;padding:14px max(16px,calc((100% - 1220px)/2));display:flex;align-items:center;flex-wrap:wrap;gap:15px}.brand{font-size:24px;letter-spacing:-.045em;font-weight:850;white-space:nowrap}.brand span{color:#1894d8}form{flex:1;min-width:220px;display:flex;gap:8px}input,button{font:inherit;border-radius:12px;border:1px solid var(--stroke);padding:11px 13px}input{min-width:0;width:100%;background:#f7fafc;color:var(--ink)}button{background:#eaf4ff;color:#115784;font-weight:750;cursor:pointer}button:hover{background:#dbeefd}main{max-width:1240px;margin:auto;padding:23px 16px 35px}.titlebar{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px}h1{font-size:clamp(26px,4vw,36px);margin:0;letter-spacing:-.035em}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.card{background:var(--paper);border:1px solid var(--stroke);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0}.card h2{margin:0;padding:17px 20px;border-bottom:1px solid var(--stroke);font-size:17px}.pad{padding:20px}.current{display:flex;align-items:center;gap:20px}.current .icon{font-size:72px}.big{font-size:70px;font-weight:850;letter-spacing:-.07em;line-height:1}.parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.part{border-radius:14px;border:1px solid #deebf5;background:#f1f7ff;padding:12px;text-align:center;display:flex;flex-direction:column;gap:4px}.part .emoji{font-size:27px}.part strong{font-size:19px}.part .small{min-height:31px}.rainnow{margin-top:16px;padding:13px;border-radius:14px;background:#eef8ff;border:1px solid #cfe7fa;display:flex;gap:10px;align-items:center}.rainnow .sym{font-size:31px}.rainnow b{display:block}.hours{display:flex;gap:9px;padding:16px;overflow-x:auto}.hour{flex:0 0 82px;border:1px solid #e0ebf4;background:#f6f9fd;text-align:center;border-radius:14px;padding:12px 7px}.hour .ico{font-size:27px;margin:7px 0}.hour strong{font-size:17px}.full{grid-column:1/-1}.satgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:17px}.embed{width:100%;height:330px;border:0;border-radius:12px;background:#edf3f8}.embed-title{font-weight:800;margin:0 0 8px}.mapnote{color:var(--muted);font-size:12px;padding:9px 0}.chart-scroll{overflow-x:auto;padding:18px 18px 10px}.chart-svg{min-width:1200px;width:100%;display:block;height:auto}.legend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:22px;color:var(--muted);font-size:13px;padding:0 10px 18px}.legend i{display:inline-block;width:20px;height:3px;vertical-align:middle;margin-right:5px}.favorites{padding:6px 18px}.favorite{display:flex;justify-content:space-between;gap:14px;align-items:center;border-bottom:1px solid var(--stroke);padding:15px 0}.favorite:last-child{border:0}.favorite .value{text-align:right;font-weight:650}.favorite .value small{font-size:12px;display:block;color:var(--muted);font-weight:400}.favorite button{background:none;border:0;color:#146da9;font-weight:750;padding:0;text-align:left}.favorite small{display:block;color:var(--muted)}.favorite a{color:#1673ac}.map{width:100%;height:420px;display:block;border:0;background:#edf3f8}footer{max-width:1240px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);font-size:12px}a{color:#146da9}.tag{display:inline-block;padding:5px 9px;background:#eaf4ff;color:#28769e;border-radius:18px;font-weight:700;font-size:12px} .error{color:#a03130}
@@ -39,7 +39,7 @@
  <div class="grid">
   <section class="card"><h2>🌤 Aktuelles Wetter</h2><div class="pad"><div class="current"><div class="icon" id="currentIcon">⛅</div><div><div class="big" id="currentTemp">—°</div><strong id="currentDesc">Wird geladen …</strong><div class="muted" id="feels">Gefühlt —°</div></div></div><div class="parts" id="dayParts"><div class="part">Vormittag</div><div class="part">Nachmittag</div><div class="part">Abend</div></div></div></section>
   <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div><div class="mapnote" style="padding:0 17px 16px">Stündliche Temperatur, Wetterlage und Regenwahrscheinlichkeit</div></section>
-  <section class="card full" id="vierzehn-tage-verlauf"><h2>📈 14-Tage-Wetterverlauf · Temperatur, Sonne &amp; Wind</h2><div class="day-tip">👆 Tippe oder klicke auf einen Tag, um die detaillierte Tagesvorhersage zu öffnen.</div><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1370 515" role="group" aria-label="14 Tage. Jeder Tag ist anklickbar und zeigt Wetterdetails."></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>☀️ Sonnenstunden/Tag</span><span>💨 Windhose nach Böen: schlaff unter 10 kn · gespannt ab 10 kn · rot ab 25 kn</span><span>Windrichtung steht unter jeder Windhose</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole: Wetter um 14 Uhr; Hintergrund nach Wetterlage. Windhosen reagieren auf die vorhergesagten maximalen Böen (bei fehlenden Böenwerten auf den Maximalwind); die Himmelsrichtung darunter zeigt die vorherrschende Windrichtung. Wind und Sonne sind Modellwerte; die zweite Woche ist unsicherer.</div><div id="dayDetails" class="day-details" hidden aria-live="polite"></div></section>
+  <section class="card full" id="vierzehn-tage-verlauf"><h2>📈 14-Tage-Wetterverlauf · Temperatur, Sonne &amp; Wind</h2><div class="day-tip">👆 Tippe oder klicke auf einen Tag, um die detaillierte Tagesvorhersage zu öffnen.</div><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1370 515" role="group" aria-label="14 Tage. Jeder Tag ist anklickbar und zeigt Wetterdetails."></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>☀️ Sonnenstunden/Tag</span><span>💨 Windhose nach Wind / Böen: schlaff bis 8 / 12 kn · gespannt bis 14 / 16 kn · rot darüber</span><span>Windrichtung steht unter jeder Windhose</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole: Wetter um 14 Uhr; Hintergrund nach Wetterlage. Die Windhose berücksichtigt Wind und Böen: die höhere Stufe zählt. Schlaff bei Wind bis 8 kn UND Böen bis 12 kn; gespannt bei Wind über 8 bis 14 kn ODER Böen über 12 bis 16 kn; rot bei Wind über 14 kn ODER Böen über 16 kn. Die Himmelsrichtung darunter zeigt die vorherrschende Windrichtung. Wind und Sonne sind Modellwerte; die zweite Woche ist unsicherer.</div><div id="dayDetails" class="day-details" hidden aria-live="polite"></div></section>
   <section class="card full"><h2>🛰️ Satellitenwolken & Regenradar – Windy</h2>
     <div class="satgrid">
       <div><div class="embed-title">Satelliten-Wolkenbild · München (ca. 75 km)</div><iframe class="embed" id="satellite" title="Windy Satellitenwolkenkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Aktuelle Satellitenansicht von Windy. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.137,11.576,9" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div>
@@ -103,11 +103,22 @@ function compassDirection(degrees){
  const labels=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];
  return labels[Math.round((((degrees%360)+360)%360)/22.5)%16];
 }
-// Windhose nach maximalen Tagesboeen: unter 10 kn schlaff, 10 bis <25 kn straff, ab 25 kn rot.
+// Stufen nach maximalem Tageswind UND maximaler Tagesboee (jeweils in kn).
+// Ueber 14 kn Wind ODER ueber 16 kn Boeen -> rot.
+// Ueber 8 kn Wind ODER ueber 12 kn Boeen -> gespannt.
+// Sonst -> schlaff. Wenn nur ein Wert vorhanden ist, gilt dessen Stufe.
+function windSockLevel(windKn,gustKn){
+ const wind=Number.isFinite(windKn)?windKn:0;
+ const gust=Number.isFinite(gustKn)?gustKn:0;
+ if(wind>14 || gust>16)return 'strong';
+ if(wind>8 || gust>12)return 'medium';
+ return 'weak';
+}
 // Der Wind kommt aus der unter dem Symbol angegebenen Himmelsrichtung.
-function windSockSVG(x,y,knots,id){
- const weak=!Number.isFinite(knots)||knots<10;
- const strong=Number.isFinite(knots)&&knots>=25;
+function windSockSVG(x,y,windKn,gustKn,id){
+ const level=windSockLevel(windKn,gustKn);
+ const weak=level==='weak';
+ const strong=level==='strong';
  const tone=strong?'#d82d3a':weak?'#9eb1c2':'#2485cb';
  const edge=strong?'#a52231':weak?'#7e95a9':'#176398';
  const shape=weak?'M -20 -17 Q -11 -17 -9 -11 L -1 6 Q 2 12 -5 15 Q -10 11 -13 3 L -20 -5 Z':'M -20 -19 L 25 -12 L 25 -4 L -20 -6 Z';
@@ -163,12 +174,12 @@ function renderChart(d){
    svg+=`<text x="${X(i)}" y="400" font-size="15" font-weight="750" text-anchor="middle" fill="#93620a">☀ ${sunText}</text>`;
    const knots=daily.wind_speed_10m_max?.[i];
    const gusts=daily.wind_gusts_10m_max?.[i];
-   const gustStrength=Number.isFinite(gusts)?gusts:knots;
+   const windLevel=windSockLevel(knots,gusts);
    const degrees=daily.wind_direction_10m_dominant?.[i];
    const dir=compassDirection(degrees);
-   // Die Windhose beruecksichtigt Boeen, selbst wenn der Dauerwind schwaecher ist.
-   svg+=windSockSVG(X(i),450,gustStrength,'chart-'+i);
-   svg+=`<text x="${X(i)}" y="501" font-size="16" font-weight="800" text-anchor="middle" fill="${Number.isFinite(gustStrength)&&gustStrength>=25?'#ad2732':'#315979'}">${dir}</text>`;
+   // Die hoehere Stufe aus Dauerwind und Boeen bestimmt die Windhose.
+   svg+=windSockSVG(X(i),450,knots,gusts,'chart-'+i);
+   svg+=`<text x="${X(i)}" y="501" font-size="16" font-weight="800" text-anchor="middle" fill="${windLevel==='strong'?'#ad2732':'#315979'}">${dir}</text>`;
  }
  // Temperaturachsen und Linien über der jeweiligen Tagesfärbung.
  for(let t=axMin;t<=axMax;t+=5){
@@ -212,7 +223,7 @@ function showDayDetails(index,scrollToDetails){
  const sunText=Number.isFinite(sun)?fmtNum(sun/3600,1)+' h':'—';
  const windText=Number.isFinite(knots)?fmtNum(knots,1)+' kn':'—';
  const gustText=Number.isFinite(gusts)?fmtNum(gusts,1)+' kn':'—';
- const gustStrength=Number.isFinite(gusts)?gusts:knots;
+ const windLevel=windSockLevel(knots,gusts);
  const rainChance=day.precipitation_probability_max?.[index];
  const rainSum=day.precipitation_sum?.[index];
  const tempText=(Number.isFinite(max)?Math.round(max)+'°':'—')+' / '+(Number.isFinite(min)?Math.round(min)+'°':'—');
@@ -228,13 +239,13 @@ function showDayDetails(index,scrollToDetails){
  const hourlyHtml=indexes.map(i=>{
    const time=d.hourly.time[i].slice(11,16),[label,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i]);
    const temp=d.hourly.temperature_2m?.[i],chance=d.hourly.precipitation_probability?.[i],speed=d.hourly.wind_speed_10m?.[i],gust=d.hourly.wind_gusts_10m?.[i],direction=d.hourly.wind_direction_10m?.[i];
-   return `<div class="day-hour" title="${label}"><div class="tiny">${time} Uhr</div><div class="hour-weather">${iconHTML(ic)}</div><b>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</b><div class="tiny">☂ ${chance??'—'} %</div><div class="tiny">💨 ${Number.isFinite(speed)?fmtNum(speed,0)+' kn':'—'} ${compassDirection(direction)}</div><div class="tiny${Number.isFinite(gust)&&gust>=25?' gust-alert':''}">Böen ${Number.isFinite(gust)?fmtNum(gust,0)+' kn':'—'}</div></div>`;
+   return `<div class="day-hour" title="${label}"><div class="tiny">${time} Uhr</div><div class="hour-weather">${iconHTML(ic)}</div><b>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</b><div class="tiny">☂ ${chance??'—'} %</div><div class="tiny">💨 ${Number.isFinite(speed)?fmtNum(speed,0)+' kn':'—'} ${compassDirection(direction)}</div><div class="tiny${windSockLevel(speed,gust)==='strong'?' gust-alert':''}">Böen ${Number.isFinite(gust)?fmtNum(gust,0)+' kn':'—'}</div></div>`;
  }).join('');
  box.innerHTML=`<div class="day-details-head"><div><h3>📅 ${name}</h3><div class="muted small">${weatherLabel} · Tagesvorhersage für ${place.name}</div></div><button type="button" id="closeDayDetails" aria-label="Tagesdetails schließen">✕ Schließen</button></div>
- <div class="day-summary"><div class="day-fact"><small>🌡️ Höchst- / Tiefsttemperatur</small><strong>${tempText}</strong></div><div class="day-fact"><small>☀️ Sonnenschein</small><strong>${sunText}</strong></div><div class="day-fact"><small>🌧️ Regenchance / -menge</small><strong>${rainChance??'—'} % / ${Number.isFinite(rainSum)?fmtNum(rainSum,1)+' mm':'—'}</strong></div><div class="day-fact"><small>💨 Max. Wind / Richtung</small><strong>${windText} · ${compassDirection(degrees)}</strong></div><div class="day-fact"><small>🚩 Max. Böen</small><svg class="sock-svg" viewBox="-41 -37 82 68" role="img" aria-label="Windhose nach Böen, ${gustText}">${windSockSVG(0,0,gustStrength,'details')}</svg><strong>${gustText}</strong></div></div>
+ <div class="day-summary"><div class="day-fact"><small>🌡️ Höchst- / Tiefsttemperatur</small><strong>${tempText}</strong></div><div class="day-fact"><small>☀️ Sonnenschein</small><strong>${sunText}</strong></div><div class="day-fact"><small>🌧️ Regenchance / -menge</small><strong>${rainChance??'—'} % / ${Number.isFinite(rainSum)?fmtNum(rainSum,1)+' mm':'—'}</strong></div><div class="day-fact"><small>💨 Max. Wind / Richtung</small><strong>${windText} · ${compassDirection(degrees)}</strong></div><div class="day-fact"><small>🚩 Max. Böen</small><svg class="sock-svg" viewBox="-41 -37 82 68" role="img" aria-label="Windhose nach Wind ${windText} und Böen ${gustText}, Stufe ${windLevel==='strong'?'rot':windLevel==='medium'?'gespannt':'schlaff'}">${windSockSVG(0,0,knots,gusts,'details')}</svg><strong>${gustText}</strong></div></div>
  <h4>Wetter im Tagesverlauf</h4><div class="day-part-grid">${partHtml}</div>
  <h4>Stündliche Vorhersage</h4><div class="day-hour-grid">${hourlyHtml||'<span class="muted">Keine Stundendaten verfügbar.</span>'}</div>
- <div class="day-details-foot">Wind: maximale Windgeschwindigkeit und maximale Böen des Tages in 10 m Höhe; die Richtung beschreibt den vorherrschenden Wind, nicht die Richtung einzelner Böen. Die Windhose richtet sich nach den Böen. Regen und Sonnenschein sind Modellvorhersagen; längerfristige Werte können sich ändern.</div>`;
+ <div class="day-details-foot">Wind: maximale Windgeschwindigkeit und maximale Böen des Tages in 10 m Höhe; die Richtung beschreibt den vorherrschenden Wind, nicht die Richtung einzelner Böen. Die Windhose zeigt die höhere Stufe aus Wind und Böen (schlaff: bis 8 / 12 kn, gespannt: darüber bis 14 / 16 kn, rot: über 14 / 16 kn). Regen und Sonnenschein sind Modellvorhersagen; längerfristige Werte können sich ändern.</div>`;
  box.hidden=false;
  $('closeDayDetails').addEventListener('click',()=>{box.hidden=true;selectedDayIndex=-1;$('chart').querySelectorAll('.chart-day-target').forEach(g=>g.classList.remove('selected'))});
  if(scrollToDetails)box.scrollIntoView({behavior:'smooth',block:'nearest'});
