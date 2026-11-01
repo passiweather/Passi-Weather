@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f4f8fc"><title>Passis Wetter – 14 Tage mit ausgewogenen Windhosen-Stufen und Tagesdetails</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f8fc"><title>Passis Wetter – 14 Tage · mobil optimiert</title>
 <style>
 :root{--bg:#f4f8fc;--paper:#fff;--ink:#17283d;--muted:#63788f;--stroke:#dbe5ef;--blue:#146da9;--shadow:0 10px 32px rgba(26,57,90,.06)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}header{background:#fff;border-bottom:1px solid var(--stroke);box-shadow:0 3px 15px #18375007;padding:14px max(16px,calc((100% - 1220px)/2));display:flex;align-items:center;flex-wrap:wrap;gap:15px}.brand{font-size:24px;letter-spacing:-.045em;font-weight:850;white-space:nowrap}.brand span{color:#1894d8}form{flex:1;min-width:220px;display:flex;gap:8px}input,button{font:inherit;border-radius:12px;border:1px solid var(--stroke);padding:11px 13px}input{min-width:0;width:100%;background:#f7fafc;color:var(--ink)}button{background:#eaf4ff;color:#115784;font-weight:750;cursor:pointer}button:hover{background:#dbeefd}main{max-width:1240px;margin:auto;padding:23px 16px 35px}.titlebar{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px}h1{font-size:clamp(26px,4vw,36px);margin:0;letter-spacing:-.035em}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.card{background:var(--paper);border:1px solid var(--stroke);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0}.card h2{margin:0;padding:17px 20px;border-bottom:1px solid var(--stroke);font-size:17px}.pad{padding:20px}.current{display:flex;align-items:center;gap:20px}.current .icon{font-size:72px}.big{font-size:70px;font-weight:850;letter-spacing:-.07em;line-height:1}.parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.part{border-radius:14px;border:1px solid #deebf5;background:#f1f7ff;padding:12px;text-align:center;display:flex;flex-direction:column;gap:4px}.part .emoji{font-size:27px}.part strong{font-size:19px}.part .small{min-height:31px}.rainnow{margin-top:16px;padding:13px;border-radius:14px;background:#eef8ff;border:1px solid #cfe7fa;display:flex;gap:10px;align-items:center}.rainnow .sym{font-size:31px}.rainnow b{display:block}.hours{display:flex;gap:9px;padding:16px;overflow-x:auto}.hour{flex:0 0 82px;border:1px solid #e0ebf4;background:#f6f9fd;text-align:center;border-radius:14px;padding:12px 7px}.hour .ico{font-size:27px;margin:7px 0}.hour strong{font-size:17px}.full{grid-column:1/-1}.satgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:17px}.embed{width:100%;height:330px;border:0;border-radius:12px;background:#edf3f8}.embed-title{font-weight:800;margin:0 0 8px}.mapnote{color:var(--muted);font-size:12px;padding:9px 0}.chart-scroll{overflow-x:auto;padding:18px 18px 10px}.chart-svg{min-width:1200px;width:100%;display:block;height:auto}.legend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:22px;color:var(--muted);font-size:13px;padding:0 10px 18px}.legend i{display:inline-block;width:20px;height:3px;vertical-align:middle;margin-right:5px}.favorites{padding:6px 18px}.favorite{display:flex;justify-content:space-between;gap:14px;align-items:center;border-bottom:1px solid var(--stroke);padding:15px 0}.favorite:last-child{border:0}.favorite .value{text-align:right;font-weight:650}.favorite .value small{font-size:12px;display:block;color:var(--muted);font-weight:400}.favorite button{background:none;border:0;color:#146da9;font-weight:750;padding:0;text-align:left}.favorite small{display:block;color:var(--muted)}.favorite a{color:#1673ac}.map{width:100%;height:420px;display:block;border:0;background:#edf3f8}footer{max-width:1240px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);font-size:12px}a{color:#146da9}.tag{display:inline-block;padding:5px 9px;background:#eaf4ff;color:#28769e;border-radius:18px;font-weight:700;font-size:12px} .error{color:#a03130}
@@ -31,6 +31,77 @@
 .day-details h4{font-size:15px;margin:10px 0 8px}.day-hour-grid{display:flex;gap:7px;overflow-x:auto;padding-bottom:7px}.day-hour{flex:0 0 92px;text-align:center;border:1px solid #e1e9f0;border-radius:12px;padding:10px 6px;background:#fff}.day-hour .rain-icon{width:35px;height:31px}.day-hour .hour-weather{font-size:27px;min-height:35px}.day-hour b{font-size:17px}.day-hour .tiny{font-size:11px;color:#667b8c;line-height:1.5}
 .day-details-foot{font-size:12px;color:#677e90;margin-top:12px}.day-hour .gust-alert{color:#b02032;font-weight:800}
 @media(max-width:650px){.day-part-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.day-details{margin:0 10px 14px;padding:11px}.day-details h3{font-size:18px}}
+
+/* Eigenstaendige Smartphone-Ansicht: kein winzig skaliertes Desktop-Diagramm.
+   Wir beruecksichtigen auch groessere Viewports auf Touch-Geraeten. */
+.mobile-days{display:none}
+@media (max-width:720px), (pointer:coarse) and (max-width:1100px){
+ html{-webkit-text-size-adjust:100%;scroll-padding-top:12px}
+ body{font-size:14px;overflow-x:hidden}
+ header{padding:12px;gap:10px;align-items:center}
+ .brand{font-size:23px;flex:1;white-space:nowrap}
+ #locationBtn{padding:10px 12px;font-size:13px;margin-left:auto}
+ header form{order:3;flex:0 0 100%;width:100%;min-width:0;gap:7px}
+ header form button{padding:11px 13px}
+ #searchInput{font-size:16px}
+ main{padding:13px 10px 20px;max-width:100%}
+ .titlebar{gap:8px;margin-bottom:12px}
+ .titlebar h1{font-size:clamp(23px,6.5vw,31px);overflow-wrap:anywhere}
+ .titlebar .tag{font-size:10px;padding:4px 8px}
+ .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+ .full{grid-column:auto}
+ .card{border-radius:16px}
+ .card h2{padding:13px 14px;font-size:16px}
+ .pad{padding:14px}
+ .current{gap:13px}
+ .current .icon{font-size:55px;min-width:63px;display:flex;align-items:center;justify-content:center}
+ .big{font-size:55px}
+ .parts{gap:7px;margin-top:15px}
+ .part{padding:9px 3px;border-radius:11px}
+ .part strong{font-size:17px}
+ .part .emoji{font-size:23px}
+ .part .small{font-size:11px}
+ .hours{padding:12px;gap:7px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+ .hour{flex-basis:77px;scroll-snap-align:start;padding:10px 6px}
+ .day-tip{padding:11px 14px 0;font-size:12px}
+ .chart-scroll{display:none}
+ .mobile-days{display:grid;grid-template-columns:1fr;gap:8px;padding:12px}
+ .mobile-day{appearance:none;width:100%;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) 62px minmax(0,1fr);align-items:center;gap:7px;text-align:left;padding:10px 11px;border:1px solid #dce8f3;background:#f8fbff;border-radius:13px;color:var(--ink);font-weight:400}
+ .mobile-day:active,.mobile-day:focus-visible,.mobile-day.selected{background:#e9f5ff;border-color:#5b9cc8;outline:2px solid transparent}
+ .mobile-day .mobile-date{font-weight:800;font-size:14px;line-height:1.25}
+ .mobile-day .mobile-caption{font-size:11px;color:var(--muted);line-height:1.5}
+ .mobile-day .mobile-weather{display:flex;align-items:center;justify-content:center;font-size:29px;min-height:48px}
+ .mobile-day .mobile-weather .rain-icon{width:51px;height:46px}
+ .mobile-day .mobile-temps{font-weight:800;font-size:17px;color:#1b5b87}
+ .mobile-day .mobile-wind{display:flex;justify-content:flex-end;align-items:center;gap:5px}
+ .mobile-day .mobile-sock{width:50px;height:48px;flex:0 0 50px}
+ .mobile-day .mobile-direction{font-size:12px;font-weight:750;text-align:center}
+ .mobile-day .mobile-sun{font-size:12px;color:#99600d;font-weight:650}
+ .legend{gap:7px 13px;padding:3px 12px 12px;font-size:11px;justify-content:flex-start}
+ #vierzehn-tage-verlauf>.mapnote{padding:0 14px 12px!important;font-size:11px}
+ .day-details{margin:0 11px 12px;padding:12px;scroll-margin-top:12px}
+ .day-details h3{font-size:18px}
+ .day-summary{gap:7px}
+ .day-fact{flex:1 1 126px;min-width:0}
+ .day-part-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .day-hour-grid{scroll-snap-type:x proximity}
+ .day-hour{scroll-snap-align:start}
+ .satgrid{grid-template-columns:1fr;padding:12px;gap:14px}
+ .embed{height:305px;min-height:280px;max-width:100%;border-radius:10px}
+ .embed-title{font-size:13px}
+ .map{height:315px}
+ .favorites{padding:4px 13px}
+ .favorite{gap:8px}
+ .favorite .value{max-width:60%;overflow-wrap:anywhere}
+ footer{padding:12px 13px 28px;font-size:11px}
+}
+@media(max-width:360px){
+ .mobile-day{grid-template-columns:minmax(0,1fr) 52px minmax(0,1fr);padding:8px;gap:3px}
+ .mobile-day .mobile-sock{width:42px;flex-basis:42px}
+ .mobile-day .mobile-temps{font-size:15px}
+ .brand{font-size:21px}
+ .big{font-size:50px}
+}
 </style>
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
@@ -39,7 +110,7 @@
  <div class="grid">
   <section class="card"><h2>🌤 Aktuelles Wetter</h2><div class="pad"><div class="current"><div class="icon" id="currentIcon">⛅</div><div><div class="big" id="currentTemp">—°</div><strong id="currentDesc">Wird geladen …</strong><div class="muted" id="feels">Gefühlt —°</div></div></div><div class="parts" id="dayParts"><div class="part">Vormittag</div><div class="part">Nachmittag</div><div class="part">Abend</div></div></div></section>
   <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div><div class="mapnote" style="padding:0 17px 16px">Stündliche Temperatur, Wetterlage und Regenwahrscheinlichkeit</div></section>
-  <section class="card full" id="vierzehn-tage-verlauf"><h2>📈 14-Tage-Wetterverlauf · Temperatur, Sonne &amp; Wind</h2><div class="day-tip">👆 Tippe oder klicke auf einen Tag, um die detaillierte Tagesvorhersage zu öffnen.</div><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1370 515" role="group" aria-label="14 Tage. Jeder Tag ist anklickbar und zeigt Wetterdetails."></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>☀️ Sonnenstunden/Tag</span><span>💨 Windhose nach Wind / Böen: schlaff bis 10 / 18 kn · gespannt bis 20 / 30 kn · rot darüber</span><span>Windrichtung steht unter jeder Windhose</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole: Wetter um 14 Uhr; Hintergrund nach Wetterlage. Die Windhose berücksichtigt Wind und Böen: die höhere Stufe zählt. Schlaff bei Wind bis 10 kn UND Böen bis 18 kn; gespannt bei Wind über 10 bis 20 kn ODER Böen über 18 bis 30 kn, sofern nicht bereits Rot gilt; rot bei Wind über 20 kn ODER Böen über 30 kn. Die Himmelsrichtung darunter zeigt die vorherrschende Windrichtung. Wind und Sonne sind Modellwerte; die zweite Woche ist unsicherer.</div><div id="dayDetails" class="day-details" hidden aria-live="polite"></div></section>
+  <section class="card full" id="vierzehn-tage-verlauf"><h2>📈 14-Tage-Wetterverlauf · Temperatur, Sonne &amp; Wind</h2><div class="day-tip">👆 Tippe oder klicke auf einen Tag, um die detaillierte Tagesvorhersage zu öffnen.</div><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1370 515" role="group" aria-label="14 Tage. Jeder Tag ist anklickbar und zeigt Wetterdetails."></svg></div><div class="mobile-days" id="mobileDays" aria-label="14-Tage-Vorhersage als anklickbare Tageskarten"></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>☀️ Sonnenstunden/Tag</span><span>💨 Windhose nach Wind / Böen: schlaff bis 10 / 18 kn · gespannt bis 20 / 30 kn · rot darüber</span><span>Windrichtung steht unter jeder Windhose</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole: Wetter um 14 Uhr; Hintergrund nach Wetterlage. Die Windhose berücksichtigt Wind und Böen: die höhere Stufe zählt. Schlaff bei Wind bis 10 kn UND Böen bis 18 kn; gespannt bei Wind über 10 bis 20 kn ODER Böen über 18 bis 30 kn, sofern nicht bereits Rot gilt; rot bei Wind über 20 kn ODER Böen über 30 kn. Die Himmelsrichtung darunter zeigt die vorherrschende Windrichtung. Wind und Sonne sind Modellwerte; die zweite Woche ist unsicherer.</div><div id="dayDetails" class="day-details" hidden aria-live="polite"></div></section>
   <section class="card full"><h2>🛰️ Satellitenwolken & Regenradar – Windy</h2>
     <div class="satgrid">
       <div><div class="embed-title">Satelliten-Wolkenbild · München (ca. 75 km)</div><iframe class="embed" id="satellite" title="Windy Satellitenwolkenkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Aktuelle Satellitenansicht von Windy. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.137,11.576,9" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div>
@@ -134,6 +205,40 @@ function windSockSVG(x,y,windKn,gustKn,id){
   <circle cx="-20" cy="-14" r="2.2" fill="${edge}"/>
  </g>`;
 }
+// Smartphone: gut lesbare Tageskarten statt eines verkleinerten Desktop-Diagramms.
+// Klick auf eine Karte oeffnet dieselben vollstaendigen Tagesdetails.
+function renderMobileDays(d){
+ const daily=d.daily||{},count=Math.min(14,daily.time?.length||0);
+ const host=$('mobileDays');
+ host.innerHTML=Array.from({length:count},(_,i)=>{
+   const date=daily.time[i];
+   const code=daily.weather_code?.[i];
+   const midday=d.hourly?.time?.indexOf(date+'T14:00')??-1;
+   const symbolCode=midday>=0?d.hourly.weather_code[midday]:code;
+   const rain=midday>=0?d.hourly.precipitation?.[midday]:daily.precipitation_sum?.[i];
+   const [desc,ic]=detail(symbolCode,true,rain);
+   const dateText=i===0?'Heute':new Intl.DateTimeFormat('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'}).format(safeDate(date));
+   const hi=daily.temperature_2m_max?.[i],lo=daily.temperature_2m_min?.[i];
+   const max=Number.isFinite(hi)?Math.round(hi)+'°':'—';
+   const min=Number.isFinite(lo)?Math.round(lo)+'°':'—';
+   const sun=daily.sunshine_duration?.[i];
+   const sunText=Number.isFinite(sun)?fmtNum(sun/3600,1)+' h':'—';
+   const wind=daily.wind_speed_10m_max?.[i],gust=daily.wind_gusts_10m_max?.[i];
+   const dir=compassDirection(daily.wind_direction_10m_dominant?.[i]);
+   const sock=windSockSVG(0,0,wind,gust,'mobile-'+i);
+   const level=windSockLevel(wind,gust);
+   const fullDate=new Intl.DateTimeFormat('de-DE',{dateStyle:'full'}).format(safeDate(date));
+   return `<button class="mobile-day${selectedDayIndex===i?' selected':''}" type="button" data-mobile-day="${i}" aria-label="${fullDate}: ${desc}, ${max} bis ${min}, Tagesdetails öffnen" aria-pressed="${selectedDayIndex===i}">
+    <div><div class="mobile-date">${dateText}</div><div class="mobile-temps">${max} / ${min}</div><div class="mobile-sun">☀ ${sunText}</div></div>
+    <div class="mobile-weather" title="${desc}">${iconHTML(ic)}</div>
+    <div class="mobile-wind"><svg class="mobile-sock" viewBox="-43 -40 88 80" role="img" aria-label="Windhose ${level==='strong'?'rot':level==='medium'?'gespannt':'schlaff'}">${sock}</svg><div><div class="mobile-direction">${dir}</div><div class="mobile-caption">Wind</div></div></div>
+   </button>`;
+ }).join('');
+}
+$('mobileDays').addEventListener('click',event=>{
+ const button=event.target.closest('[data-mobile-day]');
+ if(button)selectDailyForecast(Number(button.dataset.mobileDay));
+});
 function renderChart(d){
  const daily=d.daily||{}, N=Math.min(14,daily.time?.length||0);
  if(!N){$('chart').innerHTML='';return;}
@@ -203,12 +308,14 @@ function renderChart(d){
    svg+=`<g class="chart-day-target${i===selectedDayIndex?' selected':''}" role="button" tabindex="0" data-day-index="${i}" aria-label="${dateLabel}: Tagesvorhersage anzeigen, ${windHint}"><title>${dateLabel}: Tagesvorhersage anzeigen · ${windHint}</title><rect class="day-hit" x="${left+i*cellWidth+2}" y="15" width="${cellWidth-4}" height="495" rx="11"/></g>`;
  }
  $('chart').innerHTML=svg;
+ renderMobileDays(d);
  if(selectedDayIndex>=0)showDayDetails(selectedDayIndex,false);
 }
 function selectDailyForecast(index){
  if(!activeForecastData||index<0||index>=activeForecastData.daily.time.length)return;
  selectedDayIndex=index;
  $('chart').querySelectorAll('[data-day-index]').forEach(el=>el.classList.toggle('selected',Number(el.dataset.dayIndex)===index));
+ $('mobileDays').querySelectorAll('[data-mobile-day]').forEach(el=>{const selected=Number(el.dataset.mobileDay)===index;el.classList.toggle('selected',selected);el.setAttribute('aria-pressed',String(selected));});
  showDayDetails(index,true);
 }
 function showDayDetails(index,scrollToDetails){
@@ -247,7 +354,7 @@ function showDayDetails(index,scrollToDetails){
  <h4>Stündliche Vorhersage</h4><div class="day-hour-grid">${hourlyHtml||'<span class="muted">Keine Stundendaten verfügbar.</span>'}</div>
  <div class="day-details-foot">Wind: maximale Windgeschwindigkeit und maximale Böen des Tages in 10 m Höhe; die Richtung beschreibt den vorherrschenden Wind, nicht die Richtung einzelner Böen. Die Windhose zeigt die höhere Stufe aus Wind und Böen (schlaff: bis 10 / 18 kn, gespannt: darüber bis 20 / 30 kn, rot: über 20 / 30 kn). Regen und Sonnenschein sind Modellvorhersagen; längerfristige Werte können sich ändern.</div>`;
  box.hidden=false;
- $('closeDayDetails').addEventListener('click',()=>{box.hidden=true;selectedDayIndex=-1;$('chart').querySelectorAll('.chart-day-target').forEach(g=>g.classList.remove('selected'))});
+ $('closeDayDetails').addEventListener('click',()=>{box.hidden=true;selectedDayIndex=-1;$('chart').querySelectorAll('.chart-day-target').forEach(g=>g.classList.remove('selected'));$('mobileDays').querySelectorAll('.mobile-day').forEach(g=>{g.classList.remove('selected');g.setAttribute('aria-pressed','false');});});
  if(scrollToDetails)box.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 $('chart').addEventListener('click',event=>{
