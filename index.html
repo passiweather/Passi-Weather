@@ -27,8 +27,8 @@
   <section class="card full" id="zehn-tage-verlauf"><h2>📈 10-Tage-Temperaturverlauf mit Wetterbildern</h2><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1040 350" role="img" aria-label="Zehntägige Temperaturvorhersage mit Wettericons, Wettersymbolhintergründen und Temperaturachse"></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>Hintergrund: ☀️ sonnig · ⛅ wechselhaft · Regen (Wolke + Tropfen)</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole orientieren sich am Wetter um 14 Uhr. Die Tagesfärbung berücksichtigt außerdem Niederschlag über den gesamten Tag.</div></section>
   <section class="card full"><h2>🛰️ Satellitenwolken & Regenradar – Windy</h2>
     <div class="satgrid">
-      <div><div class="embed-title">Satelliten-Wolkenbild · gewählter Ort</div><iframe class="embed" id="satellite" title="Windy Satellitenwolkenkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Aktuelle Satellitenansicht von Windy. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.137,11.576,7" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div>
-      <div><div class="embed-title">Regenradar · gewählter Ort</div><iframe class="embed" id="radar" title="Windy Regenradarkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Niederschlagsradar von Windy; Datenabdeckung je nach Region.</div></div>
+      <div><div class="embed-title">Satelliten-Wolkenbild · München (ca. 75 km)</div><iframe class="embed" id="satellite" title="Windy Satellitenwolkenkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Aktuelle Satellitenansicht von Windy. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.137,11.576,9" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div>
+      <div><div class="embed-title">Regenradar · München (ca. 75 km)</div><iframe class="embed" id="radar" title="Windy Regenradarkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Niederschlagsradar von Windy; Datenabdeckung je nach Region.</div></div>
     </div>
   </section>
   <section class="card full"><h2>📍 Meine Orte & Spezialwerte</h2><div class="favorites" id="favorites"></div></section>
@@ -72,9 +72,12 @@ const fmtNum=(n,digits=0)=>Number(n).toLocaleString('de-DE',{maximumFractionDigi
 const safeDate=(s)=>new Date(s+'T12:00:00');
 function rainLevel(mm,code){const n=rainCount(mm,code);return [n?rainSymbol(n):'☀️',n?rainName(n):'Kein messbarer Regen'];}
 function updateMaps(){
- const q=`lat=${place.lat}&lon=${place.lon}&detailLat=${place.lat}&detailLon=${place.lon}&width=960&height=600&zoom=6&level=surface&menu=&message=false&marker=true&calendar=now&type=map&location=coordinates&metricWind=km%2Fh&metricTemp=%C2%B0C`;
+ // Beide Windy-Karten bleiben auf München fixiert, auch bei der Wetter-Ortssuche.
+ // Zoom 9 entspricht je nach Bildschirmgröße etwa einem Umkreis von 75 km.
+ const munichLat=48.1372, munichLon=11.5756, mapZoom=9;
+ const q=`lat=${munichLat}&lon=${munichLon}&detailLat=${munichLat}&detailLon=${munichLon}&width=960&height=600&zoom=${mapZoom}&level=surface&menu=&message=false&marker=true&calendar=now&type=map&location=coordinates&metricWind=km%2Fh&metricTemp=%C2%B0C`;
  $('satellite').src='https://embed.windy.com/embed2.html?'+q+'&product=satellite&overlay=satellite';
- $('satelliteLink').href=`https://www.windy.com/?satellite,${place.lat.toFixed(3)},${place.lon.toFixed(3)},7`;
+ $('satelliteLink').href=`https://www.windy.com/?satellite,${munichLat.toFixed(3)},${munichLon.toFixed(3)},${mapZoom}`;
  $('radar').src='https://embed.windy.com/embed2.html?'+q+'&product=radar&overlay=radar';
  $('waves').src='https://embed.windy.com/embed2.html?lat=43.7&lon=7.26&detailLat=43.7&detailLon=7.26&width=960&height=600&zoom=3&level=surface&product=ecmwf&overlay=waves&type=map&metricWind=km%2Fh&metricTemp=%C2%B0C';
 }
