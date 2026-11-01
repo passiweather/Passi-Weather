@@ -28,8 +28,29 @@
 .day-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.day-fact{flex:1 1 126px;min-width:120px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;border:1px solid #dceaf4;border-radius:12px;background:white;padding:10px 8px;text-align:center}.day-fact strong{font-size:17px}.day-fact small{color:#617a8d;font-size:12px}.day-fact .sock-svg{width:67px;height:54px}
 .day-part-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.day-part-item{min-width:0;border-radius:12px;border:1px solid #dce8f0;background:#fff;padding:11px 5px;text-align:center}.day-part-item .rain-icon{height:39px;width:45px}.day-part-item .wx-icon{font-size:29px;display:block;min-height:38px}.day-part-item .caption{font-size:12px;color:#63788f}.day-part-item strong{display:block;margin:4px 0}
 .day-details h4{font-size:15px;margin:10px 0 8px}.day-hour-grid{display:flex;gap:7px;overflow-x:auto;padding-bottom:7px}.day-hour{flex:0 0 92px;text-align:center;border:1px solid #e1e9f0;border-radius:12px;padding:10px 6px;background:#fff}.day-hour .rain-icon{width:35px;height:31px}.day-hour .hour-weather{font-size:27px;min-height:35px}.day-hour b{font-size:17px}.day-hour .tiny{font-size:11px;color:#667b8c;line-height:1.5}
-.day-details-foot{font-size:12px;color:#677e90;margin-top:12px}.day-hour .gust-alert{color:#b02032;font-weight:800}
+.day-hour .gust-alert{color:#b02032;font-weight:800}
 @media(max-width:650px){.day-part-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.day-details{margin:0 10px 14px;padding:11px}.day-details h3{font-size:18px}}
+
+/* Nur fuer schmale Smartphone-Displays: acht Tage gleichzeitig im 14-Tage-Graph. */
+@media(max-width:650px){
+  #vierzehn-tage-verlauf .chart-scroll{
+    padding:9px 4px 5px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+  }
+  #vierzehn-tage-verlauf .chart-svg{
+    display:block;
+    min-width:0;
+    max-width:none;
+    height:auto;
+    touch-action:pan-x pan-y;
+  }
+  #vierzehn-tage-verlauf .legend{gap:11px;font-size:10px;padding:2px 3px 10px;}
+  #vierzehn-tage-verlauf .legend i{width:12px;}
+  #vierzehn-tage-verlauf h2{padding:13px 14px;}
+}
 </style>
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
@@ -135,7 +156,86 @@ function windSockSVG(x,y,windKn,gustKn,id){
   <circle cx="-20" cy="-14" r="2.2" fill="${edge}"/>
  </g>`;
 }
+
+/* Kompakte Grafik nur fuer Smartphones: acht anklickbare Tage auf einen Blick. */
+function renderMobileChart(d){
+ const daily=d.daily||{}, N=Math.min(14,daily.time?.length||0);
+ if(!N){$('chart').innerHTML='';return;}
+ const chart=$('chart'),scroll=chart.parentElement;
+ // Die acht ersten vollstaendigen Tages-Spalten passen dynamisch zur Handybreite.
+ const style=getComputedStyle(scroll);
+ const freeWidth=scroll.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
+ const left=25,cell=Math.max(27,Math.floor((freeWidth-left-3)/8)),right=left+cell*N,fullWidth=right+3,height=316;
+ chart.setAttribute('viewBox',`0 0 ${fullWidth} ${height}`);
+ chart.style.width=fullWidth+'px';
+ chart.style.minWidth='0';
+ const hi=daily.temperature_2m_max?.slice(0,N)||[],lo=daily.temperature_2m_min?.slice(0,N)||[];
+ const vals=[...hi,...lo].filter(Number.isFinite);
+ if(!vals.length){chart.innerHTML='';return;}
+ const axMin=Math.floor((Math.min(...vals)-2)/5)*5,axMax=Math.ceil((Math.max(...vals)+2)/5)*5;
+ const X=i=>left+(i+.5)*cell;
+ const Y=t=>173-(t-axMin)/Math.max(1,axMax-axMin)*115;
+ const view=scroll.scrollLeft;
+ let svg='';
+ for(let i=0;i<N;i++){
+   const code=daily.weather_code?.[i]??3,date=daily.time[i];
+   const at14=d.hourly?.time?.indexOf(date+'T14:00')??-1;
+   const hourCode=at14>=0?d.hourly.weather_code[at14]:code;
+   const kind=isRainCode(code)?'rain':hourCode===0||hourCode===1?'sun':'mixed';
+   const bg={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'}[kind];
+   const x0=left+i*cell+1;
+   svg+=`<rect x="${x0}" y="4" width="${cell-2}" height="308" rx="5" fill="${bg}"/>`;
+   const mm=at14>=0?d.hourly.precipitation?.[at14]:null;
+   const ic=detail(hourCode,true,mm)[1];
+   if(ic.startsWith('RAIN:')){
+     const count=Number(ic.slice(5));
+     svg+=`<svg x="${X(i)-13}" y="5" width="26" height="38" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
+   }else{
+     svg+=`<text x="${X(i)}" y="34" font-size="21" text-anchor="middle">${ic}</text>`;
+   }
+   const day=i===0?'Heute':new Intl.DateTimeFormat('de-DE',{weekday:'short'}).format(safeDate(date));
+   const dm=new Intl.DateTimeFormat('de-DE',{day:'2-digit',month:'2-digit'}).format(safeDate(date));
+   svg+=`<text x="${X(i)}" y="205" font-size="${cell<=32?9:10.5}" font-weight="750" text-anchor="middle" fill="#314962">${day}</text>`;
+   svg+=`<text x="${X(i)}" y="219" font-size="9" text-anchor="middle" fill="#63788f">${dm}</text>`;
+   const sun=daily.sunshine_duration?.[i];
+   const sunText=Number.isFinite(sun)?fmtNum(sun/3600,1)+'h':'—';
+   svg+=`<text x="${X(i)}" y="243" font-size="${cell<=32?8.4:9.5}" font-weight="750" text-anchor="middle" fill="#93620a">☀${sunText}</text>`;
+   const wind=daily.wind_speed_10m_max?.[i],gust=daily.wind_gusts_10m_max?.[i];
+   const level=windSockLevel(wind,gust);
+   const dir=compassDirection(daily.wind_direction_10m_dominant?.[i]);
+   svg+=`<g transform="translate(${X(i)} 278) scale(${Math.min(.48,(cell-3)/55).toFixed(3)})">${windSockSVG(0,0,wind,gust,'mobile-'+i)}</g>`;
+   svg+=`<text x="${X(i)}" y="304" font-size="10" font-weight="750" text-anchor="middle" fill="${level==='strong'?'#ad2732':'#315979'}">${dir}</text>`;
+ }
+ // Zwei gut lesbare Temperaturkurven trotz engerer Tages-Spalten.
+ for(let t=axMin;t<=axMax;t+=5){
+   svg+=`<line x1="${left}" x2="${right}" y1="${Y(t)}" y2="${Y(t)}" stroke="#bfccdb" stroke-width=".7" stroke-dasharray="2 3"/>`;
+   svg+=`<text x="${left-4}" y="${Y(t)+3}" fill="#66798c" font-size="9" text-anchor="end">${t}°</text>`;
+ }
+ for(const [arr,color] of [[hi,'#ef9c22'],[lo,'#318ed9']]){
+   const pts=arr.map((v,i)=>Number.isFinite(v)?`${X(i)},${Y(v)}`:null).filter(Boolean);
+   if(pts.length>1)svg+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;
+   for(let i=0;i<N;i++){
+     if(!Number.isFinite(arr[i]))continue;
+     svg+=`<circle cx="${X(i)}" cy="${Y(arr[i])}" r="2.4" fill="${color}"/>`;
+     const isLow=color==='#318ed9';
+     svg+=`<text x="${X(i)}" y="${Y(arr[i])+(isLow?12:-7)}" text-anchor="middle" font-size="10" font-weight="750" fill="${isLow?'#175a96':'#8e5600'}">${Math.round(arr[i])}°</text>`;
+   }
+ }
+ // Gleicher Klick-/Tastatur-Mechanismus wie im Desktop-Diagramm.
+ for(let i=0;i<N;i++){
+   const dateLabel=new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long'}).format(safeDate(daily.time[i]));
+   const wind=daily.wind_speed_10m_max?.[i],gust=daily.wind_gusts_10m_max?.[i];
+   const hint=`Wind ${Number.isFinite(wind)?fmtNum(wind,1)+' kn':'—'}, Böen ${Number.isFinite(gust)?fmtNum(gust,1)+' kn':'—'}, Richtung ${compassDirection(daily.wind_direction_10m_dominant?.[i])}`;
+   svg+=`<g class="chart-day-target${i===selectedDayIndex?' selected':''}" role="button" tabindex="0" data-day-index="${i}" aria-label="${dateLabel}: Tagesvorhersage anzeigen, ${hint}"><title>${dateLabel}: Tagesvorhersage anzeigen · ${hint}</title><rect class="day-hit" x="${left+i*cell+.5}" y="4" width="${cell-1}" height="308" rx="5"/></g>`;
+ }
+ chart.innerHTML=svg;
+ scroll.scrollLeft=view;
+ if(selectedDayIndex>=0)showDayDetails(selectedDayIndex,false);
+}
+
 function renderChart(d){
+ if(window.matchMedia('(max-width:650px)').matches){renderMobileChart(d);return;}
+ const desktopChart=$('chart');desktopChart.setAttribute('viewBox','0 0 1370 515');desktopChart.style.width='';desktopChart.style.minWidth='';
  const daily=d.daily||{}, N=Math.min(14,daily.time?.length||0);
  if(!N){$('chart').innerHTML='';return;}
  const hi=daily.temperature_2m_max.slice(0,N),lo=daily.temperature_2m_min.slice(0,N);
@@ -245,7 +345,7 @@ function showDayDetails(index,scrollToDetails){
  <div class="day-summary"><div class="day-fact"><small>🌡️ Höchst- / Tiefsttemperatur</small><strong>${tempText}</strong></div><div class="day-fact"><small>☀️ Sonnenschein</small><strong>${sunText}</strong></div><div class="day-fact"><small>🌧️ Regenchance / -menge</small><strong>${rainChance??'—'} % / ${Number.isFinite(rainSum)?fmtNum(rainSum,1)+' mm':'—'}</strong></div><div class="day-fact"><small>💨 Max. Wind / Richtung</small><strong>${windText} · ${compassDirection(degrees)}</strong></div><div class="day-fact"><small>🚩 Max. Böen</small><svg class="sock-svg" viewBox="-41 -37 82 68" role="img" aria-label="Windhose nach Wind ${windText} und Böen ${gustText}, Stufe ${windLevel==='strong'?'rot':windLevel==='medium'?'gespannt':'schlaff'}">${windSockSVG(0,0,knots,gusts,'details')}</svg><strong>${gustText}</strong></div></div>
  <h4>Wetter im Tagesverlauf</h4><div class="day-part-grid">${partHtml}</div>
  <h4>Stündliche Vorhersage</h4><div class="day-hour-grid">${hourlyHtml||'<span class="muted">Keine Stundendaten verfügbar.</span>'}</div>
- <div class="day-details-foot">Wind: maximale Windgeschwindigkeit und maximale Böen des Tages in 10 m Höhe; die Richtung beschreibt den vorherrschenden Wind, nicht die Richtung einzelner Böen. Die Windhose zeigt die höhere Stufe aus Wind und Böen (schlaff: bis 10 / 18 kn, gespannt: darüber bis 20 / 30 kn, rot: über 20 / 30 kn). Regen und Sonnenschein sind Modellvorhersagen; längerfristige Werte können sich ändern.</div>`;
+ `;
  box.hidden=false;
  $('closeDayDetails').addEventListener('click',()=>{box.hidden=true;selectedDayIndex=-1;$('chart').querySelectorAll('.chart-day-target').forEach(g=>g.classList.remove('selected'))});
  if(scrollToDetails)box.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -290,6 +390,15 @@ document.addEventListener('click',e=>{if(!e.target.closest('#searchForm'))hideSu
 $('locationBtn').addEventListener('click',()=>{if(!navigator.geolocation)return alert('Standort nicht verfügbar');navigator.geolocation.getCurrentPosition(v=>loadWeather({name:'Mein Standort',country:'',lat:v.coords.latitude,lon:v.coords.longitude}),()=>alert('Standortfreigabe nicht möglich'))});
 function refreshAll(){loadWeather(place,true);loadSpecial();updateMaps()}
 loadWeather(place);loadSpecial();setInterval(()=>{if(!document.hidden){loadWeather(place,true);updateMaps()}},10*60*1000);setInterval(()=>{if(!document.hidden)loadSpecial()},15*60*1000);
+
+// Layout nach Drehen des Handys bzw. nach Aenderung der Displaybreite neu zeichnen.
+let chartResizeTimer;
+window.addEventListener('resize',()=>{
+ clearTimeout(chartResizeTimer);
+ chartResizeTimer=setTimeout(()=>{
+   if(activeForecastData)renderChart(activeForecastData);
+ },150);
+});
 function onReturn(){if(document.hidden||Date.now()-lastRefresh<60000)return;lastRefresh=Date.now();refreshAll()}
 document.addEventListener('visibilitychange',onReturn);window.addEventListener('pageshow',e=>{if(e.persisted)onReturn()});
 </script>
