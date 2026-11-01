@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f4f8fc"><title>Passis Wetter – 14 Tage mit ausgewogenen Windhosen-Stufen und Tagesdetails</title>
+<meta name="theme-color" content="#f4f8fc"><title>Passis Wetter – 14 Tage Wetter</title>
 <style>
 :root{--bg:#f4f8fc;--paper:#fff;--ink:#17283d;--muted:#63788f;--stroke:#dbe5ef;--blue:#146da9;--shadow:0 10px 32px rgba(26,57,90,.06)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}header{background:#fff;border-bottom:1px solid var(--stroke);box-shadow:0 3px 15px #18375007;padding:14px max(16px,calc((100% - 1220px)/2));display:flex;align-items:center;flex-wrap:wrap;gap:15px}.brand{font-size:24px;letter-spacing:-.045em;font-weight:850;white-space:nowrap}.brand span{color:#1894d8}form{flex:1;min-width:220px;display:flex;gap:8px}input,button{font:inherit;border-radius:12px;border:1px solid var(--stroke);padding:11px 13px}input{min-width:0;width:100%;background:#f7fafc;color:var(--ink)}button{background:#eaf4ff;color:#115784;font-weight:750;cursor:pointer}button:hover{background:#dbeefd}main{max-width:1240px;margin:auto;padding:23px 16px 35px}.titlebar{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px}h1{font-size:clamp(26px,4vw,36px);margin:0;letter-spacing:-.035em}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.card{background:var(--paper);border:1px solid var(--stroke);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0}.card h2{margin:0;padding:17px 20px;border-bottom:1px solid var(--stroke);font-size:17px}.pad{padding:20px}.current{display:flex;align-items:center;gap:20px}.current .icon{font-size:72px}.big{font-size:70px;font-weight:850;letter-spacing:-.07em;line-height:1}.parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.part{border-radius:14px;border:1px solid #deebf5;background:#f1f7ff;padding:12px;text-align:center;display:flex;flex-direction:column;gap:4px}.part .emoji{font-size:27px}.part strong{font-size:19px}.part .small{min-height:31px}.rainnow{margin-top:16px;padding:13px;border-radius:14px;background:#eef8ff;border:1px solid #cfe7fa;display:flex;gap:10px;align-items:center}.rainnow .sym{font-size:31px}.rainnow b{display:block}.hours{display:flex;gap:9px;padding:16px;overflow-x:auto}.hour{flex:0 0 82px;border:1px solid #e0ebf4;background:#f6f9fd;text-align:center;border-radius:14px;padding:12px 7px}.hour .ico{font-size:27px;margin:7px 0}.hour strong{font-size:17px}.full{grid-column:1/-1}.satgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:17px}.embed{width:100%;height:330px;border:0;border-radius:12px;background:#edf3f8}.embed-title{font-weight:800;margin:0 0 8px}.mapnote{color:var(--muted);font-size:12px;padding:9px 0}.chart-scroll{overflow-x:auto;padding:18px 18px 10px}.chart-svg{min-width:1200px;width:100%;display:block;height:auto}.legend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:22px;color:var(--muted);font-size:13px;padding:0 10px 18px}.legend i{display:inline-block;width:20px;height:3px;vertical-align:middle;margin-right:5px}.favorites{padding:6px 18px}.favorite{display:flex;justify-content:space-between;gap:14px;align-items:center;border-bottom:1px solid var(--stroke);padding:15px 0}.favorite:last-child{border:0}.favorite .value{text-align:right;font-weight:650}.favorite .value small{font-size:12px;display:block;color:var(--muted);font-weight:400}.favorite button{background:none;border:0;color:#146da9;font-weight:750;padding:0;text-align:left}.favorite small{display:block;color:var(--muted)}.favorite a{color:#1673ac}.map{width:100%;height:420px;display:block;border:0;background:#edf3f8}footer{max-width:1240px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);font-size:12px}a{color:#146da9}.tag{display:inline-block;padding:5px 9px;background:#eaf4ff;color:#28769e;border-radius:18px;font-weight:700;font-size:12px} .error{color:#a03130}
@@ -18,7 +18,6 @@
 .rain-icon{display:inline-block;width:1.3em;height:1.15em;vertical-align:-.16em;overflow:visible}.current .rain-icon{width:1.25em;height:1.1em}.hour .rain-icon,.part .rain-icon{width:1.45em;height:1.25em}
 
 /* Windhosen und interaktive Tagesvorhersage */
-.day-tip{padding:13px 20px 0;color:#2774a6;font-size:13px;font-weight:700}
 .day-hit{fill:transparent;stroke:transparent;stroke-width:3;cursor:pointer;transition:fill .12s ease,stroke .12s ease}
 .chart-day-target:hover .day-hit,.chart-day-target:focus .day-hit{fill:#247dc412;stroke:#387cb1}
 .chart-day-target:focus{outline:none}.chart-day-target.selected .day-hit{stroke:#146da9;stroke-width:4;fill:#146da912}
@@ -37,9 +36,9 @@
 <main>
  <div class="titlebar"><div><h1 id="city">München, Deutschland</h1><div class="muted small" id="status" role="status">Lade aktuelle Wetterdaten …</div></div><span class="tag">Wetter & aktuelle Messwerte</span></div>
  <div class="grid">
-  <section class="card"><h2>🌤 Aktuelles Wetter</h2><div class="pad"><div class="current"><div class="icon" id="currentIcon">⛅</div><div><div class="big" id="currentTemp">—°</div><strong id="currentDesc">Wird geladen …</strong><div class="muted" id="feels">Gefühlt —°</div></div></div><div class="parts" id="dayParts"><div class="part">Vormittag</div><div class="part">Nachmittag</div><div class="part">Abend</div></div></div></section>
-  <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div><div class="mapnote" style="padding:0 17px 16px">Stündliche Temperatur, Wetterlage und Regenwahrscheinlichkeit</div></section>
-  <section class="card full" id="vierzehn-tage-verlauf"><h2>📈 14-Tage-Wetterverlauf · Temperatur, Sonne &amp; Wind</h2><div class="day-tip">👆 Tippe oder klicke auf einen Tag, um die detaillierte Tagesvorhersage zu öffnen.</div><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1370 515" role="group" aria-label="14 Tage. Jeder Tag ist anklickbar und zeigt Wetterdetails."></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>☀️ Sonnenstunden/Tag</span><span>💨 Windhose nach Wind / Böen: schlaff bis 10 / 18 kn · gespannt bis 20 / 30 kn · rot darüber</span><span>Windrichtung steht unter jeder Windhose</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole: Wetter um 14 Uhr; Hintergrund nach Wetterlage. Die Windhose berücksichtigt Wind und Böen: die höhere Stufe zählt. Schlaff bei Wind bis 10 kn UND Böen bis 18 kn; gespannt bei Wind über 10 bis 20 kn ODER Böen über 18 bis 30 kn, sofern nicht bereits Rot gilt; rot bei Wind über 20 kn ODER Böen über 30 kn. Die Himmelsrichtung darunter zeigt die vorherrschende Windrichtung. Wind und Sonne sind Modellwerte; die zweite Woche ist unsicherer.</div><div id="dayDetails" class="day-details" hidden aria-live="polite"></div></section>
+  <section class="card"><h2>🌤 Aktuelle Wetterprognose</h2><div class="pad"><div class="current"><div class="icon" id="currentIcon">⛅</div><div><div class="big" id="currentTemp">—°</div><strong id="currentDesc">Wird geladen …</strong><div class="muted" id="feels">Gefühlt —°</div></div></div><div class="parts" id="dayParts"><div class="part">Vormittag</div><div class="part">Nachmittag</div><div class="part">Abend</div></div></div></section>
+  <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div></section>
+  <section class="card full" id="vierzehn-tage-verlauf"><h2>📈 14 Tage Wetter</h2><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1370 515" role="group" aria-label="14 Tage. Jeder Tag ist anklickbar und zeigt Wetterdetails."></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>☀️ Sonnenstunden/Tag</span></div><div id="dayDetails" class="day-details" hidden aria-live="polite"></div></section>
   <section class="card full"><h2>🛰️ Satellitenwolken & Regenradar – Windy</h2>
     <div class="satgrid">
       <div><div class="embed-title">Satelliten-Wolkenbild · München (ca. 75 km)</div><iframe class="embed" id="satellite" title="Windy Satellitenwolkenkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Aktuelle Satellitenansicht von Windy. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.137,11.576,9" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div>
@@ -60,12 +59,14 @@ function isRainCode(code){return [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,9
 // Leicht: ein Tropfen, mittel: zwei, stark: drei. WMO-Code dient als
 // Fallback, wenn die gemeldete Niederschlagsmenge auf 0 gerundet ist.
 function rainCount(mm,code){
- const val=Number(mm);
- if(Number.isFinite(val)&&val>=0.05)return val>=1.2?3:val>=0.5?2:1;
+ // Nur ein Niederschlags-Wettercode darf ein Regensymbol auslösen.
+ // Winzige berechnete Niederschlagsmengen allein bedeuten keinen aktuellen Regen.
  if(!isRainCode(code))return 0;
- if([55,57,65,67,82,95,96,99].includes(code))return 3;
- if([53,63,81].includes(code))return 2;
- return 1;
+ const val=mm === null || mm === undefined ? NaN : Number(mm);
+ const codeLevel=[55,57,65,67,82,95,96,99].includes(code)?3:
+                 [53,63,81].includes(code)?2:1;
+ if(!Number.isFinite(val)||val<0.05)return codeLevel;
+ return Math.max(codeLevel,val>=1.2?3:val>=0.5?2:1);
 }
 function rainSymbol(n){return 'RAIN:'+Math.max(1,Math.min(3,n))}
 // Eigene SVG-Grafik statt Emoji: je nach Intensitaet EXAKT 1, 2 oder 3
@@ -151,8 +152,7 @@ function renderChart(d){
    const code=daily.weather_code[i],date=daily.time[i];
    const at14=d.hourly.time.indexOf(date+'T14:00');
    const hourlyCode=at14>=0?d.hourly.weather_code[at14]:code;
-   const rain=daily.precipitation_sum?.[i]??0;
-   const isRain=rain>=0.5||isRainCode(code);
+   const isRain=isRainCode(code);
    const kind=isRain?'rain':hourlyCode===0||hourlyCode===1?'sun':'mixed';
    const colors={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'};
    const x0=left+i*cellWidth+3;
