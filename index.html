@@ -8,6 +8,7 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}header{background:#fff;border-bottom:1px solid var(--stroke);box-shadow:0 3px 15px #18375007;padding:14px max(16px,calc((100% - 1220px)/2));display:flex;align-items:center;flex-wrap:wrap;gap:15px}.brand{font-size:24px;letter-spacing:-.045em;font-weight:850;white-space:nowrap}.brand span{color:#1894d8}form{flex:1;min-width:220px;display:flex;gap:8px}input,button{font:inherit;border-radius:12px;border:1px solid var(--stroke);padding:11px 13px}input{min-width:0;width:100%;background:#f7fafc;color:var(--ink)}button{background:#eaf4ff;color:#115784;font-weight:750;cursor:pointer}button:hover{background:#dbeefd}main{max-width:1240px;margin:auto;padding:23px 16px 35px}.titlebar{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px}h1{font-size:clamp(26px,4vw,36px);margin:0;letter-spacing:-.035em}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.card{background:var(--paper);border:1px solid var(--stroke);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0}.card h2{margin:0;padding:17px 20px;border-bottom:1px solid var(--stroke);font-size:17px}.pad{padding:20px}.current{display:flex;align-items:center;gap:20px}.current .icon{font-size:72px}.big{font-size:70px;font-weight:850;letter-spacing:-.07em;line-height:1}.parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.part{border-radius:14px;border:1px solid #deebf5;background:#f1f7ff;padding:12px;text-align:center;display:flex;flex-direction:column;gap:4px}.part .emoji{font-size:27px}.part strong{font-size:19px}.part .small{min-height:31px}.rainnow{margin-top:16px;padding:13px;border-radius:14px;background:#eef8ff;border:1px solid #cfe7fa;display:flex;gap:10px;align-items:center}.rainnow .sym{font-size:31px}.rainnow b{display:block}.hours{display:flex;gap:9px;padding:16px;overflow-x:auto}.hour{flex:0 0 82px;border:1px solid #e0ebf4;background:#f6f9fd;text-align:center;border-radius:14px;padding:12px 7px}.hour .ico{font-size:27px;margin:7px 0}.hour strong{font-size:17px}.full{grid-column:1/-1}.satgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:17px}.embed{width:100%;height:330px;border:0;border-radius:12px;background:#edf3f8}.embed-title{font-weight:800;margin:0 0 8px}.mapnote{color:var(--muted);font-size:12px;padding:9px 0}.chart-scroll{overflow-x:auto;padding:18px 18px 10px}.chart-svg{min-width:1200px;width:100%;display:block;height:auto}.legend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:22px;color:var(--muted);font-size:13px;padding:0 10px 18px}.legend i{display:inline-block;width:20px;height:3px;vertical-align:middle;margin-right:5px}.favorites{padding:6px 18px}.favorite{display:flex;justify-content:space-between;gap:14px;align-items:center;border-bottom:1px solid var(--stroke);padding:15px 0}.favorite:last-child{border:0}.favorite .value{text-align:right;font-weight:650}.favorite .value small{font-size:12px;display:block;color:var(--muted);font-weight:400}.favorite button{background:none;border:0;color:#146da9;font-weight:750;padding:0;text-align:left}.favorite small{display:block;color:var(--muted)}.favorite a{color:#1673ac}.map{width:100%;height:420px;display:block;border:0;background:#edf3f8}footer{max-width:1240px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);font-size:12px}a{color:#146da9}.tag{display:inline-block;padding:5px 9px;background:#eaf4ff;color:#28769e;border-radius:18px;font-weight:700;font-size:12px} .error{color:#a03130}
 @media(max-width:820px){header{padding:14px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.satgrid{grid-template-columns:1fr}.embed{height:290px}.current .icon{font-size:58px}.big{font-size:56px}.map{height:310px}main{padding:14px 11px}.part{padding:9px 5px}.part .small{font-size:11px}}
 
+.retry-weather{font-size:12px;padding:5px 10px;border-radius:9px;margin-top:5px}.retry-weather[hidden]{display:none}
 .search-wrap{position:relative;flex:1;min-width:0}.search-wrap input{width:100%}
 .suggestions{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:30;max-height:290px;overflow-y:auto;background:#fff;border:1px solid #b9cfe1;border-radius:13px;box-shadow:0 15px 35px #243b512a;padding:6px}
 .suggestions[hidden]{display:none}.suggestion{display:block;width:100%;padding:11px 12px;background:#fff;border:0;text-align:left;border-radius:8px;font-weight:500;color:#182b40;cursor:pointer}.suggestion:hover,.suggestion:focus,.suggestion.active{background:#e9f4ff}.suggestion small{display:block;color:#667c91;font-size:12px}
@@ -55,7 +56,7 @@
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
 <main>
- <div class="titlebar"><div><h1 id="city">München, Deutschland</h1><div class="muted small" id="status" role="status">Lade aktuelle Wetterdaten …</div></div><span class="tag">Wetter & aktuelle Messwerte</span></div>
+ <div class="titlebar"><div><h1 id="city">München, Deutschland</h1><div class="muted small" id="status" role="status">Lade aktuelle Wetterdaten …</div><button type="button" id="retryWeather" class="retry-weather" hidden>↻ Nochmals laden</button></div><span class="tag">Wetter & aktuelle Messwerte</span></div>
  <div class="grid">
   <section class="card"><h2>🌤 Aktuelle Wetterprognose</h2><div class="pad"><div class="current"><div class="icon" id="currentIcon">⛅</div><div><div class="big" id="currentTemp">—°</div><strong id="currentDesc">Wird geladen …</strong><div class="muted" id="feels">Gefühlt —°</div></div></div><div class="parts" id="dayParts"><div class="part">Vormittag</div><div class="part">Nachmittag</div><div class="part">Abend</div></div></div></section>
   <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div></section>
@@ -76,18 +77,32 @@
 const $=id=>document.getElementById(id);
 const places=[{name:'München',country:'Deutschland',lat:48.1372,lon:11.5756},{name:'Levanto',country:'Italien',lat:44.169,lon:9.612},{name:'Suances',country:'Spanien',lat:43.428,lon:-4.043},{name:'Kitzbühel',country:'Österreich',lat:47.446,lon:12.392},{name:'Nußdorf am Inn',country:'Deutschland',lat:47.743,lon:12.164}];
 let place=places[0], lastRefresh=0, requestId=0, activeForecastData=null, selectedDayIndex=-1;
-function isRainCode(code){return [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(code)}
-// Leicht: ein Tropfen, mittel: zwei, stark: drei. WMO-Code dient als
-// Fallback, wenn die gemeldete Niederschlagsmenge auf 0 gerundet ist.
-function rainCount(mm,code){
- // Nur ein Niederschlags-Wettercode darf ein Regensymbol auslösen.
- // Winzige berechnete Niederschlagsmengen allein bedeuten keinen aktuellen Regen.
- if(!isRainCode(code))return 0;
- const val=mm === null || mm === undefined ? NaN : Number(mm);
- const codeLevel=[55,57,65,67,82,95,96,99].includes(code)?3:
-                 [53,63,81].includes(code)?2:1;
- if(!Number.isFinite(val)||val<0.05)return codeLevel;
- return Math.max(codeLevel,val>=1.2?3:val>=0.5?2:1);
+// WMO-Wettercodes: 45/48 sind Nebel, 51-57 Nieselregen, 61+ Regen.
+// Ein Regen-Code allein beweist keinen tatsaechlichen Niederschlag am Boden.
+function isRainCode(code){return [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,97,99].includes(code)}
+function weatherContext(data,index,period='hourly'){
+ const get=k=>index===undefined?data?.[k]:data?.[k]?.[index];
+ return {period,cloudCoverLow:get('cloud_cover_low'),cloudCover:get('cloud_cover'),visibility:get('visibility'),precipitationProbability:get('precipitation_probability')};
+}
+// Bewusst konservative Anzeige: Code + nennenswerte Modell-Niederschlagsmenge.
+// current: 15-Minuten-Wert; hourly: Stunde; daily: Tag. Dichte Wolken
+// oder WMO-Nieselregencode bei 0 mm ergeben KEIN Regensymbol.
+function rainCount(mm,code,context={}){
+ if(!isRainCode(code)||!Number.isFinite(mm)||mm<0)return 0;
+ const period=context.period||'hourly';
+ const threshold=period==='current'?0.1:period==='daily'?0.4:0.2;
+ if(mm+1e-8<threshold)return 0;
+ const drizzle=[51,53,55].includes(code);
+ const chance=context.precipitationProbability;
+ // Unsichere, sehr geringe Nieselregen-Signale nicht als sicheren Regen ausgeben.
+ if(drizzle&&period==='hourly'&&Number.isFinite(chance)&&chance<35&&mm<0.5)return 0;
+ // Hochnebel kann im Modell Nieselregen-Signale erzeugen: nur bei messbarer
+ // Staerke als Nieselregen anzeigen, sonst den Wolken-/Nebelzustand.
+ if(drizzle&&period==='current'&&mm<0.2&&Number.isFinite(context.cloudCoverLow)&&context.cloudCoverLow>=85)return 0;
+ const base=[55,57,65,67,82,95,96,97,99].includes(code)?3:
+            [53,63,81].includes(code)?2:1;
+ const scale=period==='current'?4:period==='daily'?0.15:1;
+ return Math.max(base,mm*scale>=1.2?3:mm*scale>=0.5?2:1);
 }
 function rainSymbol(n){return 'RAIN:'+Math.max(1,Math.min(3,n))}
 // Eigene SVG-Grafik statt Emoji: je nach Intensitaet EXAKT 1, 2 oder 3
@@ -100,14 +115,28 @@ function rainSvgInner(n){
 }
 function iconHTML(icon){if(typeof icon==='string'&&icon.startsWith('RAIN:')){const n=Number(icon.slice(5));return `<svg class="rain-icon" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${n} Regentropfen" xmlns="http://www.w3.org/2000/svg">${rainSvgInner(n)}</svg>`;}return icon;}
 function rainName(n){return ['Kein messbarer Regen','Leichter Regen','Mittlerer Regen','Starker Regen'][n]}
-function detail(code,day=true,mm=null){
- const count=rainCount(mm,code);
- if(count)return[rainName(count),rainSymbol(count)];
- if(code===0)return day?['Sonnig','☀️']:['Klar','🌙'];if(code===1)return day?['Überwiegend sonnig','🌤️']:['Meist klar','🌙'];if(code===2)return day?['Teilweise bewölkt','⛅']:['Leicht bewölkt','☁️🌙'];if(code===3)return['Bedeckt','☁️'];if([45,48].includes(code))return['Neblig','🌫️'];if([71,73,75,77,85,86].includes(code))return['Schnee','🌨️'];return['Wetter','🌥️'];
+function detail(code,day=true,mm=null,context={}){
+ const count=rainCount(mm,code,context);
+ if(count)return[[51,53,55,56,57].includes(code)?'Nieselregen':rainName(count),rainSymbol(count)];
+ const vis=context.visibility,low=context.cloudCoverLow,cloud=context.cloudCover;
+ const isFogOrCloud=[2,3,45,48].includes(code)||[51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code);
+ if([45,48].includes(code)||(isFogOrCloud&&Number.isFinite(vis)&&vis>=0&&vis<1000))return['Nebel','🌫️'];
+ if(isFogOrCloud&&Number.isFinite(low)&&low>=85)return['Hochnebel / tiefe Wolken','🌫️'];
+ if(isRainCode(code)){
+   if([95,96,97,99].includes(code))return['Gewitter möglich','⛈️'];
+   return ['Bewölkt','☁️'];
+ }
+ if(code===0)return day?['Sonnig','☀️']:['Klar','🌙'];
+ if(code===1)return day?['Überwiegend sonnig','🌤️']:['Meist klar','🌙'];
+ if(code===2)return day?['Teilweise bewölkt','⛅']:['Leicht bewölkt','☁️🌙'];
+ if(code===3)return['Bedeckt','☁️'];
+ if([71,73,75,77,85,86].includes(code))return['Schnee','🌨️'];
+ if(Number.isFinite(cloud)&&cloud>=80)return['Bedeckt','☁️'];
+ return['Wetter','🌥️'];
 }
 const fmtNum=(n,digits=0)=>Number(n).toLocaleString('de-DE',{maximumFractionDigits:digits});
 const safeDate=(s)=>new Date(s+'T12:00:00');
-function rainLevel(mm,code){const n=rainCount(mm,code);return [n?rainSymbol(n):'☀️',n?rainName(n):'Kein messbarer Regen'];}
+function rainLevel(mm,code,context={}){const n=rainCount(mm,code,context);return [n?rainSymbol(n):'☁️',n?rainName(n):'Kein messbarer Regen'];}
 function updateMaps(){
  // Beide Windy-Karten bleiben auf München fixiert, auch bei der Wetter-Ortssuche.
  // Zoom 9 entspricht je nach Bildschirmgröße etwa einem Umkreis von 75 km.
@@ -181,12 +210,12 @@ function renderMobileChart(d){
    const code=daily.weather_code?.[i]??3,date=daily.time[i];
    const at14=d.hourly?.time?.indexOf(date+'T14:00')??-1;
    const hourCode=at14>=0?d.hourly.weather_code[at14]:code;
-   const kind=isRainCode(code)?'rain':hourCode===0||hourCode===1?'sun':'mixed';
+   const kind=rainCount(daily.precipitation_sum?.[i],code,{period:'daily'})?'rain':hourCode===0||hourCode===1?'sun':'mixed';
    const bg={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'}[kind];
    const x0=left+i*cell+1;
    svg+=`<rect x="${x0}" y="4" width="${cell-2}" height="308" rx="5" fill="${bg}"/>`;
    const mm=at14>=0?d.hourly.precipitation?.[at14]:null;
-   const ic=detail(hourCode,true,mm)[1];
+   const ic=detail(hourCode,true,mm,at14>=0?weatherContext(d.hourly,at14):{})[1];
    if(ic.startsWith('RAIN:')){
      const count=Number(ic.slice(5));
      svg+=`<svg x="${X(i)-13}" y="5" width="26" height="38" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
@@ -252,13 +281,13 @@ function renderChart(d){
    const code=daily.weather_code[i],date=daily.time[i];
    const at14=d.hourly.time.indexOf(date+'T14:00');
    const hourlyCode=at14>=0?d.hourly.weather_code[at14]:code;
-   const isRain=isRainCode(code);
+   const isRain=rainCount(daily.precipitation_sum?.[i],code,{period:'daily'})>0;
    const kind=isRain?'rain':hourlyCode===0||hourlyCode===1?'sun':'mixed';
    const colors={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'};
    const x0=left+i*cellWidth+3;
    svg+=`<rect x="${x0}" y="15" width="${cellWidth-6}" height="495" rx="12" fill="${colors[kind]}"/>`;
    const mmAt14=at14>=0?d.hourly.precipitation?.[at14]:null;
-   const icon=detail(hourlyCode,true,mmAt14)[1];
+   const icon=detail(hourlyCode,true,mmAt14,at14>=0?weatherContext(d.hourly,at14):{})[1];
    if(icon.startsWith('RAIN:')){
      const count=Number(icon.slice(5));
      svg+=`<svg x="${X(i)-25}" y="18" width="50" height="68" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
@@ -317,7 +346,7 @@ function showDayDetails(index,scrollToDetails){
  const date=day.time[index];
  const name=new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(safeDate(date));
  const code=day.weather_code?.[index];
- const [weatherLabel]=detail(code,true,day.precipitation_sum?.[index]);
+ const [weatherLabel]=detail(code,true,day.precipitation_sum?.[index],{period:'daily'});
  const max=day.temperature_2m_max?.[index],min=day.temperature_2m_min?.[index];
  const sun=day.sunshine_duration?.[index],knots=day.wind_speed_10m_max?.[index],gusts=day.wind_gusts_10m_max?.[index],degrees=day.wind_direction_10m_dominant?.[index];
  const sunText=Number.isFinite(sun)?fmtNum(sun/3600,1)+' h':'—';
@@ -332,12 +361,12 @@ function showDayDetails(index,scrollToDetails){
  const partHtml=partHours.map(([label,t])=>{
    const i=d.hourly.time.indexOf(date+'T'+t);
    if(i<0)return `<div class="day-part-item"><strong>${label}</strong><div class="caption">Keine Daten</div></div>`;
-   const [caption,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i]);
+   const [caption,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
    const temp=d.hourly.temperature_2m?.[i];
    return `<div class="day-part-item"><div class="caption">${label} · ${t}</div><div class="wx-icon">${iconHTML(ic)}</div><strong>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</strong><div class="caption">${caption}</div><div class="caption">☂ ${d.hourly.precipitation_probability?.[i]??'—'} %</div></div>`;
  }).join('');
  const hourlyHtml=indexes.map(i=>{
-   const time=d.hourly.time[i].slice(11,16),[label,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i]);
+   const time=d.hourly.time[i].slice(11,16),[label,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
    const temp=d.hourly.temperature_2m?.[i],chance=d.hourly.precipitation_probability?.[i],speed=d.hourly.wind_speed_10m?.[i],gust=d.hourly.wind_gusts_10m?.[i],direction=d.hourly.wind_direction_10m?.[i];
    return `<div class="day-hour" title="${label}"><div class="tiny">${time} Uhr</div><div class="hour-weather">${iconHTML(ic)}</div><b>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</b><div class="tiny">☂ ${chance??'—'} %</div><div class="tiny">💨 ${Number.isFinite(speed)?fmtNum(speed,0)+' kn':'—'} ${compassDirection(direction)}</div><div class="tiny${windSockLevel(speed,gust)==='strong'?' gust-alert':''}">Böen ${Number.isFinite(gust)?fmtNum(gust,0)+' kn':'—'}</div></div>`;
  }).join('');
@@ -359,11 +388,119 @@ $('chart').addEventListener('keydown',event=>{
  const target=event.target.closest('[data-day-index]');
  if(target){event.preventDefault();selectDailyForecast(Number(target.dataset.dayIndex));}
 });
-async function loadWeather(p,skipMaps=false){if(!skipMaps){selectedDayIndex=-1;activeForecastData=null;$('dayDetails').hidden=true;}place=p;const id=++requestId;$('city').textContent=p.name+(p.country?', '+p.country:'');$('status').textContent='Aktualisiere Wetterdaten …';if(!skipMaps)updateMaps();
- try{const u=new URL('https://api.open-meteo.com/v1/forecast');Object.entries({latitude:p.lat,longitude:p.lon,current:'temperature_2m,apparent_temperature,precipitation,weather_code,is_day',hourly:'temperature_2m,precipitation_probability,weather_code,is_day,precipitation,wind_speed_10m,wind_gusts_10m,wind_direction_10m',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,sunshine_duration,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant',wind_speed_unit:'kn',timezone:'auto',forecast_days:14,_:Date.now()}).forEach(([k,v])=>u.searchParams.set(k,v));const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw Error('Wetterdienst nicht erreichbar ('+r.status+')');const d=await r.json();if(id!==requestId)return;const c=d.current;const [desc,icon]=detail(c.weather_code,Boolean(c.is_day),c.precipitation);$('currentIcon').innerHTML=iconHTML(icon);$('currentTemp').textContent=Math.round(c.temperature_2m)+'°';$('currentDesc').textContent=desc;$('feels').textContent='Gefühlt '+Math.round(c.apparent_temperature)+'°';
- const today=c.time.slice(0,10);$('dayParts').innerHTML=[['Vormittag','10:00'],['Nachmittag','15:00'],['Abend','20:00']].map(([label,time])=>{let i=d.hourly.time.indexOf(today+'T'+time);if(i<0)return`<div class="part"><strong>${label}</strong><span class="small muted">Keine Daten</span></div>`;const [des,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i]);return`<div class="part"><span class="small">${label}</span><span class="emoji">${iconHTML(ic)}</span><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><span class="small muted">${des}</span></div>`}).join('');
- let start=d.hourly.time.findIndex(t=>t>=c.time);start=Math.max(start,0);$('hourly').innerHTML=d.hourly.time.slice(start,start+24).map((t,j)=>{const i=start+j;const [_,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i]);return`<div class="hour"><div class="small muted">${j===0?'Jetzt':t.slice(11,16)}</div><div class="ico">${iconHTML(ic)}</div><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><div class="small muted">☂ ${d.hourly.precipitation_probability[i]??0}%</div></div>`}).join('');activeForecastData=d;renderChart(d);$('status').textContent='Wetterdaten frisch geladen · '+new Intl.DateTimeFormat('de-DE',{dateStyle:'short',timeStyle:'short'}).format(new Date());
- }catch(e){if(id===requestId)$('status').textContent='Fehler: '+e.message+' · Bitte Internetverbindung prüfen.';}}
+// Robuster Wetterabruf: nur offiziell unterstuetzte CURRENT-Variablen.
+// cloud_cover_low und visibility werden ausschliesslich STUENDLICH abgefragt;
+// zur Nebelerkennung benutzen wir den zur aktuellen Uhrzeit passenden Stundenwert.
+const forecastDailyFields='weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,sunshine_duration,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant';
+const forecastHourlyCore='temperature_2m,precipitation_probability,weather_code,is_day,precipitation,cloud_cover,wind_speed_10m,wind_gusts_10m,wind_direction_10m';
+const forecastCachePrefix='passis-wetter-forecast-v3:';
+function makeForecastUrl(p,compact=false){
+ const u=new URL('https://api.open-meteo.com/v1/forecast');
+ const params={latitude:p.lat,longitude:p.lon,current:'temperature_2m,apparent_temperature,precipitation,weather_code,is_day,cloud_cover',hourly:compact?forecastHourlyCore:forecastHourlyCore+',cloud_cover_low,visibility',daily:forecastDailyFields,wind_speed_unit:'kn',timezone:'auto',forecast_days:14};
+ Object.entries(params).forEach(([key,value])=>u.searchParams.set(key,value));
+ return u.toString();
+}
+function isValidForecast(d){return Boolean(d&&d.current&&typeof d.current.time==='string'&&Number.isFinite(d.current.temperature_2m)&&d.hourly&&Array.isArray(d.hourly.time)&&Array.isArray(d.hourly.temperature_2m)&&d.hourly.time.length>=24&&d.daily&&Array.isArray(d.daily.time)&&d.daily.time.length>=7)}
+function cacheKey(p){return forecastCachePrefix+Number(p.lat).toFixed(4)+','+Number(p.lon).toFixed(4)}
+function saveForecast(p,d){try{localStorage.setItem(cacheKey(p),JSON.stringify({saved:Date.now(),data:d}))}catch(e){/* Kein Storage z.B. in Privatmodus */}}
+function cachedForecast(p){try{const result=JSON.parse(localStorage.getItem(cacheKey(p))||'null');if(result&&Number.isFinite(result.saved)&&Date.now()-result.saved<24*3600*1000&&isValidForecast(result.data))return result}catch(e){}return null}
+function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
+async function fetchForecastOnce(url){
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),15000);
+ try{
+  const r=await fetch(url,{signal:controller.signal,cache:'no-cache'});
+  if(!r.ok){const err=new Error('HTTP '+r.status);err.status=r.status;throw err}
+  const d=await r.json();
+  if(!isValidForecast(d))throw new Error('Wetterdaten unvollständig');
+  return d;
+ }finally{clearTimeout(timeout)}
+}
+async function fetchForecast(p){
+ let lastError;
+ // Bei 503/502/504 erst den normalen Aufruf wiederholen, dann mit weniger
+ // Parametern probieren. Bei 400 direkt mit reduziertem Variablensatz weiter.
+ for(const compact of [false,true]){
+  const url=makeForecastUrl(p,compact);
+  const attempts=compact?1:2;
+  for(let attempt=0;attempt<attempts;attempt++){
+   try{return await fetchForecastOnce(url)}
+   catch(e){
+    lastError=e;
+    if(e.status===400||e.status===422||e.status===401||e.status===403)break;
+    if(attempt+1<attempts)await pause(1100);
+   }
+  }
+ }
+ throw lastError||new Error('Wetterdienst vorübergehend nicht erreichbar');
+}
+function currentWeatherContext(d){
+ const c=d.current;
+ // Die CURRENT-Zeit kann z.B. :15 sein, HOURLY hingegen immer :00.
+ const hour=(c.time||'').slice(0,13);
+ let i=d.hourly.time.findIndex(t=>t.slice(0,13)===hour);
+ if(i<0)i=0;
+ const ctx=weatherContext(d.hourly,i,'current');
+ if(Number.isFinite(c.cloud_cover))ctx.cloudCover=c.cloud_cover;
+ return ctx;
+}
+function renderForecast(d){
+ const c=d.current;
+ const [desc,icon]=detail(c.weather_code,Boolean(c.is_day),c.precipitation,currentWeatherContext(d));
+ $('currentIcon').innerHTML=iconHTML(icon);
+ $('currentTemp').textContent=Math.round(c.temperature_2m)+'°';
+ $('currentDesc').textContent=desc;
+ $('feels').textContent='Gefühlt '+(Number.isFinite(c.apparent_temperature)?Math.round(c.apparent_temperature)+'°':'—');
+ const today=c.time.slice(0,10);
+ $('dayParts').innerHTML=[['Vormittag','10:00'],['Nachmittag','15:00'],['Abend','20:00']].map(([label,time])=>{
+  const i=d.hourly.time.indexOf(today+'T'+time);
+  if(i<0)return `<div class="part"><strong>${label}</strong><span class="small muted">Keine Daten</span></div>`;
+  const [des,ic]=detail(d.hourly.weather_code?.[i],Boolean(d.hourly.is_day?.[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
+  return `<div class="part"><span class="small">${label}</span><span class="emoji">${iconHTML(ic)}</span><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><span class="small muted">${des}</span></div>`;
+ }).join('');
+ let start=d.hourly.time.findIndex(t=>t>=c.time);start=Math.max(start,0);
+ $('hourly').innerHTML=d.hourly.time.slice(start,start+24).map((t,j)=>{
+  const i=start+j;
+  const [label,ic]=detail(d.hourly.weather_code?.[i],Boolean(d.hourly.is_day?.[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
+  return `<div class="hour" title="${label}"><div class="small muted">${j===0?'Jetzt':t.slice(11,16)}</div><div class="ico">${iconHTML(ic)}</div><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><div class="small muted">☂ ${d.hourly.precipitation_probability?.[i]??0}%</div></div>`;
+ }).join('');
+ activeForecastData=d;
+ renderChart(d);
+}
+async function loadWeather(p,skipMaps=false){
+ lastRefresh=Date.now();
+ if(!skipMaps){
+  selectedDayIndex=-1;activeForecastData=null;$('dayDetails').hidden=true;
+  $('currentTemp').textContent='—°';$('currentDesc').textContent='Wird geladen …';$('currentIcon').textContent='⛅';$('feels').textContent='Gefühlt —°';
+  $('dayParts').innerHTML='';$('hourly').innerHTML='';$('chart').innerHTML='';
+ }
+ place=p;
+ const id=++requestId;
+ $('city').textContent=p.name+(p.country?', '+p.country:'');
+ $('status').textContent='Aktualisiere Wetterdaten …';
+ $('retryWeather').hidden=true;
+ if(!skipMaps)updateMaps();
+ try{
+  const d=await fetchForecast(p);
+  if(id!==requestId)return;
+  renderForecast(d);
+  saveForecast(p,d);
+  $('status').textContent='Wetterdaten frisch geladen · '+new Intl.DateTimeFormat('de-DE',{dateStyle:'short',timeStyle:'short'}).format(new Date());
+ }catch(e){
+  if(id!==requestId)return;
+  const saved=cachedForecast(p);
+  const reason=e.status?'HTTP '+e.status:'Verbindung vorübergehend gestört';
+  if(saved){
+   renderForecast(saved.data);
+   const date=new Intl.DateTimeFormat('de-DE',{dateStyle:'short',timeStyle:'short'}).format(new Date(saved.saved));
+   $('status').textContent='⚠ Wetterdienst '+reason+' · Letzte gespeicherte Vorhersage vom '+date+' (nicht aktuell)';
+  }else{
+   $('status').textContent='⚠ Wetterdienst momentan nicht erreichbar ('+reason+'). Bitte erneut versuchen.';
+  }
+  $('retryWeather').hidden=false;
+ }
+}
+$('retryWeather').addEventListener('click',()=>loadWeather(place,true));
 const gkd='https://www.gkd.bayern.de/de/fluesse/wasserstand/kelheim/muenchen-himmelreichbruecke-16515005/messwerte';
 function setSpecial(index,html){const e=$('special-'+index);if(e)e.innerHTML=html}
 async function refreshEisbach(){const el=$('eisbach-reading');if(!el)return;try{const r=await fetch('./data/eisbach.json?_='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('Keine Messwertdatei');const d=await r.json();if(typeof d.water_level_cm!=='number'||!d.observed_at)throw Error('Kein aktueller Messwert');const age=(Date.now()-new Date(d.observed_at).getTime())/3600000;const label=d.observed_at_label||new Date(d.observed_at).toLocaleString('de-DE');el.innerHTML=`<b>${fmtNum(d.water_level_cm)} cm</b><small>Messung: ${label}${age>6?' · älter als 6 Stunden':''}</small>`;}catch{el.innerHTML=`<span class="muted">Messwert derzeit nicht abrufbar</span><small><a target="_blank" rel="noopener" href="${gkd}">GKD-Messstelle öffnen</a></small>`}}
