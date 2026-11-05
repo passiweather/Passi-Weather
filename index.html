@@ -75,6 +75,7 @@
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
+const windReference={name:'Windshausen bei Erl',lat:47.70537,lon:12.16575};
 const places=[{name:'München',country:'Deutschland',lat:48.1372,lon:11.5756},{name:'Levanto',country:'Italien',lat:44.169,lon:9.612},{name:'Suances',country:'Spanien',lat:43.428,lon:-4.043},{name:'Kitzbühel',country:'Österreich',lat:47.446,lon:12.392},{name:'Nußdorf am Inn',country:'Deutschland',lat:47.743,lon:12.164}];
 let place=places[0], lastRefresh=0, requestId=0, activeForecastData=null, selectedDayIndex=-1;
 // WMO-Wettercodes: 45/48 sind Nebel, 51-57 Nieselregen, 61+ Regen.
@@ -88,38 +89,21 @@ function weatherContext(data,index,period='hourly'){
 // current: 15-Minuten-Wert; hourly: Stunde; daily: Tag. Dichte Wolken
 // oder WMO-Nieselregencode bei 0 mm ergeben KEIN Regensymbol.
 function rainCount(mm,code,context={}){
- // A rain code alone is not sufficient evidence for visible rain.
- // Use BOTH forecast amount and probability. Higher confidence is needed
- // for a definite raindrop symbol in the near-term hourly forecast.
- if(!isRainCode(code)||!Number.isFinite(mm)||mm<=0)return 0;
+ if(!isRainCode(code)||!Number.isFinite(mm)||mm<0)return 0;
  const period=context.period||'hourly';
- const minimum=period==='current'?0.25:period==='daily'?1.5:0.4;
- const minimumChance=period==='current'?65:period==='daily'?65:70;
- if(mm+1e-8<minimum)return 0;
+ const threshold=period==='current'?0.1:period==='daily'?0.4:0.2;
+ if(mm+1e-8<threshold)return 0;
+ const drizzle=[51,53,55].includes(code);
  const chance=context.precipitationProbability;
- if(Number.isFinite(chance)){
-  if(chance<minimumChance)return 0;
- }else{
-  // A missing probability is not proof of rain. Require a much
-  // clearer precipitation signal before showing a rain icon.
-  if(mm<(period==='current'?0.6:period==='daily'?4:1.2))return 0;
- }
- // Low cloud/fog plus weak precipitation is often over-interpreted as rain.
- if([51,53,55,56,57].includes(code)&&Number.isFinite(context.cloudCoverLow)&&context.cloudCoverLow>=85&&mm<(period==='current'?0.5:0.8))return 0;
- // Count of drops is the forecast precipitation intensity, not probability.
- const rate=period==='current'?mm*4:period==='daily'?mm/6:mm;
- return rate>=2.5?3:rate>=1?2:1;
-}
-// Open-Meteo hourly precipitation and precipitation probability refer to
-// the PRECEDING hour. The 19:00 amounts describe 18:00-19:00.
-// Align values with the hour people actually tap (18 means 18:00-19:00).
-function hourForwardIndex(hourly,index){return index+1<(hourly.time?.length||0)?index+1:index}
-function hourProbability(hourly,index){return hourly.precipitation_probability?.[hourForwardIndex(hourly,index)]??null}
-function hourWeather(hourly,index){
- const next=hourForwardIndex(hourly,index);
- const ctx=weatherContext(hourly,index);
- ctx.precipitationProbability=hourly.precipitation_probability?.[next];
- return detail(hourly.weather_code?.[index],Boolean(hourly.is_day?.[index]),hourly.precipitation?.[next],ctx);
+ // Unsichere, sehr geringe Nieselregen-Signale nicht als sicheren Regen ausgeben.
+ if(drizzle&&period==='hourly'&&Number.isFinite(chance)&&chance<35&&mm<0.5)return 0;
+ // Hochnebel kann im Modell Nieselregen-Signale erzeugen: nur bei messbarer
+ // Staerke als Nieselregen anzeigen, sonst den Wolken-/Nebelzustand.
+ if(drizzle&&period==='current'&&mm<0.2&&Number.isFinite(context.cloudCoverLow)&&context.cloudCoverLow>=85)return 0;
+ const base=[55,57,65,67,82,95,96,97,99].includes(code)?3:
+            [53,63,81].includes(code)?2:1;
+ const scale=period==='current'?4:period==='daily'?0.15:1;
+ return Math.max(base,mm*scale>=1.2?3:mm*scale>=0.5?2:1);
 }
 function rainSymbol(n){return 'RAIN:'+Math.max(1,Math.min(3,n))}
 // Eigene SVG-Grafik statt Emoji: je nach Intensitaet EXAKT 1, 2 oder 3
@@ -204,6 +188,25 @@ function windSockSVG(x,y,windKn,gustKn,id){
 }
 
 /* Kompakte Grafik nur fuer Smartphones: acht anklickbare Tage auf einen Blick. */
+
+function smoothLinePath(points){
+ if(!Array.isArray(points)||points.length<2)return '';
+ const coords=points.map(p=>typeof p==='string'?p.split(',').map(Number):[p.x,p.y]).map(([x,y])=>({x,y}));
+ let d=`M ${coords[0].x} ${coords[0].y}`;
+ for(let i=0;i<coords.length-1;i++){
+   const p0=i>0?coords[i-1]:coords[i];
+   const p1=coords[i];
+   const p2=coords[i+1];
+   const p3=i!==coords.length-2?coords[i+2]:p2;
+   const cp1x=(p1.x+(p2.x-p0.x)/6).toFixed(2);
+   const cp1y=(p1.y+(p2.y-p0.y)/6).toFixed(2);
+   const cp2x=(p2.x-(p3.x-p1.x)/6).toFixed(2);
+   const cp2y=(p2.y-(p3.y-p1.y)/6).toFixed(2);
+   d+=` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+ }
+ return d;
+}
+
 function renderMobileChart(d){
  const daily=d.daily||{}, N=Math.min(14,daily.time?.length||0);
  if(!N){$('chart').innerHTML='';return;}
@@ -227,11 +230,12 @@ function renderMobileChart(d){
    const code=daily.weather_code?.[i]??3,date=daily.time[i];
    const at14=d.hourly?.time?.indexOf(date+'T14:00')??-1;
    const hourCode=at14>=0?d.hourly.weather_code[at14]:code;
-   const kind=rainCount(daily.precipitation_sum?.[i],code,{period:'daily',precipitationProbability:daily.precipitation_probability_max?.[i]})?'rain':hourCode===0||hourCode===1?'sun':'mixed';
+   const kind=rainCount(daily.precipitation_sum?.[i],code,{period:'daily'})?'rain':hourCode===0||hourCode===1?'sun':'mixed';
    const bg={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'}[kind];
    const x0=left+i*cell+1;
    svg+=`<rect x="${x0}" y="4" width="${cell-2}" height="308" rx="5" fill="${bg}"/>`;
-   const ic=(at14>=0?hourWeather(d.hourly,at14):detail(code,true,daily.precipitation_sum?.[i],{period:'daily',precipitationProbability:daily.precipitation_probability_max?.[i]}))[1];
+   const mm=at14>=0?d.hourly.precipitation?.[at14]:null;
+   const ic=detail(hourCode,true,mm,at14>=0?weatherContext(d.hourly,at14):{})[1];
    if(ic.startsWith('RAIN:')){
      const count=Number(ic.slice(5));
      svg+=`<svg x="${X(i)-13}" y="5" width="26" height="38" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
@@ -258,7 +262,7 @@ function renderMobileChart(d){
  }
  for(const [arr,color] of [[hi,'#ef9c22'],[lo,'#318ed9']]){
    const pts=arr.map((v,i)=>Number.isFinite(v)?`${X(i)},${Y(v)}`:null).filter(Boolean);
-   if(pts.length>1)svg+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;
+   if(pts.length>1)svg+=`<path d="${smoothLinePath(pts)}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;
    for(let i=0;i<N;i++){
      if(!Number.isFinite(arr[i]))continue;
      svg+=`<circle cx="${X(i)}" cy="${Y(arr[i])}" r="2.4" fill="${color}"/>`;
@@ -297,12 +301,13 @@ function renderChart(d){
    const code=daily.weather_code[i],date=daily.time[i];
    const at14=d.hourly.time.indexOf(date+'T14:00');
    const hourlyCode=at14>=0?d.hourly.weather_code[at14]:code;
-   const isRain=rainCount(daily.precipitation_sum?.[i],code,{period:'daily',precipitationProbability:daily.precipitation_probability_max?.[i]})>0;
+   const isRain=rainCount(daily.precipitation_sum?.[i],code,{period:'daily'})>0;
    const kind=isRain?'rain':hourlyCode===0||hourlyCode===1?'sun':'mixed';
    const colors={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'};
    const x0=left+i*cellWidth+3;
    svg+=`<rect x="${x0}" y="15" width="${cellWidth-6}" height="495" rx="12" fill="${colors[kind]}"/>`;
-   const icon=(at14>=0?hourWeather(d.hourly,at14):detail(code,true,daily.precipitation_sum?.[i],{period:'daily',precipitationProbability:daily.precipitation_probability_max?.[i]}))[1];
+   const mmAt14=at14>=0?d.hourly.precipitation?.[at14]:null;
+   const icon=detail(hourlyCode,true,mmAt14,at14>=0?weatherContext(d.hourly,at14):{})[1];
    if(icon.startsWith('RAIN:')){
      const count=Number(icon.slice(5));
      svg+=`<svg x="${X(i)-25}" y="18" width="50" height="68" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
@@ -332,7 +337,7 @@ function renderChart(d){
  }
  for(const [arr,color] of [[hi,'#ef9c22'],[lo,'#318ed9']]){
    const pts=arr.map((v,i)=>Number.isFinite(v)?`${X(i)},${Y(v)}`:null).filter(Boolean);
-   if(pts.length>1)svg+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>`;
+   if(pts.length>1)svg+=`<path d="${smoothLinePath(pts)}" fill="none" stroke="${color}" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>`;
    for(let i=0;i<N;i++){
      if(!Number.isFinite(arr[i]))continue;
      svg+=`<circle cx="${X(i)}" cy="${Y(arr[i])}" r="4.2" fill="${color}"/>`;
@@ -361,7 +366,7 @@ function showDayDetails(index,scrollToDetails){
  const date=day.time[index];
  const name=new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(safeDate(date));
  const code=day.weather_code?.[index];
- const [weatherLabel]=detail(code,true,day.precipitation_sum?.[index],{period:'daily',precipitationProbability:day.precipitation_probability_max?.[index]});
+ const [weatherLabel]=detail(code,true,day.precipitation_sum?.[index],{period:'daily'});
  const max=day.temperature_2m_max?.[index],min=day.temperature_2m_min?.[index];
  const sun=day.sunshine_duration?.[index],knots=day.wind_speed_10m_max?.[index],gusts=day.wind_gusts_10m_max?.[index],degrees=day.wind_direction_10m_dominant?.[index];
  const sunText=Number.isFinite(sun)?fmtNum(sun/3600,1)+' h':'—';
@@ -376,13 +381,13 @@ function showDayDetails(index,scrollToDetails){
  const partHtml=partHours.map(([label,t])=>{
    const i=d.hourly.time.indexOf(date+'T'+t);
    if(i<0)return `<div class="day-part-item"><strong>${label}</strong><div class="caption">Keine Daten</div></div>`;
-   const [caption,ic]=hourWeather(d.hourly,i);
+   const [caption,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
    const temp=d.hourly.temperature_2m?.[i];
-   return `<div class="day-part-item"><div class="caption">${label} · ${t}</div><div class="wx-icon">${iconHTML(ic)}</div><strong>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</strong><div class="caption">${caption}</div><div class="caption">☂ ${hourProbability(d.hourly,i)??'—'} %</div></div>`;
+   return `<div class="day-part-item"><div class="caption">${label} · ${t}</div><div class="wx-icon">${iconHTML(ic)}</div><strong>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</strong><div class="caption">${caption}</div><div class="caption">☂ ${d.hourly.precipitation_probability?.[i]??'—'} %</div></div>`;
  }).join('');
  const hourlyHtml=indexes.map(i=>{
-   const time=d.hourly.time[i].slice(11,16),[label,ic]=hourWeather(d.hourly,i);
-   const temp=d.hourly.temperature_2m?.[i],chance=hourProbability(d.hourly,i),speed=d.hourly.wind_speed_10m?.[i],gust=d.hourly.wind_gusts_10m?.[i],direction=d.hourly.wind_direction_10m?.[i];
+   const time=d.hourly.time[i].slice(11,16),[label,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
+   const temp=d.hourly.temperature_2m?.[i],chance=d.hourly.precipitation_probability?.[i],speed=d.hourly.wind_speed_10m?.[i],gust=d.hourly.wind_gusts_10m?.[i],direction=d.hourly.wind_direction_10m?.[i];
    return `<div class="day-hour" title="${label}"><div class="tiny">${time} Uhr</div><div class="hour-weather">${iconHTML(ic)}</div><b>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</b><div class="tiny">☂ ${chance??'—'} %</div><div class="tiny">💨 ${Number.isFinite(speed)?fmtNum(speed,0)+' kn':'—'} ${compassDirection(direction)}</div><div class="tiny${windSockLevel(speed,gust)==='strong'?' gust-alert':''}">Böen ${Number.isFinite(gust)?fmtNum(gust,0)+' kn':'—'}</div></div>`;
  }).join('');
  box.innerHTML=`<div class="day-details-head"><div><h3>📅 ${name}</h3><div class="muted small">${weatherLabel} · Tagesvorhersage für ${place.name}</div></div><button type="button" id="closeDayDetails" aria-label="Tagesdetails schließen">✕ Schließen</button></div>
@@ -408,7 +413,7 @@ $('chart').addEventListener('keydown',event=>{
 // zur Nebelerkennung benutzen wir den zur aktuellen Uhrzeit passenden Stundenwert.
 const forecastDailyFields='weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,sunshine_duration,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant';
 const forecastHourlyCore='temperature_2m,precipitation_probability,weather_code,is_day,precipitation,cloud_cover,wind_speed_10m,wind_gusts_10m,wind_direction_10m';
-const forecastCachePrefix='passis-wetter-forecast-v4:';
+const forecastCachePrefix='passis-wetter-forecast-v3:';
 function makeForecastUrl(p,compact=false){
  const u=new URL('https://api.open-meteo.com/v1/forecast');
  const params={latitude:p.lat,longitude:p.lon,current:'temperature_2m,apparent_temperature,precipitation,weather_code,is_day,cloud_cover',hourly:compact?forecastHourlyCore:forecastHourlyCore+',cloud_cover_low,visibility',daily:forecastDailyFields,wind_speed_unit:'kn',timezone:'auto',forecast_days:14};
@@ -470,14 +475,14 @@ function renderForecast(d){
  $('dayParts').innerHTML=[['Vormittag','10:00'],['Nachmittag','15:00'],['Abend','20:00']].map(([label,time])=>{
   const i=d.hourly.time.indexOf(today+'T'+time);
   if(i<0)return `<div class="part"><strong>${label}</strong><span class="small muted">Keine Daten</span></div>`;
-  const [des,ic]=hourWeather(d.hourly,i);
+  const [des,ic]=detail(d.hourly.weather_code?.[i],Boolean(d.hourly.is_day?.[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
   return `<div class="part"><span class="small">${label}</span><span class="emoji">${iconHTML(ic)}</span><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><span class="small muted">${des}</span></div>`;
  }).join('');
- let start=d.hourly.time.findIndex(t=>t.slice(0,13)===c.time.slice(0,13));if(start<0)start=Math.max(0,d.hourly.time.findIndex(t=>t>=c.time));
+ let start=d.hourly.time.findIndex(t=>t>=c.time);start=Math.max(start,0);
  $('hourly').innerHTML=d.hourly.time.slice(start,start+24).map((t,j)=>{
   const i=start+j;
-  const [label,ic]=hourWeather(d.hourly,i);
-  return `<div class="hour" title="${label}"><div class="small muted">${j===0?'Jetzt':t.slice(11,16)}</div><div class="ico">${iconHTML(ic)}</div><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><div class="small muted">☂ ${hourProbability(d.hourly,i)??0}%</div></div>`;
+  const [label,ic]=detail(d.hourly.weather_code?.[i],Boolean(d.hourly.is_day?.[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
+  return `<div class="hour" title="${label}"><div class="small muted">${j===0?'Jetzt':t.slice(11,16)}</div><div class="ico">${iconHTML(ic)}</div><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><div class="small muted">☂ ${d.hourly.precipitation_probability?.[i]??0}%</div></div>`;
  }).join('');
  activeForecastData=d;
  renderChart(d);
@@ -524,7 +529,7 @@ async function loadSpecial(){setSpecial(0,`<strong>💧 Eisbach-Pegel</strong><d
  await Promise.all([{idx:1,lat:44.169,lon:9.612},{idx:2,lat:43.428,lon:-4.043}].map(async p=>{try{const d=await getJson(`https://marine-api.open-meteo.com/v1/marine?latitude=${p.lat}&longitude=${p.lon}&current=wave_height&cell_selection=sea&timezone=auto&_=${Date.now()}`);if(!Number.isFinite(d.current?.wave_height))throw Error();setSpecial(p.idx,`<strong>🌊 ${fmtNum(d.current.wave_height,1)} m</strong><small>Wellenhöhe · Modellprognose</small>`)}catch{setSpecial(p.idx,'<strong>🌊 —</strong><small>Wellenhöhe derzeit nicht verfügbar</small>')}}));
  try{const d=await getJson('https://api.open-meteo.com/v1/forecast?latitude=47.446&longitude=12.392&current=snow_depth&timezone=Europe%2FVienna');const ground=d.current?.snow_depth;const mountain=await getJson('https://api.open-meteo.com/v1/forecast?latitude=47.423732&longitude=12.364764&elevation=1712&current=snow_depth&timezone=Europe%2FVienna');const up=mountain.current?.snow_depth;setSpecial(3,`<strong>❄️ ${Number.isFinite(ground)?fmtNum(ground*100)+' cm':'—'} Tal</strong><small>🏔️ Hahnenkamm (1.712 m): ${Number.isFinite(up)?fmtNum(up*100)+' cm':'—'} · Modellwerte</small>`);}catch{setSpecial(3,'<strong>❄️ —</strong><small>Schneehöhen derzeit nicht verfügbar</small>')}
  // Real observational data from a nearby DWD station, not a modeled local wind value.
- try{const d=await getJson('https://api.brightsky.dev/current_weather?lat=47.743&lon=12.164&units=dwd&_='+Date.now());const w=d.weather||{},source=(d.sources||[]).find(s=>s.id===w.source_id)||(d.sources||[])[0];const wind=w.wind_speed_10??w.wind_speed;const direction=w.wind_direction_10??w.wind_direction;const compass16=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];const compassName=['Nord','Nordnordost','Nordost','Ostnordost','Ost','Ostsüdost','Südost','Südsüdost','Süd','Südsüdwest','Südwest','Westsüdwest','West','Westnordwest','Nordwest','Nordnordwest'];const dirIndex=Number.isFinite(direction)?Math.round(((direction%360)+360)%360/22.5)%16:null;const compass=dirIndex===null?'unbekannt':compass16[dirIndex]+' ('+compassName[dirIndex]+')';const ts=w.timestamp?new Date(w.timestamp):null;if(!Number.isFinite(wind))throw Error('Windmesswert fehlt');const age=ts?(Date.now()-ts.getTime())/3600000:null;setSpecial(4,`<strong>💨 ${fmtNum(wind,1)} km/h</strong><small>Windmessung · ${compass}${Number.isFinite(direction)?' · '+Math.round(direction)+'°':''}</small><small>${source?.station_name||'DWD-Station in der Umgebung'}${ts?' · '+ts.toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):''}${age!==null&&age>2?' · ältere Messung':''}</small>`);}catch{setSpecial(4,'<strong>💨 —</strong><small>DWD-Stationsmessung derzeit nicht abrufbar · keine Modellwerte eingesetzt</small>')}
+ try{const d=await getJson(`https://api.brightsky.dev/current_weather?lat=${windReference.lat}&lon=${windReference.lon}&units=dwd&_=${Date.now()}`);const w=d.weather||{},source=(d.sources||[]).find(s=>s.id===w.source_id)||(d.sources||[])[0];const wind=w.wind_speed_10??w.wind_speed;const direction=w.wind_direction_10??w.wind_direction;const compass16=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];const compassName=['Nord','Nordnordost','Nordost','Ostnordost','Ost','Ostsüdost','Südost','Südsüdost','Süd','Südsüdwest','Südwest','Westsüdwest','West','Westnordwest','Nordwest','Nordnordwest'];const dirIndex=Number.isFinite(direction)?Math.round(((direction%360)+360)%360/22.5)%16:null;const compass=dirIndex===null?'unbekannt':compass16[dirIndex]+' ('+compassName[dirIndex]+')';const ts=w.timestamp?new Date(w.timestamp):null;if(!Number.isFinite(wind))throw Error('Windmesswert fehlt');const age=ts?(Date.now()-ts.getTime())/3600000:null;setSpecial(4,`<strong>💨 ${fmtNum(wind,1)} km/h</strong><small>Windmessung · ${compass}${Number.isFinite(direction)?' · '+Math.round(direction)+'°':''}</small><small>Bezugspunkt: ${windReference.name} · Messstation: ${source?.station_name||'DWD-Station in der Umgebung'}${Number.isFinite(source?.distance)?' ('+fmtNum(source.distance/1000,1)+' km entfernt)':''}${ts?' · '+ts.toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):''}${age!==null&&age>2?' · ältere Messung':''}</small>`);}catch{setSpecial(4,'<strong>💨 —</strong><small>Bezugspunkt Windshausen / Erl · DWD-Stationsmessung derzeit nicht abrufbar · keine Modellwerte eingesetzt</small>')}
 }
 $('favorites').innerHTML=places.map((p,i)=>`<div class="favorite"><div><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`).join('');
 $('favorites').addEventListener('click',e=>{const b=e.target.closest('button[data-index]');if(b)loadWeather(places[Number(b.dataset.index)])});
