@@ -14,13 +14,13 @@
 .rain-drops{display:inline-flex;gap:2px;align-items:center;justify-content:center;white-space:nowrap;color:#217fce}.rain-drops .drop{font-size:inherit}
 @media(max-width:650px){form{order:3;flex-basis:100%}.suggestions{max-height:250px}}
 
-/* Kompakte Marineprognosen direkt in der Ortsliste */
+/* NEU: Levanto + Suances 7-Tage-Wellenbalken, Stand 15.11.2026 */
 .favorite.wave-favorite{display:grid;grid-template-columns:minmax(110px,1fr) minmax(125px,165px) minmax(230px,340px);gap:14px;align-items:center}
 .wave-favorite .value{text-align:left}
 .wave-favorite .wave-current strong{font-size:19px;color:#146da9;white-space:nowrap}
 .wave-favorite .wave-current small{line-height:1.35}
-.wave-mini{min-width:0;width:100%}
-.wave-mini-title{font-size:11px;color:var(--muted);margin-bottom:4px;text-align:center}
+.wave-mini{min-width:0;width:100%;background:#f0f8ff;border:1px solid #d8eaf8;border-radius:12px;padding:9px 12px}
+.wave-mini-title{font-size:11px;color:#146da9;font-weight:750;margin-bottom:4px;text-align:center}
 .wave-bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;align-items:end;height:83px;border-bottom:1px solid #c6d8e8}
 .wave-day{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;min-width:0;height:100%}
 .wave-height{font-size:10px;font-weight:750;white-space:nowrap;line-height:1.1}
@@ -38,7 +38,7 @@
   <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div><div class="mapnote" style="padding:0 17px 16px">Stündliche Temperatur, Wetterlage und Regenwahrscheinlichkeit</div></section>
   <section class="card full"><h2>🛰️ Regionale Satellitenwolken & Regenradar</h2><div class="satgrid"><div><div class="embed-title">Satelliten-Wolkenbild · Region um den gewählten Ort</div><iframe class="embed" id="satellite" title="Satelliten-Wolkenbilder der gewählten Region" loading="lazy" allowfullscreen></iframe><div class="mapnote">Regionale Satellitenansicht (Windy). Wolkenbewegung ist eine Beobachtung, nicht die Wetterprognose. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.14,11.58,7" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div><div><div class="embed-title">Regenradar · ausgewählter Ort</div><iframe class="embed" id="radar" title="Niederschlagsradar" loading="lazy"></iframe><div class="mapnote">Radarbeobachtungen der letzten Zeit; Verfügbarkeit und Zeitangaben im Kartenfenster. Satellit und Niederschlagsradar getrennt; kombinierte Ansicht ggf. über den Kartenanbieter.</div></div></div></section>
   <section class="card full"><h2>📈 10-Tage-Temperaturverlauf mit Wetterbildern</h2><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1040 350" role="img" aria-label="Zehntägige Temperaturvorhersage mit Wettericons, Wettersymbolhintergründen und Temperaturachse"></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>Hintergrund: ☀️ sonnig · ⛅ wechselhaft · 🌧️ Regen</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole orientieren sich am Wetter um 14 Uhr. Die Tagesfärbung berücksichtigt außerdem Niederschlag über den gesamten Tag.</div></section>
-  <section class="card full"><h2>📍 Meine Orte & Spezialwerte</h2><div class="favorites" id="favorites"></div></section>
+  <section class="card full"><h2>📍 Meine Orte & Spezialwerte</h2><div class="favorites" id="favorites"></div><div class="mapnote" style="padding:0 18px 12px">🌊 Levanto & Suances: Tagesmaximum der Wellenhöhe aus dem Open-Meteo-Meeresmodell (7 Tage).</div></section>
   <section class="card full"><h2>🌧️ Regenradar – große Karte</h2><iframe class="map" id="radarLarge" title="Großes Regenradar" loading="lazy"></iframe><div class="mapnote" style="padding:12px 18px">Interaktive Niederschlagskarte · Kartenquelle Windy</div></section>
   <section class="card"><h2>🌊 Wellenkarte</h2><iframe class="map" id="waves" loading="lazy" title="Meereswellenkarte"></iframe><div class="mapnote" style="padding:12px 18px">Wellenmodell · Mittelmeeransicht mit Zentrum bei Nizza – Italien und Spanien im Blick</div></section>
  </div>
@@ -82,26 +82,23 @@ async function refreshEisbach(){const el=$('eisbach-reading');if(!el)return;try{
 async function getJson(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);return r.json()}
 async function loadSpecial(){setSpecial(0,`<a href="${gkd}" target="_blank" rel="noopener noreferrer" title="Eisbach-Pegel beim HND öffnen" style="display:block;text-decoration:none;color:inherit;cursor:pointer"><strong style="color:#146da9;text-decoration:underline">💧 Eisbach-Pegel ↗</strong><div id="eisbach-reading">Lade Messwert …</div></a>`);refreshEisbach();
  await Promise.all([{idx:1,lat:44.169,lon:9.612},{idx:2,lat:43.428,lon:-4.043}].map(async p=>{
+  const chart=$('wave-chart-'+p.idx);
   try{
-   const d=await getJson(`https://marine-api.open-meteo.com/v1/marine?latitude=${p.lat}&longitude=${p.lon}&current=wave_height,wave_period,wave_direction&hourly=wave_height&forecast_days=7&cell_selection=sea&timezone=auto&_=${Date.now()}`);
-   const height=d.current?.wave_height;
-   const period=d.current?.wave_period;
-   const direction=d.current?.wave_direction;
+   const d=await getJson(`https://marine-api.open-meteo.com/v1/marine?latitude=${p.lat}&longitude=${p.lon}&current=wave_height,wave_period,wave_direction&daily=wave_height_max&forecast_days=7&cell_selection=sea&timezone=auto&_=${Date.now()}`);
+   const height=d.current?.wave_height,period=d.current?.wave_period,direction=d.current?.wave_direction;
    const current=`<div class="wave-current"><strong>🌊 ${Number.isFinite(height)?fmtNum(height,1)+' m':'—'}</strong><small>Aktuelle Wellenhöhe · Modell</small>${Number.isFinite(period)?`<small>Periode: ${fmtNum(period,0)} s</small>`:''}${Number.isFinite(direction)?`<small>Richtung: ${Math.round(direction)}°</small>`:''}</div>`;
-   const days=new Map();
-   (d.hourly?.time||[]).forEach((t,i)=>{const h=d.hourly.wave_height?.[i];if(!Number.isFinite(h))return;const key=t.slice(0,10);days.set(key,Math.max(days.get(key)||0,h))});
-   const items=[...days].slice(0,7);
-   const max=Math.max(1.5,...items.map(v=>v[1]));
+   const items=(d.daily?.time||[]).map((date,i)=>[date,d.daily.wave_height_max?.[i]]).filter(([,h])=>Number.isFinite(h)).slice(0,7);
+   const max=Math.max(1.5,...items.map(([,h])=>h));
    const bars=items.map(([date,h])=>{const day=new Date(date+'T12:00:00');const label=new Intl.DateTimeFormat('de-DE',{weekday:'short'}).format(day);const barHeight=Math.max(4,Math.round(h/max*55));return `<div class="wave-day" title="${date}: maximal ${fmtNum(h,1)} m"><span class="wave-height">${fmtNum(h,1)}</span><span class="wave-bar" style="height:${barHeight}px"></span><span class="wave-day-name">${label}</span></div>`}).join('');
-   const graph=items.length?`<div class="wave-mini" role="img" aria-label="Sieben Tage Wellenprognose als Balkendiagramm"><div class="wave-mini-title">Wellenhöhe · Tagesmaximum (m)</div><div class="wave-bars">${bars}</div><div class="wave-caption">Modellprognose · nächste 7 Tage</div></div>`:`<div class="wave-mini small muted">Prognose derzeit nicht verfügbar</div>`;
-   setSpecial(p.idx,current);const chart=$('wave-chart-'+p.idx);if(chart)chart.innerHTML=graph;
-  }catch{setSpecial(p.idx,'<strong>🌊 —</strong><small>Wellenwerte derzeit nicht verfügbar</small>');const chart=$('wave-chart-'+p.idx);if(chart)chart.textContent='Prognose derzeit nicht verfügbar';}
+   const graph=items.length?`<div class="wave-mini-title">7 Tage · Wellenhöhe max. (m)</div><div class="wave-bars" role="img" aria-label="Wellenhöhen-Vorhersage für die nächsten 7 Tage">${bars}</div><div class="wave-caption">Open-Meteo · Modellprognose</div>`:`<div class="wave-mini-title">7-Tage-Wellenprognose</div><small class="muted">Für diesen Ort derzeit keine Wellenprognose verfügbar.</small>`;
+   setSpecial(p.idx,current);if(chart)chart.innerHTML=graph;
+  }catch(e){setSpecial(p.idx,'<strong>🌊 —</strong><small>Wellenwerte derzeit nicht verfügbar</small>');if(chart)chart.innerHTML='<div class="wave-mini-title">7-Tage-Wellenprognose</div><small class="muted">Daten aktuell nicht erreichbar.</small>';}
  }));
  try{const d=await getJson('https://api.open-meteo.com/v1/forecast?latitude=47.446&longitude=12.392&current=snow_depth&timezone=Europe%2FVienna');const ground=d.current?.snow_depth;const mountain=await getJson('https://api.open-meteo.com/v1/forecast?latitude=47.423732&longitude=12.364764&elevation=1712&current=snow_depth&timezone=Europe%2FVienna');const up=mountain.current?.snow_depth;setSpecial(3,`<strong>❄️ ${Number.isFinite(ground)?fmtNum(ground*100)+' cm':'—'} Tal</strong><small>🏔️ Hahnenkamm (1.712 m): ${Number.isFinite(up)?fmtNum(up*100)+' cm':'—'} · Modellwerte</small>`);}catch{setSpecial(3,'<strong>❄️ —</strong><small>Schneehöhen derzeit nicht verfügbar</small>')}
  // Real observational data from a nearby DWD station, not a modeled local wind value.
  try{const d=await getJson('https://api.brightsky.dev/current_weather?lat=47.743&lon=12.164&units=dwd&_='+Date.now());const w=d.weather||{},source=(d.sources||[]).find(s=>s.id===w.source_id)||(d.sources||[])[0];const wind=w.wind_speed_10??w.wind_speed;const direction=w.wind_direction_10??w.wind_direction;const compass16=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];const compassName=['Nord','Nordnordost','Nordost','Ostnordost','Ost','Ostsüdost','Südost','Südsüdost','Süd','Südsüdwest','Südwest','Westsüdwest','West','Westnordwest','Nordwest','Nordnordwest'];const dirIndex=Number.isFinite(direction)?Math.round(((direction%360)+360)%360/22.5)%16:null;const compass=dirIndex===null?'unbekannt':compass16[dirIndex]+' ('+compassName[dirIndex]+')';const ts=w.timestamp?new Date(w.timestamp):null;if(!Number.isFinite(wind))throw Error('Windmesswert fehlt');const age=ts?(Date.now()-ts.getTime())/3600000:null;setSpecial(4,`<strong>💨 ${fmtNum(wind,1)} km/h</strong><small>Windmessung · ${compass}${Number.isFinite(direction)?' · '+Math.round(direction)+'°':''}</small><small>${source?.station_name||'DWD-Station in der Umgebung'}${ts?' · '+ts.toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):''}${age!==null&&age>2?' · ältere Messung':''}</small>`);}catch{setSpecial(4,'<strong>💨 —</strong><small>DWD-Stationsmessung derzeit nicht abrufbar · keine Modellwerte eingesetzt</small>')}
 }
-$('favorites').innerHTML=places.map((p,i)=>`<div class="favorite${i===1||i===2?' wave-favorite':''}"><div><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div>${i===1||i===2?`<div class="wave-mini" id="wave-chart-${i}"><small class="muted">Lade 7-Tage-Prognose …</small></div>`:''}</div>`).join('');
+$('favorites').innerHTML=places.map((p,i)=>`<div class="favorite${i===1||i===2?' wave-favorite':''}"><div><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div>${i===1||i===2?`<div class="wave-mini" id="wave-chart-${i}"><div class="wave-mini-title">7 Tage · Wellenhöhe max. (m)</div><div class="wave-bars" aria-label="Wellenprognose wird geladen">${Array.from({length:7},(_,j)=>`<div class="wave-day"><span class="wave-height">·</span><span class="wave-bar" style="height:${15+(j%4)*9}px;opacity:.18"></span><span class="wave-day-name">·</span></div>`).join('')}</div><div class="wave-caption">Lade Prognose …</div></div>`:''}</div>`).join('');
 $('favorites').addEventListener('click',e=>{const b=e.target.closest('button[data-index]');if(b)loadWeather(places[Number(b.dataset.index)])});
 let suggestionResults=[],searchTimer=null,searchController=null,activeSuggestion=-1;
 const input=$('searchInput'),suggestions=$('searchSuggestions');
