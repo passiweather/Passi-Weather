@@ -144,6 +144,51 @@
  .eisbach-favorite .eisbach-place button{font-size:15px}
  .eisbach-current b{font-size:17px}
 }
+
+/* Eisbach mobil: drei gleichmaessig angeordnete Bereiche in einer Zeile. */
+@media(max-width:720px){
+ .favorite.eisbach-favorite{grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr);column-gap:8px;row-gap:8px;align-items:center}
+ .eisbach-favorite .eisbach-place{display:contents}
+ .eisbach-favorite .eisbach-place button{grid-column:1;grid-row:1;justify-self:start;font-size:16px;white-space:nowrap}
+ .eisbach-favorite .eisbach-place img{grid-column:2;grid-row:1;justify-self:center;width:76px;height:51px;object-fit:cover;flex-shrink:0}
+ .eisbach-current{grid-column:3;grid-row:1;align-items:flex-end;text-align:right;justify-self:end;max-width:100%}
+ .eisbach-current .eisbach-current-title{font-size:11px;white-space:nowrap}
+ .eisbach-current b{font-size:17px}
+ .eisbach-plot{grid-column:1/-1;grid-row:2}
+}
+@media(max-width:380px){
+ .favorite.eisbach-favorite{grid-template-columns:minmax(0,1fr) 62px minmax(0,1fr);column-gap:6px}
+ .eisbach-favorite .eisbach-place img{width:62px;height:44px}
+ .eisbach-favorite .eisbach-place button{font-size:15px}
+ .eisbach-current .eisbach-current-title{font-size:10px}
+ .eisbach-current b{font-size:16px}
+}
+
+/* Levanto mobil: wie Eisbach, Ortsname links, Webcam mittig, Current rechts. */
+@media(max-width:720px){
+ .favorite.wave-favorite.levanto-favorite{display:grid;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr);column-gap:7px;row-gap:8px;align-items:center}
+ .levanto-favorite>.wave-place{grid-column:1;grid-row:1;display:flex;align-items:center;min-width:0}
+ .levanto-favorite .wave-place button{font-size:16px;white-space:nowrap}
+ .levanto-favorite>.value{display:contents}
+ .levanto-favorite .wave-special.has-levanto-webcam{display:contents}
+ .levanto-favorite .levanto-webcam{grid-column:2;grid-row:1;display:flex;flex-direction:column;align-items:center;justify-self:center;gap:2px;min-width:0}
+ .levanto-favorite .levanto-webcam img{width:90px;height:58px;object-fit:cover;border-radius:7px}
+ .levanto-favorite .levanto-webcam span{font-size:9px;text-align:center;white-space:nowrap}
+ .levanto-favorite .wave-now{grid-column:3;grid-row:1;display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:0;text-align:right}
+ .levanto-favorite .wave-now .main{order:0;font-size:10px;font-weight:750;line-height:1.2;white-space:nowrap}
+ .levanto-favorite .wave-now .wave-big{order:1;display:flex;flex-direction:row;align-items:center;gap:3px;font-size:17px;line-height:1.2}
+ .levanto-favorite .wave-now .wave-big .sym{font-size:15px}
+ .levanto-favorite .wave-now .sub{order:2;font-size:9px;line-height:1.25}
+ .levanto-favorite .wave-chart-box{grid-column:1/-1;grid-row:2;min-width:0;width:100%}
+}
+@media(max-width:380px){
+ .favorite.wave-favorite.levanto-favorite{grid-template-columns:minmax(0,1fr) 74px minmax(0,1fr);column-gap:5px}
+ .levanto-favorite .levanto-webcam img{width:74px;height:49px}
+ .levanto-favorite .wave-place button{font-size:15px}
+ .levanto-favorite .wave-now .main{font-size:9px}
+ .levanto-favorite .wave-now .wave-big{font-size:16px}
+ .levanto-favorite .wave-now .sub{font-size:8px}
+}
 </style>
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
@@ -697,7 +742,7 @@ async function loadSpecial(){setSpecial(0,`<div class="eisbach-panel"><div class
  // Real observational data from a nearby DWD station, not a modeled local wind value.
  try{const d=await getJson(`https://api.brightsky.dev/current_weather?lat=${windReference.lat}&lon=${windReference.lon}&units=dwd&_=${Date.now()}`);const w=d.weather||{},source=(d.sources||[]).find(s=>s.id===w.source_id)||(d.sources||[])[0];const wind=w.wind_speed_10??w.wind_speed;const direction=w.wind_direction_10??w.wind_direction;const compass16=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];const compassName=['Nord','Nordnordost','Nordost','Ostnordost','Ost','Ostsüdost','Südost','Südsüdost','Süd','Südsüdwest','Südwest','Westsüdwest','West','Westnordwest','Nordwest','Nordnordwest'];const dirIndex=Number.isFinite(direction)?Math.round(((direction%360)+360)%360/22.5)%16:null;const compass=dirIndex===null?'unbekannt':compass16[dirIndex]+' ('+compassName[dirIndex]+')';const ts=w.timestamp?new Date(w.timestamp):null;if(!Number.isFinite(wind))throw Error('Windmesswert fehlt');const age=ts?(Date.now()-ts.getTime())/3600000:null;setSpecial(4,`<strong>💨 ${fmtNum(wind,1)} km/h</strong><small>Windmessung · ${compass}${Number.isFinite(direction)?' · '+Math.round(direction)+'°':''}</small><small>Bezugspunkt: ${windReference.name} · Messstation: ${source?.station_name||'DWD-Station in der Umgebung'}${Number.isFinite(source?.distance)?' ('+fmtNum(source.distance/1000,1)+' km entfernt)':''}${ts?' · '+ts.toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):''}${age!==null&&age>2?' · ältere Messung':''}</small>`);}catch{setSpecial(4,'<strong>💨 —</strong><small>Bezugspunkt Windshausen / Erl · DWD-Stationsmessung derzeit nicht abrufbar · keine Modellwerte eingesetzt</small>')}
 }
-$('favorites').innerHTML=places.map((p,i)=>i===1||i===2||i===3?`<div class="favorite wave-favorite"><div class="wave-place"><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`:i===0?`<div class="favorite eisbach-favorite"><div class="eisbach-place"><button data-index="0">Eisbach</button><img src="assets/eisbach-bruecke.jpg" alt="Schwarz-weiße Zeichnung der Eisbachbrücke" loading="lazy"></div><div class="value" id="special-0"><small>Lädt …</small></div></div>`:`<div class="favorite"><div><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`).join('');
+$('favorites').innerHTML=places.map((p,i)=>i===1||i===2||i===3?`<div class="favorite wave-favorite${i===1?' levanto-favorite':''}"><div class="wave-place"><button data-index="${i}">${p.name}</button>${i===1?'':`<small>${p.country}</small>`}</div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`:i===0?`<div class="favorite eisbach-favorite"><div class="eisbach-place"><button data-index="0">Eisbach</button><img src="assets/eisbach-bruecke.jpg" alt="Schwarz-weiße Zeichnung der Eisbachbrücke" loading="lazy"></div><div class="value" id="special-0"><small>Lädt …</small></div></div>`:`<div class="favorite"><div><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`).join('');
 $('favorites').addEventListener('click',e=>{const b=e.target.closest('button[data-index]');if(b)loadWeather(places[Number(b.dataset.index)])});
 let suggestionResults=[],searchTimer=null,searchController=null,activeSuggestion=-1;
 const input=$('searchInput'),suggestions=$('searchSuggestions');
