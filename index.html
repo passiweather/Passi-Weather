@@ -203,6 +203,31 @@
 @media(max-width:820px){.webcam-link-tile{width:150px;height:90px}}
 @media(max-width:720px){.levanto-favorite .webcam-link-tile{width:90px;height:58px;border-radius:7px}.levanto-favorite .webcam-link-tile .webcam-icon{font-size:19px}.levanto-favorite .webcam-link-tile .webcam-live{font-size:9px}}
 @media(max-width:380px){.levanto-favorite .webcam-link-tile{width:74px;height:49px}}
+
+/* Mobile Feinanpassung: alle drei Surfspots in derselben kompakten Aufteilung. */
+@media(max-width:720px){
+ .favorite.wave-favorite.levanto-favorite{padding:8px 0 10px;row-gap:3px;column-gap:7px}
+ .levanto-favorite .levanto-webcam{gap:1px}
+ .levanto-favorite .levanto-webcam img{width:82px;height:49px;border-radius:7px}
+ .levanto-favorite .levanto-webcam span{font-size:8px;line-height:1.15;font-weight:600}
+ .levanto-favorite .wave-now{gap:1px}
+ .levanto-favorite .wave-now .main{font-size:10px}
+ .levanto-favorite .wave-now .wave-big{font-size:17px}
+ .levanto-favorite .wave-now .sub{font-size:9px}
+ .levanto-favorite .wave-chart-heading{margin:0 0 2px;justify-content:flex-end}
+ .levanto-favorite .wave-chart-heading .surfline-forecast{font-size:10px;font-weight:700;line-height:1.2}
+ .levanto-favorite .wave-chart-box{gap:0}
+ .levanto-favorite .wave-bars{min-height:57px;gap:2px}
+ .levanto-favorite .wave-bar{gap:2px}
+ .levanto-favorite .wave-bar .val{font-size:10px;line-height:1}
+ .levanto-favorite .wave-bar .bar{width:min(100%,24px);height:calc(var(--bar-height) * .50)!important;border-radius:4px 4px 2px 2px}
+ .levanto-favorite .wave-bar .day{font-size:10px;line-height:1.15}
+}
+@media(max-width:380px){
+ .levanto-favorite .levanto-webcam img{width:70px;height:42px}
+ .levanto-favorite .levanto-webcam span{font-size:7px}
+ .levanto-favorite .wave-chart-heading .surfline-forecast{font-size:9px}
+}
 </style>
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
@@ -222,7 +247,7 @@
   <section class="card"><h2>🌊 Wellenkarte</h2><iframe class="map" id="waves" loading="lazy" title="Meereswellenkarte"></iframe><div class="mapnote" style="padding:12px 18px">Wellenmodell · Mittelmeeransicht mit Zentrum bei Nizza – Italien und Spanien im Blick</div></section>
  </div>
 </main>
-<footer>Wetterprognosen: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · DWD-Messungen via <a href="https://brightsky.dev" target="_blank" rel="noopener">Bright Sky</a> · Eisbach: <a href="https://www.gkd.bayern.de/de/fluesse/wasserstand/kelheim/muenchen-himmelreichbruecke-16515005/messwerte" target="_blank" rel="noopener">GKD Bayern</a> · Satellit, Regenradar und Wellenkarte: <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a>. Prognosen sind keine Echtzeitmessungen; Datenquellen können verzögert sein.</footer>
+<footer>Wetterprognosen: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · DWD-Messungen via <a href="https://brightsky.dev" target="_blank" rel="noopener">Bright Sky</a> · Eisbach: <a href="https://www.gkd.bayern.de/de/fluesse/wasserstand/kelheim/muenchen-himmelreichbruecke-16515005/messwerte" target="_blank" rel="noopener">GKD Bayern</a> · Satellit, Regenradar und Wellenkarte: <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a>. Prognosen sind keine Echtzeitmessungen; Datenquellen können verzögert sein. · Vorschaubilder: <a href="https://commons.wikimedia.org/wiki/File:Playa_de_los_Locos_-_Suances_-_Spain.jpg" target="_blank" rel="noopener">Suances / Javier Perez Montes</a> und <a href="https://commons.wikimedia.org/wiki/File:Praia_do_Tonel,_Sagres.jpg" target="_blank" rel="noopener">Tonel / Pedro Ponce Asensio</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; unveraenderte Fotos)</footer>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
@@ -740,14 +765,16 @@ const surflineForecasts={
 function surflineLink(index){return `<a class="surfline-forecast" href="${surflineForecasts[index]}" target="_blank" rel="noopener noreferrer" aria-label="Surfline Forecast öffnen">Surfline Forecast ↗</a>`}
 const levantoWebcamURL='https://imgproxy.windy.com/_/full/plain/current/1793919510/original.jpg?v=2';
 
+// Statische Ortsfotos von Wikimedia Commons: die Vorschaubilder sind KEINE Livebilder.
+// Beim Antippen oeffnet sich die tatsaechliche Webcam des jeweiligen Anbieters.
 const otherSurfWebcams={
- 2:{name:'Suances',url:'https://www.skylinewebcams.com/de/webcam/espana/cantabria/suances/playa-de-los-locos.html'},
- 3:{name:'Tonel',url:'https://beachcam.meo.pt/livecams/sagres/'}
+ 2:{name:'Suances',url:'https://www.skylinewebcams.com/de/webcam/espana/cantabria/suances/playa-de-los-locos.html',preview:'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Playa_de_los_Locos_-_Suances_-_Spain.jpg/330px-Playa_de_los_Locos_-_Suances_-_Spain.jpg'},
+ 3:{name:'Tonel',url:'https://beachcam.meo.pt/livecams/sagres/',preview:'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/Praia_do_Tonel,_Sagres.jpg/330px-Praia_do_Tonel,_Sagres.jpg'}
 };
 function surfWebcam(index){
  if(index===1)return levantoWebcam();
  const cam=otherSurfWebcams[index];if(!cam)return '';
- return `<a class="levanto-webcam" href="${cam.url}" target="_blank" rel="noopener noreferrer" aria-label="Webcam ${cam.name} beim Anbieter öffnen"><span class="webcam-link-tile" aria-hidden="true"><span class="webcam-icon">📷</span><span class="webcam-live">LIVE ↗</span></span><span>Webcam ${cam.name} ↗</span></a>`;
+ return `<a class="levanto-webcam" href="${cam.url}" target="_blank" rel="noopener noreferrer" title="Standbild von ${cam.name}; Webcam beim Anbieter öffnen" aria-label="Webcam ${cam.name} beim Anbieter öffnen (Vorschaubild ist ein Standbild)"><img src="${cam.preview}" alt="Strand ${cam.name} – Standbild, keine Liveaufnahme" loading="lazy"><span>📷 Webcam ${cam.name} ↗</span></a>`;
 }
 
 function levantoWebcam(){return `<a class="levanto-webcam" href="${levantoWebcamURL}" target="_blank" rel="noopener noreferrer" aria-label="Levanto Webcam in voller Groesse oeffnen"><img src="${levantoWebcamURL}" alt="Webcam Levanto" loading="lazy" referrerpolicy="no-referrer"><span>📷 Webcam Levanto ↗</span></a>`}
