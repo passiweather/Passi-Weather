@@ -52,6 +52,33 @@
   #vierzehn-tage-verlauf .legend i{width:12px;}
   #vierzehn-tage-verlauf h2{padding:13px 14px;}
 }
+
+.moon-cloud-icon{display:inline-block;width:1.3em;height:1.15em;vertical-align:-.16em;overflow:visible}
+.current .moon-cloud-icon{width:1.25em;height:1.1em}
+.hour .moon-cloud-icon,.part .moon-cloud-icon{width:1.45em;height:1.25em}
+/* Nur die Wellenzeilen auf kleinen Displays deutlich kompakter halten. */
+.favorite.wave-favorite .value{text-align:left;font-weight:400;min-width:0;width:100%}
+@media(max-width:650px){
+ .favorites{padding:4px 12px}
+ .favorite.wave-favorite{padding:9px 0;gap:4px;grid-template-columns:1fr}
+ .wave-place{display:flex;gap:8px;align-items:baseline}
+ .wave-place button{font-size:15px}
+ .wave-place small{font-size:11px}
+ .wave-special{gap:5px;grid-template-columns:1fr}
+ .wave-now{display:grid;grid-template-columns:auto 1fr;column-gap:10px;row-gap:0;align-items:center}
+ .wave-big{grid-row:1/3;font-size:18px;gap:3px;white-space:nowrap}
+ .wave-big .sym{font-size:19px}
+ .wave-now .main{font-size:11px;line-height:1.2}
+ .wave-now .sub{font-size:11px;line-height:1.2}
+ .wave-chart-box{align-items:stretch;gap:0}
+ .wave-chart-title{font-size:11px;margin:3px 0 2px;text-align:left}
+ .wave-bars{gap:2px;justify-content:space-between;overflow:visible;min-height:70px;padding-bottom:0}
+ .wave-bar{width:auto;flex:1 1 0;min-width:0;gap:3px}
+ .wave-bar .val{font-size:10px}
+ .wave-bar .bar{width:min(100%,25px);height:calc(var(--bar-height) * .62)!important;border-radius:4px 4px 2px 2px}
+ .wave-bar .day{font-size:10px}
+ .wave-chart-note{text-align:left;font-size:10px;margin-top:2px}
+}
 </style>
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
@@ -114,7 +141,15 @@ function rainSvgInner(n){
  const drop=xs.map(x=>`<path d="M ${x} 55 C ${x-1.6} 59 ${x-5} 63 ${x-5} 66 A 5 5 0 0 0 ${x+5} 66 C ${x+5} 63 ${x+1.6} 59 ${x} 55 Z" fill="#1889e2"/>`).join('');
  return `<path d="M 19 49 C 9 49 6 41 7 33 C 8 25 15 20 24 21 C 29 9 41 6 51 13 C 57 17 60 22 61 28 C 70 27 76 34 75 42 C 74 47 70 49 63 49 Z" fill="#d9e5f0" stroke="#6a839c" stroke-width="2.4" stroke-linejoin="round"/>${drop}`;
 }
-function iconHTML(icon){if(typeof icon==='string'&&icon.startsWith('RAIN:')){const n=Number(icon.slice(5));return `<svg class="rain-icon" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${n} Regentropfen" xmlns="http://www.w3.org/2000/svg">${rainSvgInner(n)}</svg>`;}return icon;}
+
+function moonCloudSvgInner(){
+ return `<path d="M47 7a25 25 0 1 0 21 36 22 22 0 0 1-21-36Z" fill="#f7cd65" stroke="#d6a641" stroke-width="2"/>
+ <path d="M18 63c-8 0-12-6-12-12 0-7 6-13 13-13 3 0 5 1 7 2 3-10 11-15 20-15 11 0 19 7 21 17 8-1 14 5 14 12 0 5-4 9-10 9Z" fill="#dfeaf4" stroke="#7891a9" stroke-width="2.5" stroke-linejoin="round"/>`;
+}
+function moonCloudSvg(){
+ return `<svg class="moon-cloud-icon" viewBox="0 0 84 76" role="img" aria-label="Mond teilweise von Wolken verdeckt" xmlns="http://www.w3.org/2000/svg">${moonCloudSvgInner()}</svg>`;
+}
+function iconHTML(icon){if(icon==='MOON_CLOUD')return moonCloudSvg();if(typeof icon==='string'&&icon.startsWith('RAIN:')){const n=Number(icon.slice(5));return `<svg class="rain-icon" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${n} Regentropfen" xmlns="http://www.w3.org/2000/svg">${rainSvgInner(n)}</svg>`;}return icon;}
 function rainName(n){return ['Kein messbarer Regen','Leichter Regen','Mittlerer Regen','Starker Regen'][n]}
 function detail(code,day=true,mm=null,context={}){
  const count=rainCount(mm,code,context);
@@ -129,7 +164,7 @@ function detail(code,day=true,mm=null,context={}){
  }
  if(code===0)return day?['Sonnig','☀️']:['Klar','🌙'];
  if(code===1)return day?['Überwiegend sonnig','🌤️']:['Meist klar','🌙'];
- if(code===2)return day?['Teilweise bewölkt','⛅']:['Leicht bewölkt','☁️🌙'];
+ if(code===2)return day?['Teilweise bewölkt','⛅']:['Leicht bewölkt','MOON_CLOUD'];
  if(code===3)return['Bedeckt','☁️'];
  if([71,73,75,77,85,86].includes(code))return['Schnee','🌨️'];
  if(Number.isFinite(cloud)&&cloud>=80)return['Bedeckt','☁️'];
@@ -239,6 +274,8 @@ function renderMobileChart(d){
    if(ic.startsWith('RAIN:')){
      const count=Number(ic.slice(5));
      svg+=`<svg x="${X(i)-13}" y="5" width="26" height="38" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
+   }else if(ic==='MOON_CLOUD'){
+     svg+=`<svg x="${X(i)-14}" y="5" width="28" height="36" viewBox="0 0 84 76" role="img" aria-label="Mond teilweise von Wolken verdeckt">${moonCloudSvgInner()}</svg>`;
    }else{
      svg+=`<text x="${X(i)}" y="34" font-size="21" text-anchor="middle">${ic}</text>`;
    }
@@ -311,6 +348,8 @@ function renderChart(d){
    if(icon.startsWith('RAIN:')){
      const count=Number(icon.slice(5));
      svg+=`<svg x="${X(i)-25}" y="18" width="50" height="68" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
+   }else if(icon==='MOON_CLOUD'){
+     svg+=`<svg x="${X(i)-27}" y="14" width="54" height="65" viewBox="0 0 84 76" role="img" aria-label="Mond teilweise von Wolken verdeckt">${moonCloudSvgInner()}</svg>`;
    }else{
      svg+=`<text x="${X(i)}" y="60" font-size="34" text-anchor="middle">${icon}</text>`;
    }
@@ -544,7 +583,7 @@ function renderWaveSpecial(current,hourly){
  const barHtml=bars.map((b,idx)=>{
   const label=idx===0?'Heute':new Intl.DateTimeFormat('de-DE',{weekday:'short'}).format(safeDate(b.day));
   const h=Math.max(16, Math.round((b.max/maxVal)*82));
-  return `<div class="wave-bar"><div class="val">${fmtNum(b.max,1)}</div><div class="bar" style="height:${h}px"></div><div class="day">${label}</div></div>`;
+  return `<div class="wave-bar"><div class="val">${fmtNum(b.max,1)}</div><div class="bar" style="--bar-height:${h}px;height:${h}px"></div><div class="day">${label}</div></div>`;
  }).join('');
  return `<div class="wave-special"><div class="wave-now"><div class="wave-big"><span class="sym">🌊</span><span>${Number.isFinite(wave)?fmtNum(wave,1)+' m':'—'}</span></div><div class="main">Wellenhöhe aktuell (Modell)</div><div class="sub">Periode ${Number.isFinite(period)?fmtNum(period,1)+' s':'—'} · ${waveDirLabel(direction)}</div></div><div class="wave-chart-box"><div class="wave-chart-title">🌊 Wellenhöhe · 8 Tage</div><div class="wave-bars">${barHtml||'<div class="muted small">Keine Tagesdaten</div>'}</div><div class="wave-chart-note">Tagesmaximum in m · Modellprognose</div></div></div>`
 }
