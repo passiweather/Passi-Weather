@@ -2,525 +2,65 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f4f8fc"><title>Passis Wetter – 14 Tage Wetter</title>
+<meta name="theme-color" content="#f4f8fc"><title>Passis Wetter – 10-Tage-Wetter</title>
 <style>
 :root{--bg:#f4f8fc;--paper:#fff;--ink:#17283d;--muted:#63788f;--stroke:#dbe5ef;--blue:#146da9;--shadow:0 10px 32px rgba(26,57,90,.06)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}header{background:#fff;border-bottom:1px solid var(--stroke);box-shadow:0 3px 15px #18375007;padding:14px max(16px,calc((100% - 1220px)/2));display:flex;align-items:center;flex-wrap:wrap;gap:15px}.brand{font-size:24px;letter-spacing:-.045em;font-weight:850;white-space:nowrap}.brand span{color:#1894d8}form{flex:1;min-width:220px;display:flex;gap:8px}input,button{font:inherit;border-radius:12px;border:1px solid var(--stroke);padding:11px 13px}input{min-width:0;width:100%;background:#f7fafc;color:var(--ink)}button{background:#eaf4ff;color:#115784;font-weight:750;cursor:pointer}button:hover{background:#dbeefd}main{max-width:1240px;margin:auto;padding:23px 16px 35px}.titlebar{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px}h1{font-size:clamp(26px,4vw,36px);margin:0;letter-spacing:-.035em}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.card{background:var(--paper);border:1px solid var(--stroke);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0}.card h2{margin:0;padding:17px 20px;border-bottom:1px solid var(--stroke);font-size:17px}.pad{padding:20px}.current{display:flex;align-items:center;gap:20px}.current .icon{font-size:72px}.big{font-size:70px;font-weight:850;letter-spacing:-.07em;line-height:1}.parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.part{border-radius:14px;border:1px solid #deebf5;background:#f1f7ff;padding:12px;text-align:center;display:flex;flex-direction:column;gap:4px}.part .emoji{font-size:27px}.part strong{font-size:19px}.part .small{min-height:31px}.rainnow{margin-top:16px;padding:13px;border-radius:14px;background:#eef8ff;border:1px solid #cfe7fa;display:flex;gap:10px;align-items:center}.rainnow .sym{font-size:31px}.rainnow b{display:block}.hours{display:flex;gap:9px;padding:16px;overflow-x:auto}.hour{flex:0 0 82px;border:1px solid #e0ebf4;background:#f6f9fd;text-align:center;border-radius:14px;padding:12px 7px}.hour .ico{font-size:27px;margin:7px 0}.hour strong{font-size:17px}.full{grid-column:1/-1}.satgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:17px}.embed{width:100%;height:330px;border:0;border-radius:12px;background:#edf3f8}.embed-title{font-weight:800;margin:0 0 8px}.mapnote{color:var(--muted);font-size:12px;padding:9px 0}.chart-scroll{overflow-x:auto;padding:18px 18px 10px}.chart-svg{min-width:1200px;width:100%;display:block;height:auto}.legend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:22px;color:var(--muted);font-size:13px;padding:0 10px 18px}.legend i{display:inline-block;width:20px;height:3px;vertical-align:middle;margin-right:5px}.favorites{padding:6px 18px}.favorite{display:flex;justify-content:space-between;gap:14px;align-items:center;border-bottom:1px solid var(--stroke);padding:15px 0}.favorite:last-child{border:0}.favorite .value{text-align:right;font-weight:650}.favorite .value small{font-size:12px;display:block;color:var(--muted);font-weight:400}.favorite button{background:none;border:0;color:#146da9;font-weight:750;padding:0;text-align:left}.favorite small{display:block;color:var(--muted)}.favorite a{color:#1673ac}.map{width:100%;height:420px;display:block;border:0;background:#edf3f8}footer{max-width:1240px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);font-size:12px}a{color:#146da9}.tag{display:inline-block;padding:5px 9px;background:#eaf4ff;color:#28769e;border-radius:18px;font-weight:700;font-size:12px} .error{color:#a03130}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}header{background:#fff;border-bottom:1px solid var(--stroke);box-shadow:0 3px 15px #18375007;padding:14px max(16px,calc((100% - 1220px)/2));display:flex;align-items:center;flex-wrap:wrap;gap:15px}.brand{font-size:24px;letter-spacing:-.045em;font-weight:850;white-space:nowrap}.brand span{color:#1894d8}form{flex:1;min-width:220px;display:flex;gap:8px}input,button{font:inherit;border-radius:12px;border:1px solid var(--stroke);padding:11px 13px}input{min-width:0;width:100%;background:#f7fafc;color:var(--ink)}button{background:#eaf4ff;color:#115784;font-weight:750;cursor:pointer}button:hover{background:#dbeefd}main{max-width:1240px;margin:auto;padding:23px 16px 35px}.titlebar{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px}h1{font-size:clamp(26px,4vw,36px);margin:0;letter-spacing:-.035em}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.card{background:var(--paper);border:1px solid var(--stroke);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0}.card h2{margin:0;padding:17px 20px;border-bottom:1px solid var(--stroke);font-size:17px}.pad{padding:20px}.current{display:flex;align-items:center;gap:20px}.current .icon{font-size:72px}.big{font-size:70px;font-weight:850;letter-spacing:-.07em;line-height:1}.parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.part{border-radius:14px;border:1px solid #deebf5;background:#f1f7ff;padding:12px;text-align:center;display:flex;flex-direction:column;gap:4px}.part .emoji{font-size:27px}.part strong{font-size:19px}.part .small{min-height:31px}.rainnow{margin-top:16px;padding:13px;border-radius:14px;background:#eef8ff;border:1px solid #cfe7fa;display:flex;gap:10px;align-items:center}.rainnow .sym{font-size:31px}.rainnow b{display:block}.hours{display:flex;gap:9px;padding:16px;overflow-x:auto}.hour{flex:0 0 82px;border:1px solid #e0ebf4;background:#f6f9fd;text-align:center;border-radius:14px;padding:12px 7px}.hour .ico{font-size:27px;margin:7px 0}.hour strong{font-size:17px}.full{grid-column:1/-1}.satgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:17px}.embed{width:100%;height:330px;border:0;border-radius:12px;background:#edf3f8}.embed-title{font-weight:800;margin:0 0 8px}.mapnote{color:var(--muted);font-size:12px;padding:9px 0}.chart-scroll{overflow-x:auto;padding:18px 18px 10px}.chart-svg{min-width:990px;width:100%;display:block;height:auto}.legend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:22px;color:var(--muted);font-size:13px;padding:0 10px 18px}.legend i{display:inline-block;width:20px;height:3px;vertical-align:middle;margin-right:5px}.favorites{padding:6px 18px}.favorite{display:flex;justify-content:space-between;gap:14px;align-items:center;border-bottom:1px solid var(--stroke);padding:15px 0}.favorite:last-child{border:0}.favorite .value{text-align:right;font-weight:650}.favorite .value small{font-size:12px;display:block;color:var(--muted);font-weight:400}.favorite button{background:none;border:0;color:#146da9;font-weight:750;padding:0;text-align:left}.favorite small{display:block;color:var(--muted)}.favorite a{color:#1673ac}.map{width:100%;height:420px;display:block;border:0;background:#edf3f8}footer{max-width:1240px;margin:0 auto;padding:10px 18px 40px;color:var(--muted);font-size:12px}a{color:#146da9}.tag{display:inline-block;padding:5px 9px;background:#eaf4ff;color:#28769e;border-radius:18px;font-weight:700;font-size:12px} .error{color:#a03130}
 @media(max-width:820px){header{padding:14px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.satgrid{grid-template-columns:1fr}.embed{height:290px}.current .icon{font-size:58px}.big{font-size:56px}.map{height:310px}main{padding:14px 11px}.part{padding:9px 5px}.part .small{font-size:11px}}
 
-.retry-weather{font-size:12px;padding:5px 10px;border-radius:9px;margin-top:5px}.retry-weather[hidden]{display:none}
 .search-wrap{position:relative;flex:1;min-width:0}.search-wrap input{width:100%}
 .suggestions{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:30;max-height:290px;overflow-y:auto;background:#fff;border:1px solid #b9cfe1;border-radius:13px;box-shadow:0 15px 35px #243b512a;padding:6px}
 .suggestions[hidden]{display:none}.suggestion{display:block;width:100%;padding:11px 12px;background:#fff;border:0;text-align:left;border-radius:8px;font-weight:500;color:#182b40;cursor:pointer}.suggestion:hover,.suggestion:focus,.suggestion.active{background:#e9f4ff}.suggestion small{display:block;color:#667c91;font-size:12px}
 .rain-drops{display:inline-flex;gap:2px;align-items:center;justify-content:center;white-space:nowrap;color:#217fce}.rain-drops .drop{font-size:inherit}
 @media(max-width:650px){form{order:3;flex-basis:100%}.suggestions{max-height:250px}}
-
-/* Einheitliche, gezeichnete Wolken-Regensymbole. Jeder Tropfen liegt UNTER der Wolke. */
-.rain-icon{display:inline-block;width:1.3em;height:1.15em;vertical-align:-.16em;overflow:visible}.current .rain-icon{width:1.25em;height:1.1em}.hour .rain-icon,.part .rain-icon{width:1.45em;height:1.25em}
-
-/* Windhosen und interaktive Tagesvorhersage */
-.day-hit{fill:transparent;stroke:transparent;stroke-width:3;cursor:pointer;transition:fill .12s ease,stroke .12s ease}
-.chart-day-target:hover .day-hit,.chart-day-target:focus .day-hit{fill:#247dc412;stroke:#387cb1}
-.chart-day-target:focus{outline:none}.chart-day-target.selected .day-hit{stroke:#146da9;stroke-width:4;fill:#146da912}
-.day-details{margin:0 18px 18px;border:1px solid #c5ddef;border-radius:17px;background:linear-gradient(180deg,#f4faff 0%,#fff 100%);padding:18px}
-.day-details[hidden]{display:none}
-.day-details-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;margin-bottom:14px}
-.day-details h3{font-size:20px;margin:0;letter-spacing:-.02em}.day-details-head button{padding:6px 11px;background:#fff;color:#375875}
-.day-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.day-fact{flex:1 1 126px;min-width:120px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;border:1px solid #dceaf4;border-radius:12px;background:white;padding:10px 8px;text-align:center}.day-fact strong{font-size:17px}.day-fact small{color:#617a8d;font-size:12px}.day-fact .sock-svg{width:67px;height:54px}
-.day-part-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.day-part-item{min-width:0;border-radius:12px;border:1px solid #dce8f0;background:#fff;padding:11px 5px;text-align:center}.day-part-item .rain-icon{height:39px;width:45px}.day-part-item .wx-icon{font-size:29px;display:block;min-height:38px}.day-part-item .caption{font-size:12px;color:#63788f}.day-part-item strong{display:block;margin:4px 0}
-.day-details h4{font-size:15px;margin:10px 0 8px}.day-hour-grid{display:flex;gap:7px;overflow-x:auto;padding-bottom:7px}.day-hour{flex:0 0 92px;text-align:center;border:1px solid #e1e9f0;border-radius:12px;padding:10px 6px;background:#fff}.day-hour .rain-icon{width:35px;height:31px}.day-hour .hour-weather{font-size:27px;min-height:35px}.day-hour b{font-size:17px}.day-hour .tiny{font-size:11px;color:#667b8c;line-height:1.5}
-.day-hour .gust-alert{color:#b02032;font-weight:800}
-@media(max-width:650px){.day-part-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.day-details{margin:0 10px 14px;padding:11px}.day-details h3{font-size:18px}}
-
-/* Nur fuer schmale Smartphone-Displays: acht Tage gleichzeitig im 14-Tage-Graph. */
-@media(max-width:650px){
-  #vierzehn-tage-verlauf .chart-scroll{
-    padding:9px 4px 5px;
-    overflow-x:auto;
-    overflow-y:hidden;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior-x:contain;
-  }
-  #vierzehn-tage-verlauf .chart-svg{
-    display:block;
-    min-width:0;
-    max-width:none;
-    height:auto;
-    touch-action:pan-x pan-y;
-  }
-  #vierzehn-tage-verlauf .legend{gap:11px;font-size:10px;padding:2px 3px 10px;}
-  #vierzehn-tage-verlauf .legend i{width:12px;}
-  #vierzehn-tage-verlauf h2{padding:13px 14px;}
-}
 </style>
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
 <main>
- <div class="titlebar"><div><h1 id="city">München, Deutschland</h1><div class="muted small" id="status" role="status">Lade aktuelle Wetterdaten …</div><button type="button" id="retryWeather" class="retry-weather" hidden>↻ Nochmals laden</button></div><span class="tag">Wetter & aktuelle Messwerte</span></div>
+ <div class="titlebar"><div><h1 id="city">München, Deutschland</h1><div class="muted small" id="status" role="status">Lade aktuelle Wetterdaten …</div></div><span class="tag">Wetter & aktuelle Messwerte</span></div>
  <div class="grid">
-  <section class="card"><h2>🌤 Aktuelle Wetterprognose</h2><div class="pad"><div class="current"><div class="icon" id="currentIcon">⛅</div><div><div class="big" id="currentTemp">—°</div><strong id="currentDesc">Wird geladen …</strong><div class="muted" id="feels">Gefühlt —°</div></div></div><div class="parts" id="dayParts"><div class="part">Vormittag</div><div class="part">Nachmittag</div><div class="part">Abend</div></div></div></section>
-  <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div></section>
-  <section class="card full" id="vierzehn-tage-verlauf"><h2>📈 14 Tage Wetter</h2><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1370 515" role="group" aria-label="14 Tage. Jeder Tag ist anklickbar und zeigt Wetterdetails."></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>☀️ Sonnenstunden/Tag</span></div><div id="dayDetails" class="day-details" hidden aria-live="polite"></div></section>
-  <section class="card full"><h2>🛰️ Satellitenwolken & Regenradar – Windy</h2>
-    <div class="satgrid">
-      <div><div class="embed-title">Satelliten-Wolkenbild · München (ca. 75 km)</div><iframe class="embed" id="satellite" title="Windy Satellitenwolkenkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Aktuelle Satellitenansicht von Windy. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.137,11.576,9" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div>
-      <div><div class="embed-title">Regenradar · München (ca. 75 km)</div><iframe class="embed" id="radar" title="Windy Regenradarkarte" loading="lazy" allowfullscreen></iframe><div class="mapnote">Niederschlagsradar von Windy; Datenabdeckung je nach Region.</div></div>
-    </div>
-  </section>
+  <section class="card"><h2>🌤 Aktuelles Wetter</h2><div class="pad"><div class="current"><div class="icon" id="currentIcon">⛅</div><div><div class="big" id="currentTemp">—°</div><strong id="currentDesc">Wird geladen …</strong><div class="muted" id="feels">Gefühlt —°</div></div></div><div class="rainnow"><span class="sym" id="rainIcon">☂️</span><div><b id="rainIntensity">Regen: wird geladen …</b><div class="small muted" id="rainDetail">Niederschlag der aktuellen Stunde</div></div></div><div class="parts" id="dayParts"><div class="part">Vormittag</div><div class="part">Nachmittag</div><div class="part">Abend</div></div></div></section>
+  <section class="card"><h2>🕒 Nächste 24 Stunden</h2><div class="hours" id="hourly"></div><div class="mapnote" style="padding:0 17px 16px">Stündliche Temperatur, Wetterlage und Regenwahrscheinlichkeit</div></section>
+  <section class="card full"><h2>🛰️ Regionale Satellitenwolken & Regenradar</h2><div class="satgrid"><div><div class="embed-title">Satelliten-Wolkenbild · Region um den gewählten Ort</div><iframe class="embed" id="satellite" title="Satelliten-Wolkenbilder der gewählten Region" loading="lazy" allowfullscreen></iframe><div class="mapnote">Regionale Satellitenansicht (Windy). Wolkenbewegung ist eine Beobachtung, nicht die Wetterprognose. <a id="satelliteLink" href="https://www.windy.com/?satellite,48.14,11.58,7" target="_blank" rel="noopener">Große Satellitenkarte öffnen</a>.</div></div><div><div class="embed-title">Regenradar · ausgewählter Ort</div><iframe class="embed" id="radar" title="Niederschlagsradar" loading="lazy"></iframe><div class="mapnote">Radarbeobachtungen der letzten Zeit; Verfügbarkeit und Zeitangaben im Kartenfenster. Satellit und Niederschlagsradar getrennt; kombinierte Ansicht ggf. über den Kartenanbieter.</div></div></div></section>
+  <section class="card full"><h2>📈 10-Tage-Temperaturverlauf mit Wetterbildern</h2><div class="chart-scroll"><svg class="chart-svg" id="chart" viewBox="0 0 1040 350" role="img" aria-label="Zehntägige Temperaturvorhersage mit Wettericons, Wettersymbolhintergründen und Temperaturachse"></svg></div><div class="legend"><span><i style="background:#ef9c22"></i> Höchsttemperatur</span><span><i style="background:#318ed9"></i> Tiefsttemperatur</span><span>Hintergrund: ☀️ sonnig · ⛅ wechselhaft · 🌧️ Regen</span></div><div class="mapnote" style="padding:0 20px 16px">Tagessymbole orientieren sich am Wetter um 14 Uhr. Die Tagesfärbung berücksichtigt außerdem Niederschlag über den gesamten Tag.</div></section>
   <section class="card full"><h2>📍 Meine Orte & Spezialwerte</h2><div class="favorites" id="favorites"></div></section>
+  <section class="card full"><h2>🌧️ Regenradar – große Karte</h2><iframe class="map" id="radarLarge" title="Großes Regenradar" loading="lazy"></iframe><div class="mapnote" style="padding:12px 18px">Interaktive Niederschlagskarte · Kartenquelle Windy</div></section>
   <section class="card"><h2>🌊 Wellenkarte</h2><iframe class="map" id="waves" loading="lazy" title="Meereswellenkarte"></iframe><div class="mapnote" style="padding:12px 18px">Wellenmodell · Mittelmeeransicht mit Zentrum bei Nizza – Italien und Spanien im Blick</div></section>
  </div>
 </main>
-<footer>Wetterprognosen: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · DWD-Messungen via <a href="https://brightsky.dev" target="_blank" rel="noopener">Bright Sky</a> · Eisbach: <a href="https://www.gkd.bayern.de/de/fluesse/wasserstand/kelheim/muenchen-himmelreichbruecke-16515005/messwerte" target="_blank" rel="noopener">GKD Bayern</a> · Satellit, Regenradar und Wellenkarte: <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a>. Prognosen sind keine Echtzeitmessungen; Datenquellen können verzögert sein.</footer>
+<footer>Wetterprognosen: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · DWD-Messungen via <a href="https://brightsky.dev" target="_blank" rel="noopener">Bright Sky</a> · Eisbach: <a href="https://www.gkd.bayern.de/de/fluesse/wasserstand/kelheim/muenchen-himmelreichbruecke-16515005/messwerte" target="_blank" rel="noopener">GKD Bayern</a> · Satellit: <a href="https://www.eumetsat.int/real-time-imagery/earth-view" target="_blank" rel="noopener">EUMETSAT</a> · Karten: <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a>. Prognosen sind keine Echtzeitmessungen; Datenquellen können verzögert sein.</footer>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
-const windReference={name:'Windshausen bei Erl',lat:47.70537,lon:12.16575};
 const places=[{name:'München',country:'Deutschland',lat:48.1372,lon:11.5756},{name:'Levanto',country:'Italien',lat:44.169,lon:9.612},{name:'Suances',country:'Spanien',lat:43.428,lon:-4.043},{name:'Kitzbühel',country:'Österreich',lat:47.446,lon:12.392},{name:'Nußdorf am Inn',country:'Deutschland',lat:47.743,lon:12.164}];
-let place=places[0], lastRefresh=0, requestId=0, activeForecastData=null, selectedDayIndex=-1;
-// WMO-Wettercodes: 45/48 sind Nebel, 51-57 Nieselregen, 61+ Regen.
-// Ein Regen-Code allein beweist keinen tatsaechlichen Niederschlag am Boden.
-function isRainCode(code){return [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,97,99].includes(code)}
-function weatherContext(data,index,period='hourly'){
- const get=k=>index===undefined?data?.[k]:data?.[k]?.[index];
- return {period,cloudCoverLow:get('cloud_cover_low'),cloudCover:get('cloud_cover'),visibility:get('visibility'),precipitationProbability:get('precipitation_probability')};
-}
-// Bewusst konservative Anzeige: Code + nennenswerte Modell-Niederschlagsmenge.
-// current: 15-Minuten-Wert; hourly: Stunde; daily: Tag. Dichte Wolken
-// oder WMO-Nieselregencode bei 0 mm ergeben KEIN Regensymbol.
-function rainCount(mm,code,context={}){
- if(!isRainCode(code)||!Number.isFinite(mm)||mm<0)return 0;
- const period=context.period||'hourly';
- const threshold=period==='current'?0.1:period==='daily'?0.4:0.2;
- if(mm+1e-8<threshold)return 0;
- const drizzle=[51,53,55].includes(code);
- const chance=context.precipitationProbability;
- // Unsichere, sehr geringe Nieselregen-Signale nicht als sicheren Regen ausgeben.
- if(drizzle&&period==='hourly'&&Number.isFinite(chance)&&chance<35&&mm<0.5)return 0;
- // Hochnebel kann im Modell Nieselregen-Signale erzeugen: nur bei messbarer
- // Staerke als Nieselregen anzeigen, sonst den Wolken-/Nebelzustand.
- if(drizzle&&period==='current'&&mm<0.2&&Number.isFinite(context.cloudCoverLow)&&context.cloudCoverLow>=85)return 0;
- const base=[55,57,65,67,82,95,96,97,99].includes(code)?3:
-            [53,63,81].includes(code)?2:1;
- const scale=period==='current'?4:period==='daily'?0.15:1;
- return Math.max(base,mm*scale>=1.2?3:mm*scale>=0.5?2:1);
-}
-function rainSymbol(n){return 'RAIN:'+Math.max(1,Math.min(3,n))}
-// Eigene SVG-Grafik statt Emoji: je nach Intensitaet EXAKT 1, 2 oder 3
-// gut sichtbare Tropfen, die unter der Wolke beginnen (auch im Diagramm).
-function rainSvgInner(n){
- const count=Math.max(1,Math.min(3,n));
- const xs=count===1?[40]:count===2?[29,51]:[20,40,60];
- const drop=xs.map(x=>`<path d="M ${x} 55 C ${x-1.6} 59 ${x-5} 63 ${x-5} 66 A 5 5 0 0 0 ${x+5} 66 C ${x+5} 63 ${x+1.6} 59 ${x} 55 Z" fill="#1889e2"/>`).join('');
- return `<path d="M 19 49 C 9 49 6 41 7 33 C 8 25 15 20 24 21 C 29 9 41 6 51 13 C 57 17 60 22 61 28 C 70 27 76 34 75 42 C 74 47 70 49 63 49 Z" fill="#d9e5f0" stroke="#6a839c" stroke-width="2.4" stroke-linejoin="round"/>${drop}`;
-}
-function iconHTML(icon){if(typeof icon==='string'&&icon.startsWith('RAIN:')){const n=Number(icon.slice(5));return `<svg class="rain-icon" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${n} Regentropfen" xmlns="http://www.w3.org/2000/svg">${rainSvgInner(n)}</svg>`;}return icon;}
-function rainName(n){return ['Kein messbarer Regen','Leichter Regen','Mittlerer Regen','Starker Regen'][n]}
-function detail(code,day=true,mm=null,context={}){
- const count=rainCount(mm,code,context);
- if(count)return[[51,53,55,56,57].includes(code)?'Nieselregen':rainName(count),rainSymbol(count)];
- const vis=context.visibility,low=context.cloudCoverLow,cloud=context.cloudCover;
- const isFogOrCloud=[2,3,45,48].includes(code)||[51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code);
- if([45,48].includes(code)||(isFogOrCloud&&Number.isFinite(vis)&&vis>=0&&vis<1000))return['Nebel','🌫️'];
- if(isFogOrCloud&&Number.isFinite(low)&&low>=85)return['Hochnebel / tiefe Wolken','🌫️'];
- if(isRainCode(code)){
-   if([95,96,97,99].includes(code))return['Gewitter möglich','⛈️'];
-   return ['Bewölkt','☁️'];
- }
- if(code===0)return day?['Sonnig','☀️']:['Klar','🌙'];
- if(code===1)return day?['Überwiegend sonnig','🌤️']:['Meist klar','🌙'];
- if(code===2)return day?['Teilweise bewölkt','⛅']:['Leicht bewölkt','☁️🌙'];
- if(code===3)return['Bedeckt','☁️'];
- if([71,73,75,77,85,86].includes(code))return['Schnee','🌨️'];
- if(Number.isFinite(cloud)&&cloud>=80)return['Bedeckt','☁️'];
- return['Wetter','🌥️'];
+let place=places[0], lastRefresh=0, requestId=0;
+function isRainCode(code){return [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(code)}
+function drops(mm){return mm>=4?5:mm>=2.5?4:mm>=1.2?3:mm>=0.5?2:mm>=0.05?1:0}
+function rainSymbol(n){return n>0?'💧'.repeat(n):'☀️'}
+function rainName(n){return ['Kein messbarer Regen','Schwacher Regen','Mittlerer Regen','Kräftiger Regen','Starker Regen','Sehr starker Regen'][n]}
+function detail(code,day=true,mm=null){
+ if(isRainCode(code)||Number(mm)>=0.05){const count=drops(Number(mm));return [rainName(count||1),rainSymbol(count||1)];}
+ if(code===0)return day?['Sonnig','☀️']:['Klar','🌙'];if(code===1)return day?['Überwiegend sonnig','🌤️']:['Meist klar','🌙'];if(code===2)return day?['Teilweise bewölkt','⛅']:['Leicht bewölkt','☁️🌙'];if(code===3)return['Bedeckt','☁️'];if([45,48].includes(code))return['Neblig','🌫️'];if([71,73,75,77,85,86].includes(code))return['Schnee','🌨️'];return['Wetter','🌥️'];
 }
 const fmtNum=(n,digits=0)=>Number(n).toLocaleString('de-DE',{maximumFractionDigits:digits});
 const safeDate=(s)=>new Date(s+'T12:00:00');
-function rainLevel(mm,code,context={}){const n=rainCount(mm,code,context);return [n?rainSymbol(n):'☁️',n?rainName(n):'Kein messbarer Regen'];}
-function updateMaps(){
- // Beide Windy-Karten bleiben auf München fixiert, auch bei der Wetter-Ortssuche.
- // Zoom 9 entspricht je nach Bildschirmgröße etwa einem Umkreis von 75 km.
- const munichLat=48.1372, munichLon=11.5756, mapZoom=9;
- const q=`lat=${munichLat}&lon=${munichLon}&detailLat=${munichLat}&detailLon=${munichLon}&width=960&height=600&zoom=${mapZoom}&level=surface&menu=&message=false&marker=true&calendar=now&type=map&location=coordinates&metricWind=km%2Fh&metricTemp=%C2%B0C`;
- $('satellite').src='https://embed.windy.com/embed2.html?'+q+'&product=satellite&overlay=satellite';
- $('satelliteLink').href=`https://www.windy.com/?satellite,${munichLat.toFixed(3)},${munichLon.toFixed(3)},${mapZoom}`;
- $('radar').src='https://embed.windy.com/embed2.html?'+q+'&product=radar&overlay=radar';
- $('waves').src='https://embed.windy.com/embed2.html?lat=43.7&lon=7.26&detailLat=43.7&detailLon=7.26&width=960&height=600&zoom=3&level=surface&product=ecmwf&overlay=waves&type=map&metricWind=km%2Fh&metricTemp=%C2%B0C';
-}
-
-// Windrichtung in 16 Himmelsrichtungen; Wetterwind kommt AUS der angegebenen Richtung.
-function compassDirection(degrees){
- if(!Number.isFinite(degrees))return '—';
- const labels=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];
- return labels[Math.round((((degrees%360)+360)%360)/22.5)%16];
-}
-// Stufen nach maximalem Tageswind UND maximaler Tagesboee (jeweils in kn).
-// Ueber 20 kn Wind ODER ueber 30 kn Boeen -> rot.
-// Ueber 10 kn Wind ODER ueber 18 kn Boeen -> gespannt.
-// Sonst -> schlaff. Wenn nur ein Wert vorhanden ist, gilt dessen Stufe.
-function windSockLevel(windKn,gustKn){
- const wind=Number.isFinite(windKn)?windKn:0;
- const gust=Number.isFinite(gustKn)?gustKn:0;
- if(wind>20 || gust>30)return 'strong';
- if(wind>10 || gust>18)return 'medium';
- return 'weak';
-}
-// Der Wind kommt aus der unter dem Symbol angegebenen Himmelsrichtung.
-function windSockSVG(x,y,windKn,gustKn,id){
- const level=windSockLevel(windKn,gustKn);
- const weak=level==='weak';
- const strong=level==='strong';
- const tone=strong?'#d82d3a':weak?'#9eb1c2':'#2485cb';
- const edge=strong?'#a52231':weak?'#7e95a9':'#176398';
- const shape=weak?'M -20 -17 Q -11 -17 -9 -11 L -1 6 Q 2 12 -5 15 Q -10 11 -13 3 L -20 -5 Z':'M -20 -19 L 25 -12 L 25 -4 L -20 -6 Z';
- const bands=weak?
-   `<path d="M-14 -15 L-8 -8 L-5 1 L-10 4 L-16 -6 Z" fill="${tone}"/><path d="M-5 2 L-1 8 L-4 14 L-8 7 Z" fill="${tone}"/>`:
-   `<rect x="-13" y="-25" width="9" height="34" fill="${tone}"/><rect x="6" y="-25" width="10" height="34" fill="${tone}"/>`;
- const clipId='windsock-'+id;
- return `<g class="sock-symbol" transform="translate(${x} ${y})" aria-hidden="true">
-  <path d="M-22 -25 V25" stroke="#59748c" stroke-width="3" stroke-linecap="round"/><circle cx="-22" cy="-25" r="3" fill="#59748c"/>
-  <defs><clipPath id="${clipId}"><path d="${shape}"/></clipPath></defs>
-  <path d="${shape}" fill="#fff" stroke="${edge}" stroke-width="2" stroke-linejoin="round"/>
-  <g clip-path="url(#${clipId})">${bands}</g>
-  <circle cx="-20" cy="-14" r="2.2" fill="${edge}"/>
- </g>`;
-}
-
-/* Kompakte Grafik nur fuer Smartphones: acht anklickbare Tage auf einen Blick. */
-
-function smoothLinePath(points){
- if(!Array.isArray(points)||points.length<2)return '';
- const coords=points.map(p=>typeof p==='string'?p.split(',').map(Number):[p.x,p.y]).map(([x,y])=>({x,y}));
- let d=`M ${coords[0].x} ${coords[0].y}`;
- for(let i=0;i<coords.length-1;i++){
-   const p0=i>0?coords[i-1]:coords[i];
-   const p1=coords[i];
-   const p2=coords[i+1];
-   const p3=i!==coords.length-2?coords[i+2]:p2;
-   const cp1x=(p1.x+(p2.x-p0.x)/6).toFixed(2);
-   const cp1y=(p1.y+(p2.y-p0.y)/6).toFixed(2);
-   const cp2x=(p2.x-(p3.x-p1.x)/6).toFixed(2);
-   const cp2y=(p2.y-(p3.y-p1.y)/6).toFixed(2);
-   d+=` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+function rainLevel(mm,code){const n=drops(Number(mm));return [n?rainSymbol(n):'☀️',n?rainName(n):'Kein messbarer Regen'];}
+function updateMaps(){const q=`lat=${place.lat}&lon=${place.lon}&detailLat=${place.lat}&detailLon=${place.lon}&width=960&height=600&zoom=6&level=surface&menu=&message=false&marker=true&calendar=now&type=map&location=coordinates&metricWind=km%2Fh&metricTemp=%C2%B0C`;
+ $('satellite').src='https://embed.windy.com/embed2.html?'+q+'&product=satellite&overlay=satellite';$('satelliteLink').href=`https://www.windy.com/?satellite,${place.lat.toFixed(3)},${place.lon.toFixed(3)},7`;$('radar').src='https://embed.windy.com/embed2.html?'+q+'&product=radar&overlay=radar';$('radarLarge').src='https://embed.windy.com/embed2.html?'+q+'&product=radar&overlay=radar';$('waves').src='https://embed.windy.com/embed2.html?lat=43.7&lon=7.26&detailLat=43.7&detailLon=7.26&width=960&height=600&zoom=3&level=surface&product=ecmwf&overlay=waves&type=map&metricWind=km%2Fh&metricTemp=%C2%B0C';}
+function renderChart(d){const daily=d.daily,N=Math.min(10,daily.time.length),hi=daily.temperature_2m_max.slice(0,N),lo=daily.temperature_2m_min.slice(0,N);const axMin=Math.floor((Math.min(...lo)-3)/5)*5,axMax=Math.ceil((Math.max(...hi)+3)/5)*5;const left=70,right=1010,top=101,bottom=292,width=(right-left)/N;const X=i=>left+(i+.5)*width,Y=t=>bottom-(t-axMin)/Math.max(1,axMax-axMin)*(bottom-top);let svg='';
+ // Rain categorization uses the daily rain sum, while symbol uses 14:00 local time.
+ for(let i=0;i<N;i++){let code=daily.weather_code[i],date=daily.time[i],at14=d.hourly.time.indexOf(date+'T14:00'),hourlyCode=at14>=0?d.hourly.weather_code[at14]:code;let rain=daily.precipitation_sum?.[i]??0;let kind=rain>=0.5||[51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(code)?'rain':hourlyCode===0||hourlyCode===1?'sun':'mixed';const colors={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'};const x0=left+i*width+3;svg+=`<rect x="${x0}" y="22" width="${width-6}" height="${bottom+20-22}" rx="13" fill="${colors[kind]}"/>`;
+ if(kind==='rain'){const hourlyMatches=d.hourly.time.map((t,j)=>t.startsWith(date+'T')?j:-1).filter(j=>j>=0);const peak=Math.max(0,...hourlyMatches.map(j=>d.hourly.precipitation?.[j]||0));const number=drops(peak)||1;svg+=`<text x="${X(i)}" y="91" font-size="13" text-anchor="middle" opacity=".8">${'💧'.repeat(number)}</text>`;}
+ const mmAt14=at14>=0?d.hourly.precipitation?.[at14]:null;const icon=detail(hourlyCode,true,mmAt14)[1];const day=new Intl.DateTimeFormat('de-DE',{weekday:'short'}).format(safeDate(date));svg+=`<text x="${X(i)}" y="56" font-size="35" text-anchor="middle">${icon}</text><text x="${X(i)}" y="330" font-size="15" font-weight="700" text-anchor="middle" fill="#475d72">${i===0?'Heute':day}</text>`;
  }
- return d;
-}
-
-function renderMobileChart(d){
- const daily=d.daily||{}, N=Math.min(14,daily.time?.length||0);
- if(!N){$('chart').innerHTML='';return;}
- const chart=$('chart'),scroll=chart.parentElement;
- // Die acht ersten vollstaendigen Tages-Spalten passen dynamisch zur Handybreite.
- const style=getComputedStyle(scroll);
- const freeWidth=scroll.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
- const left=25,cell=Math.max(27,Math.floor((freeWidth-left-3)/8)),right=left+cell*N,fullWidth=right+3,height=316;
- chart.setAttribute('viewBox',`0 0 ${fullWidth} ${height}`);
- chart.style.width=fullWidth+'px';
- chart.style.minWidth='0';
- const hi=daily.temperature_2m_max?.slice(0,N)||[],lo=daily.temperature_2m_min?.slice(0,N)||[];
- const vals=[...hi,...lo].filter(Number.isFinite);
- if(!vals.length){chart.innerHTML='';return;}
- const axMin=Math.floor((Math.min(...vals)-2)/5)*5,axMax=Math.ceil((Math.max(...vals)+2)/5)*5;
- const X=i=>left+(i+.5)*cell;
- const Y=t=>173-(t-axMin)/Math.max(1,axMax-axMin)*115;
- const view=scroll.scrollLeft;
- let svg='';
- for(let i=0;i<N;i++){
-   const code=daily.weather_code?.[i]??3,date=daily.time[i];
-   const at14=d.hourly?.time?.indexOf(date+'T14:00')??-1;
-   const hourCode=at14>=0?d.hourly.weather_code[at14]:code;
-   const kind=rainCount(daily.precipitation_sum?.[i],code,{period:'daily'})?'rain':hourCode===0||hourCode===1?'sun':'mixed';
-   const bg={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'}[kind];
-   const x0=left+i*cell+1;
-   svg+=`<rect x="${x0}" y="4" width="${cell-2}" height="308" rx="5" fill="${bg}"/>`;
-   const mm=at14>=0?d.hourly.precipitation?.[at14]:null;
-   const ic=detail(hourCode,true,mm,at14>=0?weatherContext(d.hourly,at14):{})[1];
-   if(ic.startsWith('RAIN:')){
-     const count=Number(ic.slice(5));
-     svg+=`<svg x="${X(i)-13}" y="5" width="26" height="38" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
-   }else{
-     svg+=`<text x="${X(i)}" y="34" font-size="21" text-anchor="middle">${ic}</text>`;
-   }
-   const day=i===0?'Heute':new Intl.DateTimeFormat('de-DE',{weekday:'short'}).format(safeDate(date));
-   const dm=new Intl.DateTimeFormat('de-DE',{day:'2-digit',month:'2-digit'}).format(safeDate(date));
-   svg+=`<text x="${X(i)}" y="205" font-size="${cell<=32?9:10.5}" font-weight="750" text-anchor="middle" fill="#314962">${day}</text>`;
-   svg+=`<text x="${X(i)}" y="219" font-size="9" text-anchor="middle" fill="#63788f">${dm}</text>`;
-   const sun=daily.sunshine_duration?.[i];
-   const sunText=Number.isFinite(sun)?fmtNum(sun/3600,1)+'h':'—';
-   svg+=`<text x="${X(i)}" y="243" font-size="${cell<=32?8.4:9.5}" font-weight="750" text-anchor="middle" fill="#93620a">☀${sunText}</text>`;
-   const wind=daily.wind_speed_10m_max?.[i],gust=daily.wind_gusts_10m_max?.[i];
-   const level=windSockLevel(wind,gust);
-   const dir=compassDirection(daily.wind_direction_10m_dominant?.[i]);
-   svg+=`<g transform="translate(${X(i)} 278) scale(${Math.min(.48,(cell-3)/55).toFixed(3)})">${windSockSVG(0,0,wind,gust,'mobile-'+i)}</g>`;
-   svg+=`<text x="${X(i)}" y="304" font-size="10" font-weight="750" text-anchor="middle" fill="${level==='strong'?'#ad2732':'#315979'}">${dir}</text>`;
- }
- // Zwei gut lesbare Temperaturkurven trotz engerer Tages-Spalten.
- for(let t=axMin;t<=axMax;t+=5){
-   svg+=`<line x1="${left}" x2="${right}" y1="${Y(t)}" y2="${Y(t)}" stroke="#bfccdb" stroke-width=".7" stroke-dasharray="2 3"/>`;
-   svg+=`<text x="${left-4}" y="${Y(t)+3}" fill="#66798c" font-size="9" text-anchor="end">${t}°</text>`;
- }
- for(const [arr,color] of [[hi,'#ef9c22'],[lo,'#318ed9']]){
-   const pts=arr.map((v,i)=>Number.isFinite(v)?`${X(i)},${Y(v)}`:null).filter(Boolean);
-   if(pts.length>1)svg+=`<path d="${smoothLinePath(pts)}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;
-   for(let i=0;i<N;i++){
-     if(!Number.isFinite(arr[i]))continue;
-     svg+=`<circle cx="${X(i)}" cy="${Y(arr[i])}" r="2.4" fill="${color}"/>`;
-     const isLow=color==='#318ed9';
-     svg+=`<text x="${X(i)}" y="${Y(arr[i])+(isLow?12:-7)}" text-anchor="middle" font-size="10" font-weight="750" fill="${isLow?'#175a96':'#8e5600'}">${Math.round(arr[i])}°</text>`;
-   }
- }
- // Gleicher Klick-/Tastatur-Mechanismus wie im Desktop-Diagramm.
- for(let i=0;i<N;i++){
-   const dateLabel=new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long'}).format(safeDate(daily.time[i]));
-   const wind=daily.wind_speed_10m_max?.[i],gust=daily.wind_gusts_10m_max?.[i];
-   const hint=`Wind ${Number.isFinite(wind)?fmtNum(wind,1)+' kn':'—'}, Böen ${Number.isFinite(gust)?fmtNum(gust,1)+' kn':'—'}, Richtung ${compassDirection(daily.wind_direction_10m_dominant?.[i])}`;
-   svg+=`<g class="chart-day-target${i===selectedDayIndex?' selected':''}" role="button" tabindex="0" data-day-index="${i}" aria-label="${dateLabel}: Tagesvorhersage anzeigen, ${hint}"><title>${dateLabel}: Tagesvorhersage anzeigen · ${hint}</title><rect class="day-hit" x="${left+i*cell+.5}" y="4" width="${cell-1}" height="308" rx="5"/></g>`;
- }
- chart.innerHTML=svg;
- scroll.scrollLeft=view;
- if(selectedDayIndex>=0)showDayDetails(selectedDayIndex,false);
-}
-
-function renderChart(d){
- if(window.matchMedia('(max-width:650px)').matches){renderMobileChart(d);return;}
- const desktopChart=$('chart');desktopChart.setAttribute('viewBox','0 0 1370 515');desktopChart.style.width='';desktopChart.style.minWidth='';
- const daily=d.daily||{}, N=Math.min(14,daily.time?.length||0);
- if(!N){$('chart').innerHTML='';return;}
- const hi=daily.temperature_2m_max.slice(0,N),lo=daily.temperature_2m_min.slice(0,N);
- const temps=[...hi,...lo].filter(Number.isFinite);
- if(!temps.length){$('chart').innerHTML='';return;}
- const axMin=Math.floor((Math.min(...temps)-3)/5)*5;
- const axMax=Math.ceil((Math.max(...temps)+3)/5)*5;
- const left=67,right=1344,top=112,bottom=316,cellWidth=(right-left)/N;
- const X=i=>left+(i+.5)*cellWidth;
- const Y=t=>bottom-(t-axMin)/Math.max(1,axMax-axMin)*(bottom-top);
- let svg='';
- // Spaltenfarbe, Wettersymbol, Wochentag, Sonne und Wind pro Tag.
- for(let i=0;i<N;i++){
-   const code=daily.weather_code[i],date=daily.time[i];
-   const at14=d.hourly.time.indexOf(date+'T14:00');
-   const hourlyCode=at14>=0?d.hourly.weather_code[at14]:code;
-   const isRain=rainCount(daily.precipitation_sum?.[i],code,{period:'daily'})>0;
-   const kind=isRain?'rain':hourlyCode===0||hourlyCode===1?'sun':'mixed';
-   const colors={rain:'#e8eef6',sun:'#fff4c7',mixed:'#f3f0dc'};
-   const x0=left+i*cellWidth+3;
-   svg+=`<rect x="${x0}" y="15" width="${cellWidth-6}" height="495" rx="12" fill="${colors[kind]}"/>`;
-   const mmAt14=at14>=0?d.hourly.precipitation?.[at14]:null;
-   const icon=detail(hourlyCode,true,mmAt14,at14>=0?weatherContext(d.hourly,at14):{})[1];
-   if(icon.startsWith('RAIN:')){
-     const count=Number(icon.slice(5));
-     svg+=`<svg x="${X(i)-25}" y="18" width="50" height="68" viewBox="0 0 82 76" role="img" aria-label="Wolke mit ${count} Regentropfen">${rainSvgInner(count)}</svg>`;
-   }else{
-     svg+=`<text x="${X(i)}" y="60" font-size="34" text-anchor="middle">${icon}</text>`;
-   }
-   const day=new Intl.DateTimeFormat('de-DE',{weekday:'short'}).format(safeDate(date));
-   svg+=`<text x="${X(i)}" y="347" font-size="16" font-weight="750" text-anchor="middle" fill="#314962">${i===0?'Heute':day}</text>`;
-   svg+=`<text x="${X(i)}" y="367" font-size="13" text-anchor="middle" fill="#63788f">${new Intl.DateTimeFormat('de-DE',{day:'2-digit',month:'2-digit'}).format(safeDate(date))}</text>`;
-   svg+=`<path d="M${x0+7} 377 H${x0+cellWidth-13}" stroke="#ccd7e1"/>`;
-   const seconds=daily.sunshine_duration?.[i];
-   const sunText=Number.isFinite(seconds)?fmtNum(seconds/3600,1)+' h':'—';
-   svg+=`<text x="${X(i)}" y="400" font-size="15" font-weight="750" text-anchor="middle" fill="#93620a">☀ ${sunText}</text>`;
-   const knots=daily.wind_speed_10m_max?.[i];
-   const gusts=daily.wind_gusts_10m_max?.[i];
-   const windLevel=windSockLevel(knots,gusts);
-   const degrees=daily.wind_direction_10m_dominant?.[i];
-   const dir=compassDirection(degrees);
-   // Die hoehere Stufe aus Dauerwind und Boeen bestimmt die Windhose.
-   svg+=windSockSVG(X(i),450,knots,gusts,'chart-'+i);
-   svg+=`<text x="${X(i)}" y="501" font-size="16" font-weight="800" text-anchor="middle" fill="${windLevel==='strong'?'#ad2732':'#315979'}">${dir}</text>`;
- }
- // Temperaturachsen und Linien über der jeweiligen Tagesfärbung.
- for(let t=axMin;t<=axMax;t+=5){
-   svg+=`<line x1="${left}" x2="${right}" y1="${Y(t)}" y2="${Y(t)}" stroke="#bfccdb" stroke-width="1" stroke-dasharray="3 5"/>`;
-   svg+=`<text x="58" y="${Y(t)+4}" fill="#66798c" font-size="14" text-anchor="end">${t}°</text>`;
- }
- for(const [arr,color] of [[hi,'#ef9c22'],[lo,'#318ed9']]){
-   const pts=arr.map((v,i)=>Number.isFinite(v)?`${X(i)},${Y(v)}`:null).filter(Boolean);
-   if(pts.length>1)svg+=`<path d="${smoothLinePath(pts)}" fill="none" stroke="${color}" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>`;
-   for(let i=0;i<N;i++){
-     if(!Number.isFinite(arr[i]))continue;
-     svg+=`<circle cx="${X(i)}" cy="${Y(arr[i])}" r="4.2" fill="${color}"/>`;
-     svg+=`<text x="${X(i)}" y="${Y(arr[i])+(color==='#318ed9'?20:-13)}" text-anchor="middle" font-size="14" font-weight="750" fill="${color==='#ef9c22'?'#8e5600':'#175a96'}">${Math.round(arr[i])}°</text>`;
-   }
- }
- // Unsichtbare anklickbare Tagesflächen liegen über Linien und Symbolen.
- for(let i=0;i<N;i++){
-   const dateLabel=new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long'}).format(safeDate(daily.time[i]));
-   const knots=daily.wind_speed_10m_max?.[i],gusts=daily.wind_gusts_10m_max?.[i];
-   const windHint=`Wind ${Number.isFinite(knots)?fmtNum(knots,1)+' kn':'—'}, Böen ${Number.isFinite(gusts)?fmtNum(gusts,1)+' kn':'—'}, Richtung ${compassDirection(daily.wind_direction_10m_dominant?.[i])}`;
-   svg+=`<g class="chart-day-target${i===selectedDayIndex?' selected':''}" role="button" tabindex="0" data-day-index="${i}" aria-label="${dateLabel}: Tagesvorhersage anzeigen, ${windHint}"><title>${dateLabel}: Tagesvorhersage anzeigen · ${windHint}</title><rect class="day-hit" x="${left+i*cellWidth+2}" y="15" width="${cellWidth-4}" height="495" rx="11"/></g>`;
- }
- $('chart').innerHTML=svg;
- if(selectedDayIndex>=0)showDayDetails(selectedDayIndex,false);
-}
-function selectDailyForecast(index){
- if(!activeForecastData||index<0||index>=activeForecastData.daily.time.length)return;
- selectedDayIndex=index;
- $('chart').querySelectorAll('[data-day-index]').forEach(el=>el.classList.toggle('selected',Number(el.dataset.dayIndex)===index));
- showDayDetails(index,true);
-}
-function showDayDetails(index,scrollToDetails){
- const d=activeForecastData,day=d?.daily,box=$('dayDetails');
- if(!d||!day?.time?.[index])return;
- const date=day.time[index];
- const name=new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(safeDate(date));
- const code=day.weather_code?.[index];
- const [weatherLabel]=detail(code,true,day.precipitation_sum?.[index],{period:'daily'});
- const max=day.temperature_2m_max?.[index],min=day.temperature_2m_min?.[index];
- const sun=day.sunshine_duration?.[index],knots=day.wind_speed_10m_max?.[index],gusts=day.wind_gusts_10m_max?.[index],degrees=day.wind_direction_10m_dominant?.[index];
- const sunText=Number.isFinite(sun)?fmtNum(sun/3600,1)+' h':'—';
- const windText=Number.isFinite(knots)?fmtNum(knots,1)+' kn':'—';
- const gustText=Number.isFinite(gusts)?fmtNum(gusts,1)+' kn':'—';
- const windLevel=windSockLevel(knots,gusts);
- const rainChance=day.precipitation_probability_max?.[index];
- const rainSum=day.precipitation_sum?.[index];
- const tempText=(Number.isFinite(max)?Math.round(max)+'°':'—')+' / '+(Number.isFinite(min)?Math.round(min)+'°':'—');
- const indexes=d.hourly.time.map((t,i)=>t.startsWith(date+'T')?i:-1).filter(i=>i>=0);
- const partHours=[['Morgens','08:00'],['Mittags','12:00'],['Nachmittags','16:00'],['Abends','20:00']];
- const partHtml=partHours.map(([label,t])=>{
-   const i=d.hourly.time.indexOf(date+'T'+t);
-   if(i<0)return `<div class="day-part-item"><strong>${label}</strong><div class="caption">Keine Daten</div></div>`;
-   const [caption,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
-   const temp=d.hourly.temperature_2m?.[i];
-   return `<div class="day-part-item"><div class="caption">${label} · ${t}</div><div class="wx-icon">${iconHTML(ic)}</div><strong>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</strong><div class="caption">${caption}</div><div class="caption">☂ ${d.hourly.precipitation_probability?.[i]??'—'} %</div></div>`;
- }).join('');
- const hourlyHtml=indexes.map(i=>{
-   const time=d.hourly.time[i].slice(11,16),[label,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
-   const temp=d.hourly.temperature_2m?.[i],chance=d.hourly.precipitation_probability?.[i],speed=d.hourly.wind_speed_10m?.[i],gust=d.hourly.wind_gusts_10m?.[i],direction=d.hourly.wind_direction_10m?.[i];
-   return `<div class="day-hour" title="${label}"><div class="tiny">${time} Uhr</div><div class="hour-weather">${iconHTML(ic)}</div><b>${Number.isFinite(temp)?Math.round(temp)+'°':'—'}</b><div class="tiny">☂ ${chance??'—'} %</div><div class="tiny">💨 ${Number.isFinite(speed)?fmtNum(speed,0)+' kn':'—'} ${compassDirection(direction)}</div><div class="tiny${windSockLevel(speed,gust)==='strong'?' gust-alert':''}">Böen ${Number.isFinite(gust)?fmtNum(gust,0)+' kn':'—'}</div></div>`;
- }).join('');
- box.innerHTML=`<div class="day-details-head"><div><h3>📅 ${name}</h3><div class="muted small">${weatherLabel} · Tagesvorhersage für ${place.name}</div></div><button type="button" id="closeDayDetails" aria-label="Tagesdetails schließen">✕ Schließen</button></div>
- <div class="day-summary"><div class="day-fact"><small>🌡️ Höchst- / Tiefsttemperatur</small><strong>${tempText}</strong></div><div class="day-fact"><small>☀️ Sonnenschein</small><strong>${sunText}</strong></div><div class="day-fact"><small>🌧️ Regenchance / -menge</small><strong>${rainChance??'—'} % / ${Number.isFinite(rainSum)?fmtNum(rainSum,1)+' mm':'—'}</strong></div><div class="day-fact"><small>💨 Max. Wind / Richtung</small><strong>${windText} · ${compassDirection(degrees)}</strong></div><div class="day-fact"><small>🚩 Max. Böen</small><svg class="sock-svg" viewBox="-41 -37 82 68" role="img" aria-label="Windhose nach Wind ${windText} und Böen ${gustText}, Stufe ${windLevel==='strong'?'rot':windLevel==='medium'?'gespannt':'schlaff'}">${windSockSVG(0,0,knots,gusts,'details')}</svg><strong>${gustText}</strong></div></div>
- <h4>Wetter im Tagesverlauf</h4><div class="day-part-grid">${partHtml}</div>
- <h4>Stündliche Vorhersage</h4><div class="day-hour-grid">${hourlyHtml||'<span class="muted">Keine Stundendaten verfügbar.</span>'}</div>
- `;
- box.hidden=false;
- $('closeDayDetails').addEventListener('click',()=>{box.hidden=true;selectedDayIndex=-1;$('chart').querySelectorAll('.chart-day-target').forEach(g=>g.classList.remove('selected'))});
- if(scrollToDetails)box.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-$('chart').addEventListener('click',event=>{
- const target=event.target.closest('[data-day-index]');
- if(target)selectDailyForecast(Number(target.dataset.dayIndex));
-});
-$('chart').addEventListener('keydown',event=>{
- if(event.key!=='Enter'&&event.key!==' ')return;
- const target=event.target.closest('[data-day-index]');
- if(target){event.preventDefault();selectDailyForecast(Number(target.dataset.dayIndex));}
-});
-// Robuster Wetterabruf: nur offiziell unterstuetzte CURRENT-Variablen.
-// cloud_cover_low und visibility werden ausschliesslich STUENDLICH abgefragt;
-// zur Nebelerkennung benutzen wir den zur aktuellen Uhrzeit passenden Stundenwert.
-const forecastDailyFields='weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,sunshine_duration,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant';
-const forecastHourlyCore='temperature_2m,precipitation_probability,weather_code,is_day,precipitation,cloud_cover,wind_speed_10m,wind_gusts_10m,wind_direction_10m';
-const forecastCachePrefix='passis-wetter-forecast-v3:';
-function makeForecastUrl(p,compact=false){
- const u=new URL('https://api.open-meteo.com/v1/forecast');
- const params={latitude:p.lat,longitude:p.lon,current:'temperature_2m,apparent_temperature,precipitation,weather_code,is_day,cloud_cover',hourly:compact?forecastHourlyCore:forecastHourlyCore+',cloud_cover_low,visibility',daily:forecastDailyFields,wind_speed_unit:'kn',timezone:'auto',forecast_days:14};
- Object.entries(params).forEach(([key,value])=>u.searchParams.set(key,value));
- return u.toString();
-}
-function isValidForecast(d){return Boolean(d&&d.current&&typeof d.current.time==='string'&&Number.isFinite(d.current.temperature_2m)&&d.hourly&&Array.isArray(d.hourly.time)&&Array.isArray(d.hourly.temperature_2m)&&d.hourly.time.length>=24&&d.daily&&Array.isArray(d.daily.time)&&d.daily.time.length>=7)}
-function cacheKey(p){return forecastCachePrefix+Number(p.lat).toFixed(4)+','+Number(p.lon).toFixed(4)}
-function saveForecast(p,d){try{localStorage.setItem(cacheKey(p),JSON.stringify({saved:Date.now(),data:d}))}catch(e){/* Kein Storage z.B. in Privatmodus */}}
-function cachedForecast(p){try{const result=JSON.parse(localStorage.getItem(cacheKey(p))||'null');if(result&&Number.isFinite(result.saved)&&Date.now()-result.saved<24*3600*1000&&isValidForecast(result.data))return result}catch(e){}return null}
-function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
-async function fetchForecastOnce(url){
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),15000);
- try{
-  const r=await fetch(url,{signal:controller.signal,cache:'no-cache'});
-  if(!r.ok){const err=new Error('HTTP '+r.status);err.status=r.status;throw err}
-  const d=await r.json();
-  if(!isValidForecast(d))throw new Error('Wetterdaten unvollständig');
-  return d;
- }finally{clearTimeout(timeout)}
-}
-async function fetchForecast(p){
- let lastError;
- // Bei 503/502/504 erst den normalen Aufruf wiederholen, dann mit weniger
- // Parametern probieren. Bei 400 direkt mit reduziertem Variablensatz weiter.
- for(const compact of [false,true]){
-  const url=makeForecastUrl(p,compact);
-  const attempts=compact?1:2;
-  for(let attempt=0;attempt<attempts;attempt++){
-   try{return await fetchForecastOnce(url)}
-   catch(e){
-    lastError=e;
-    if(e.status===400||e.status===422||e.status===401||e.status===403)break;
-    if(attempt+1<attempts)await pause(1100);
-   }
-  }
- }
- throw lastError||new Error('Wetterdienst vorübergehend nicht erreichbar');
-}
-function currentWeatherContext(d){
- const c=d.current;
- // Die CURRENT-Zeit kann z.B. :15 sein, HOURLY hingegen immer :00.
- const hour=(c.time||'').slice(0,13);
- let i=d.hourly.time.findIndex(t=>t.slice(0,13)===hour);
- if(i<0)i=0;
- const ctx=weatherContext(d.hourly,i,'current');
- if(Number.isFinite(c.cloud_cover))ctx.cloudCover=c.cloud_cover;
- return ctx;
-}
-function renderForecast(d){
- const c=d.current;
- const [desc,icon]=detail(c.weather_code,Boolean(c.is_day),c.precipitation,currentWeatherContext(d));
- $('currentIcon').innerHTML=iconHTML(icon);
- $('currentTemp').textContent=Math.round(c.temperature_2m)+'°';
- $('currentDesc').textContent=desc;
- $('feels').textContent='Gefühlt '+(Number.isFinite(c.apparent_temperature)?Math.round(c.apparent_temperature)+'°':'—');
- const today=c.time.slice(0,10);
- $('dayParts').innerHTML=[['Vormittag','10:00'],['Nachmittag','15:00'],['Abend','20:00']].map(([label,time])=>{
-  const i=d.hourly.time.indexOf(today+'T'+time);
-  if(i<0)return `<div class="part"><strong>${label}</strong><span class="small muted">Keine Daten</span></div>`;
-  const [des,ic]=detail(d.hourly.weather_code?.[i],Boolean(d.hourly.is_day?.[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
-  return `<div class="part"><span class="small">${label}</span><span class="emoji">${iconHTML(ic)}</span><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><span class="small muted">${des}</span></div>`;
- }).join('');
- let start=d.hourly.time.findIndex(t=>t>=c.time);start=Math.max(start,0);
- $('hourly').innerHTML=d.hourly.time.slice(start,start+24).map((t,j)=>{
-  const i=start+j;
-  const [label,ic]=detail(d.hourly.weather_code?.[i],Boolean(d.hourly.is_day?.[i]),d.hourly.precipitation?.[i],weatherContext(d.hourly,i));
-  return `<div class="hour" title="${label}"><div class="small muted">${j===0?'Jetzt':t.slice(11,16)}</div><div class="ico">${iconHTML(ic)}</div><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><div class="small muted">☂ ${d.hourly.precipitation_probability?.[i]??0}%</div></div>`;
- }).join('');
- activeForecastData=d;
- renderChart(d);
-}
-async function loadWeather(p,skipMaps=false){
- lastRefresh=Date.now();
- if(!skipMaps){
-  selectedDayIndex=-1;activeForecastData=null;$('dayDetails').hidden=true;
-  $('currentTemp').textContent='—°';$('currentDesc').textContent='Wird geladen …';$('currentIcon').textContent='⛅';$('feels').textContent='Gefühlt —°';
-  $('dayParts').innerHTML='';$('hourly').innerHTML='';$('chart').innerHTML='';
- }
- place=p;
- const id=++requestId;
- $('city').textContent=p.name+(p.country?', '+p.country:'');
- $('status').textContent='Aktualisiere Wetterdaten …';
- $('retryWeather').hidden=true;
- if(!skipMaps)updateMaps();
- try{
-  const d=await fetchForecast(p);
-  if(id!==requestId)return;
-  renderForecast(d);
-  saveForecast(p,d);
-  $('status').textContent='Wetterdaten frisch geladen · '+new Intl.DateTimeFormat('de-DE',{dateStyle:'short',timeStyle:'short'}).format(new Date());
- }catch(e){
-  if(id!==requestId)return;
-  const saved=cachedForecast(p);
-  const reason=e.status?'HTTP '+e.status:'Verbindung vorübergehend gestört';
-  if(saved){
-   renderForecast(saved.data);
-   const date=new Intl.DateTimeFormat('de-DE',{dateStyle:'short',timeStyle:'short'}).format(new Date(saved.saved));
-   $('status').textContent='⚠ Wetterdienst '+reason+' · Letzte gespeicherte Vorhersage vom '+date+' (nicht aktuell)';
-  }else{
-   $('status').textContent='⚠ Wetterdienst momentan nicht erreichbar ('+reason+'). Bitte erneut versuchen.';
-  }
-  $('retryWeather').hidden=false;
- }
-}
-$('retryWeather').addEventListener('click',()=>loadWeather(place,true));
+ for(let t=axMin;t<=axMax;t+=5){svg+=`<line x1="${left}" x2="${right}" y1="${Y(t)}" y2="${Y(t)}" stroke="#c4d2df" stroke-width="1" stroke-dasharray="3 5"/><text x="60" y="${Y(t)+4}" fill="#66798c" font-size="14" text-anchor="end">${t}°</text>`;}
+ for(const [arr,color] of [[hi,'#ef9c22'],[lo,'#318ed9']]){svg+=`<polyline points="${arr.map((v,i)=>X(i)+','+Y(v)).join(' ')}" fill="none" stroke="${color}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;for(let i=0;i<N;i++){svg+=`<circle cx="${X(i)}" cy="${Y(arr[i])}" r="4.3" fill="${color}"/><text x="${X(i)}" y="${Y(arr[i])+(color==='#318ed9'?18:-12)}" text-anchor="middle" font-size="13" font-weight="750" fill="${color==='#ef9c22'?'#915600':'#175a96'}">${Math.round(arr[i])}°</text>`;}}
+ $('chart').innerHTML=svg;}
+async function loadWeather(p,skipMaps=false){place=p;const id=++requestId;$('city').textContent=p.name+(p.country?', '+p.country:'');$('status').textContent='Aktualisiere Wetterdaten …';if(!skipMaps)updateMaps();
+ try{const u=new URL('https://api.open-meteo.com/v1/forecast');Object.entries({latitude:p.lat,longitude:p.lon,current:'temperature_2m,apparent_temperature,precipitation,weather_code,is_day',hourly:'temperature_2m,precipitation_probability,weather_code,is_day,precipitation',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum',timezone:'auto',forecast_days:10,_:Date.now()}).forEach(([k,v])=>u.searchParams.set(k,v));const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw Error('Wetterdienst nicht erreichbar ('+r.status+')');const d=await r.json();if(id!==requestId)return;const c=d.current;const [desc,icon]=detail(c.weather_code,Boolean(c.is_day),c.precipitation);$('currentIcon').textContent=icon;$('currentTemp').textContent=Math.round(c.temperature_2m)+'°';$('currentDesc').textContent=desc;$('feels').textContent='Gefühlt '+Math.round(c.apparent_temperature)+'°';const [rainIcon,intensity]=rainLevel(c.precipitation??0,c.weather_code);$('rainIcon').textContent=rainIcon;$('rainIntensity').textContent=intensity;$('rainDetail').textContent=fmtNum(c.precipitation??0,1)+' mm in der aktuellen Stunde · modellbasierter Wert';
+ const today=c.time.slice(0,10);$('dayParts').innerHTML=[['Vormittag','10:00'],['Nachmittag','15:00'],['Abend','20:00']].map(([label,time])=>{let i=d.hourly.time.indexOf(today+'T'+time);if(i<0)return`<div class="part"><strong>${label}</strong><span class="small muted">Keine Daten</span></div>`;const [des,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i]);return`<div class="part"><span class="small">${label}</span><span class="emoji">${ic}</span><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><span class="small muted">${des}</span></div>`}).join('');
+ let start=d.hourly.time.findIndex(t=>t>=c.time);start=Math.max(start,0);$('hourly').innerHTML=d.hourly.time.slice(start,start+24).map((t,j)=>{const i=start+j;const [_,ic]=detail(d.hourly.weather_code[i],Boolean(d.hourly.is_day[i]),d.hourly.precipitation?.[i]);return`<div class="hour"><div class="small muted">${j===0?'Jetzt':t.slice(11,16)}</div><div class="ico">${ic}</div><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><div class="small muted">☂ ${d.hourly.precipitation_probability[i]??0}%</div></div>`}).join('');renderChart(d);$('status').textContent='Wetterdaten frisch geladen · '+new Intl.DateTimeFormat('de-DE',{dateStyle:'short',timeStyle:'short'}).format(new Date());
+ }catch(e){if(id===requestId)$('status').textContent='Fehler: '+e.message+' · Bitte Internetverbindung prüfen.';}}
 const gkd='https://www.gkd.bayern.de/de/fluesse/wasserstand/kelheim/muenchen-himmelreichbruecke-16515005/messwerte';
 function setSpecial(index,html){const e=$('special-'+index);if(e)e.innerHTML=html}
 async function refreshEisbach(){const el=$('eisbach-reading');if(!el)return;try{const r=await fetch('./data/eisbach.json?_='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('Keine Messwertdatei');const d=await r.json();if(typeof d.water_level_cm!=='number'||!d.observed_at)throw Error('Kein aktueller Messwert');const age=(Date.now()-new Date(d.observed_at).getTime())/3600000;const label=d.observed_at_label||new Date(d.observed_at).toLocaleString('de-DE');el.innerHTML=`<b>${fmtNum(d.water_level_cm)} cm</b><small>Messung: ${label}${age>6?' · älter als 6 Stunden':''}</small>`;}catch{el.innerHTML=`<span class="muted">Messwert derzeit nicht abrufbar</span><small><a target="_blank" rel="noopener" href="${gkd}">GKD-Messstelle öffnen</a></small>`}}
@@ -529,7 +69,7 @@ async function loadSpecial(){setSpecial(0,`<strong>💧 Eisbach-Pegel</strong><d
  await Promise.all([{idx:1,lat:44.169,lon:9.612},{idx:2,lat:43.428,lon:-4.043}].map(async p=>{try{const d=await getJson(`https://marine-api.open-meteo.com/v1/marine?latitude=${p.lat}&longitude=${p.lon}&current=wave_height&cell_selection=sea&timezone=auto&_=${Date.now()}`);if(!Number.isFinite(d.current?.wave_height))throw Error();setSpecial(p.idx,`<strong>🌊 ${fmtNum(d.current.wave_height,1)} m</strong><small>Wellenhöhe · Modellprognose</small>`)}catch{setSpecial(p.idx,'<strong>🌊 —</strong><small>Wellenhöhe derzeit nicht verfügbar</small>')}}));
  try{const d=await getJson('https://api.open-meteo.com/v1/forecast?latitude=47.446&longitude=12.392&current=snow_depth&timezone=Europe%2FVienna');const ground=d.current?.snow_depth;const mountain=await getJson('https://api.open-meteo.com/v1/forecast?latitude=47.423732&longitude=12.364764&elevation=1712&current=snow_depth&timezone=Europe%2FVienna');const up=mountain.current?.snow_depth;setSpecial(3,`<strong>❄️ ${Number.isFinite(ground)?fmtNum(ground*100)+' cm':'—'} Tal</strong><small>🏔️ Hahnenkamm (1.712 m): ${Number.isFinite(up)?fmtNum(up*100)+' cm':'—'} · Modellwerte</small>`);}catch{setSpecial(3,'<strong>❄️ —</strong><small>Schneehöhen derzeit nicht verfügbar</small>')}
  // Real observational data from a nearby DWD station, not a modeled local wind value.
- try{const d=await getJson(`https://api.brightsky.dev/current_weather?lat=${windReference.lat}&lon=${windReference.lon}&units=dwd&_=${Date.now()}`);const w=d.weather||{},source=(d.sources||[]).find(s=>s.id===w.source_id)||(d.sources||[])[0];const wind=w.wind_speed_10??w.wind_speed;const direction=w.wind_direction_10??w.wind_direction;const compass16=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];const compassName=['Nord','Nordnordost','Nordost','Ostnordost','Ost','Ostsüdost','Südost','Südsüdost','Süd','Südsüdwest','Südwest','Westsüdwest','West','Westnordwest','Nordwest','Nordnordwest'];const dirIndex=Number.isFinite(direction)?Math.round(((direction%360)+360)%360/22.5)%16:null;const compass=dirIndex===null?'unbekannt':compass16[dirIndex]+' ('+compassName[dirIndex]+')';const ts=w.timestamp?new Date(w.timestamp):null;if(!Number.isFinite(wind))throw Error('Windmesswert fehlt');const age=ts?(Date.now()-ts.getTime())/3600000:null;setSpecial(4,`<strong>💨 ${fmtNum(wind,1)} km/h</strong><small>Windmessung · ${compass}${Number.isFinite(direction)?' · '+Math.round(direction)+'°':''}</small><small>Bezugspunkt: ${windReference.name} · Messstation: ${source?.station_name||'DWD-Station in der Umgebung'}${Number.isFinite(source?.distance)?' ('+fmtNum(source.distance/1000,1)+' km entfernt)':''}${ts?' · '+ts.toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):''}${age!==null&&age>2?' · ältere Messung':''}</small>`);}catch{setSpecial(4,'<strong>💨 —</strong><small>Bezugspunkt Windshausen / Erl · DWD-Stationsmessung derzeit nicht abrufbar · keine Modellwerte eingesetzt</small>')}
+ try{const d=await getJson('https://api.brightsky.dev/current_weather?lat=47.743&lon=12.164&units=dwd&_='+Date.now());const w=d.weather||{},source=(d.sources||[]).find(s=>s.id===w.source_id)||(d.sources||[])[0];const wind=w.wind_speed_10??w.wind_speed;const direction=w.wind_direction_10??w.wind_direction;const compass16=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];const compassName=['Nord','Nordnordost','Nordost','Ostnordost','Ost','Ostsüdost','Südost','Südsüdost','Süd','Südsüdwest','Südwest','Westsüdwest','West','Westnordwest','Nordwest','Nordnordwest'];const dirIndex=Number.isFinite(direction)?Math.round(((direction%360)+360)%360/22.5)%16:null;const compass=dirIndex===null?'unbekannt':compass16[dirIndex]+' ('+compassName[dirIndex]+')';const ts=w.timestamp?new Date(w.timestamp):null;if(!Number.isFinite(wind))throw Error('Windmesswert fehlt');const age=ts?(Date.now()-ts.getTime())/3600000:null;setSpecial(4,`<strong>💨 ${fmtNum(wind,1)} km/h</strong><small>Windmessung · ${compass}${Number.isFinite(direction)?' · '+Math.round(direction)+'°':''}</small><small>${source?.station_name||'DWD-Station in der Umgebung'}${ts?' · '+ts.toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):''}${age!==null&&age>2?' · ältere Messung':''}</small>`);}catch{setSpecial(4,'<strong>💨 —</strong><small>DWD-Stationsmessung derzeit nicht abrufbar · keine Modellwerte eingesetzt</small>')}
 }
 $('favorites').innerHTML=places.map((p,i)=>`<div class="favorite"><div><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`).join('');
 $('favorites').addEventListener('click',e=>{const b=e.target.closest('button[data-index]');if(b)loadWeather(places[Number(b.dataset.index)])});
@@ -545,17 +85,8 @@ input.addEventListener('keydown',e=>{if(suggestions.hidden)return;if(e.key==='Ar
 $('searchForm').addEventListener('submit',async e=>{e.preventDefault();const q=input.value.trim();if(!q)return;if(suggestionResults.length&&!suggestions.hidden){selectPlace(suggestionResults[Math.max(0,activeSuggestion)]);return}await searchPlaces(q);if(suggestionResults.length)selectPlace(suggestionResults[0]);else $('status').textContent='Kein Ort gefunden'});
 document.addEventListener('click',e=>{if(!e.target.closest('#searchForm'))hideSuggestions()});
 $('locationBtn').addEventListener('click',()=>{if(!navigator.geolocation)return alert('Standort nicht verfügbar');navigator.geolocation.getCurrentPosition(v=>loadWeather({name:'Mein Standort',country:'',lat:v.coords.latitude,lon:v.coords.longitude}),()=>alert('Standortfreigabe nicht möglich'))});
-function refreshAll(){loadWeather(place,true);loadSpecial();updateMaps()}
-loadWeather(place);loadSpecial();setInterval(()=>{if(!document.hidden){loadWeather(place,true);updateMaps()}},10*60*1000);setInterval(()=>{if(!document.hidden)loadSpecial()},15*60*1000);
-
-// Layout nach Drehen des Handys bzw. nach Aenderung der Displaybreite neu zeichnen.
-let chartResizeTimer;
-window.addEventListener('resize',()=>{
- clearTimeout(chartResizeTimer);
- chartResizeTimer=setTimeout(()=>{
-   if(activeForecastData)renderChart(activeForecastData);
- },150);
-});
+function refreshAll(){loadWeather(place,true);loadSpecial()}
+loadWeather(place);loadSpecial();setInterval(()=>{if(!document.hidden)loadWeather(place,true)},10*60*1000);setInterval(()=>{if(!document.hidden)loadSpecial()},15*60*1000);
 function onReturn(){if(document.hidden||Date.now()-lastRefresh<60000)return;lastRefresh=Date.now();refreshAll()}
 document.addEventListener('visibilitychange',onReturn);window.addEventListener('pageshow',e=>{if(e.persisted)onReturn()});
 </script>
