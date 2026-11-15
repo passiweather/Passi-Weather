@@ -79,6 +79,16 @@
  .wave-bar .day{font-size:10px}
  .wave-chart-note{text-align:left;font-size:10px;margin-top:2px}
 }
+
+/* Surfline Spotlinks direkt an den drei Wellencharts. */
+.wave-chart-heading{display:flex;flex-wrap:wrap;gap:5px 13px;align-items:center;justify-content:center;margin-bottom:10px}
+.wave-chart-heading .wave-chart-title{margin:0}
+.wave-chart-heading .surfline-forecast{font-size:12px;font-weight:750;color:#146da9;text-decoration:none;white-space:nowrap}
+.wave-chart-heading .surfline-forecast:hover{text-decoration:underline}
+@media(max-width:650px){
+ .wave-chart-heading{justify-content:flex-start;gap:3px 9px;margin-bottom:2px}
+ .wave-chart-heading .wave-chart-title,.wave-chart-heading .surfline-forecast{font-size:11px}
+}
 </style>
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
@@ -103,7 +113,7 @@
 'use strict';
 const $=id=>document.getElementById(id);
 const windReference={name:'Windshausen bei Erl',lat:47.70537,lon:12.16575};
-const places=[{name:'München',country:'Deutschland',lat:48.1372,lon:11.5756},{name:'Levanto',country:'Italien',lat:44.169,lon:9.612},{name:'Suances',country:'Spanien',lat:43.428,lon:-4.043},{name:'Kitzbühel',country:'Österreich',lat:47.446,lon:12.392},{name:'Nußdorf am Inn',country:'Deutschland',lat:47.743,lon:12.164}];
+const places=[{name:'München',country:'Deutschland',lat:48.1372,lon:11.5756},{name:'Levanto',country:'Italien',lat:44.169,lon:9.612},{name:'Suances',country:'Spanien',lat:43.428,lon:-4.043},{name:'Tonel',country:'Portugal',lat:37.00571,lon:-8.94790},{name:'Nußdorf am Inn',country:'Deutschland',lat:47.743,lon:12.164}];
 let place=places[0], lastRefresh=0, requestId=0, activeForecastData=null, selectedDayIndex=-1;
 // WMO-Wettercodes: 45/48 sind Nebel, 51-57 Nieselregen, 61+ Regen.
 // Ein Regen-Code allein beweist keinen tatsaechlichen Niederschlag am Boden.
@@ -576,7 +586,13 @@ function waveDayBars(hourly){
  }
  return [...map.entries()].slice(0,8).map(([day,max])=>({day,max}));
 }
-function renderWaveSpecial(current,hourly){
+const surflineForecasts={
+ 1:'https://www.surfline.com/surf-report/levanto/584204204e65fad6a7709b10',
+ 2:'https://www.surfline.com/surf-report/los-locos/5842041f4e65fad6a7708e71',
+ 3:'https://www.surfline.com/surf-report/tonel/5842041f4e65fad6a7708e80'
+};
+function surflineLink(index){return `<a class="surfline-forecast" href="${surflineForecasts[index]}" target="_blank" rel="noopener noreferrer" aria-label="Surfline Forecast öffnen">Surfline Forecast ↗</a>`}
+function renderWaveSpecial(current,hourly,index){
  const wave=current?.wave_height, period=current?.wave_period, direction=current?.wave_direction;
  const bars=waveDayBars(hourly);
  const maxVal=Math.max(2.5,...bars.map(b=>b.max).filter(Number.isFinite));
@@ -585,15 +601,14 @@ function renderWaveSpecial(current,hourly){
   const h=Math.max(16, Math.round((b.max/maxVal)*82));
   return `<div class="wave-bar"><div class="val">${fmtNum(b.max,1)}</div><div class="bar" style="--bar-height:${h}px;height:${h}px"></div><div class="day">${label}</div></div>`;
  }).join('');
- return `<div class="wave-special"><div class="wave-now"><div class="wave-big"><span class="sym">🌊</span><span>${Number.isFinite(wave)?fmtNum(wave,1)+' m':'—'}</span></div><div class="main">Wellenhöhe aktuell (Modell)</div><div class="sub">Periode ${Number.isFinite(period)?fmtNum(period,1)+' s':'—'} · ${waveDirLabel(direction)}</div></div><div class="wave-chart-box"><div class="wave-chart-title">🌊 Wellenhöhe · 8 Tage</div><div class="wave-bars">${barHtml||'<div class="muted small">Keine Tagesdaten</div>'}</div><div class="wave-chart-note">Tagesmaximum in m · Modellprognose</div></div></div>`
+ return `<div class="wave-special"><div class="wave-now"><div class="wave-big"><span class="sym">🌊</span><span>${Number.isFinite(wave)?fmtNum(wave,1)+' m':'—'}</span></div><div class="main">Current conditions</div><div class="sub">Periode ${Number.isFinite(period)?fmtNum(period,1)+' s':'—'} · ${waveDirLabel(direction)}</div></div><div class="wave-chart-box"><div class="wave-chart-heading"><div class="wave-chart-title">🌊 Wellenhöhe · 8 Tage</div>${surflineLink(index)}</div><div class="wave-bars">${barHtml||'<div class="muted small">Keine Tagesdaten</div>'}</div><div class="wave-chart-note">Tagesmaximum in m · Modellprognose</div></div></div>`
 }
 async function loadSpecial(){setSpecial(0,`<strong>💧 Eisbach-Pegel</strong><div id="eisbach-reading">Lade Messwert …</div>`);refreshEisbach();
- await Promise.all([{idx:1,lat:44.169,lon:9.612},{idx:2,lat:43.428,lon:-4.043}].map(async p=>{try{const d=await getJson(`https://marine-api.open-meteo.com/v1/marine?latitude=${p.lat}&longitude=${p.lon}&current=wave_height,wave_period,wave_direction&hourly=wave_height&forecast_days=8&cell_selection=sea&timezone=auto&_=${Date.now()}`);if(!Number.isFinite(d.current?.wave_height))throw Error();setSpecial(p.idx,renderWaveSpecial(d.current,d.hourly))}catch{setSpecial(p.idx,'<div class="wave-special"><div class="wave-now"><div class="wave-big"><span class="sym">🌊</span><span>—</span></div><div class="main">Wellenhöhe aktuell</div><div class="sub">Derzeit nicht verfügbar</div></div><div class="wave-chart-box"><div class="wave-chart-title">🌊 Wellenhöhe · 8 Tage</div><div class="muted small">Keine Modellprognose verfügbar</div></div></div>')}}));
- try{const d=await getJson('https://api.open-meteo.com/v1/forecast?latitude=47.446&longitude=12.392&current=snow_depth&timezone=Europe%2FVienna');const ground=d.current?.snow_depth;const mountain=await getJson('https://api.open-meteo.com/v1/forecast?latitude=47.423732&longitude=12.364764&elevation=1712&current=snow_depth&timezone=Europe%2FVienna');const up=mountain.current?.snow_depth;setSpecial(3,`<strong>❄️ ${Number.isFinite(ground)?fmtNum(ground*100)+' cm':'—'} Tal</strong><small>🏔️ Hahnenkamm (1.712 m): ${Number.isFinite(up)?fmtNum(up*100)+' cm':'—'} · Modellwerte</small>`);}catch{setSpecial(3,'<strong>❄️ —</strong><small>Schneehöhen derzeit nicht verfügbar</small>')}
+ await Promise.all([{idx:1,lat:44.169,lon:9.612},{idx:2,lat:43.428,lon:-4.043},{idx:3,lat:37.00571,lon:-8.94790}].map(async p=>{try{const d=await getJson(`https://marine-api.open-meteo.com/v1/marine?latitude=${p.lat}&longitude=${p.lon}&current=wave_height,wave_period,wave_direction&hourly=wave_height&forecast_days=8&cell_selection=sea&timezone=auto&_=${Date.now()}`);if(!Number.isFinite(d.current?.wave_height))throw Error();setSpecial(p.idx,renderWaveSpecial(d.current,d.hourly,p.idx))}catch{setSpecial(p.idx,'<div class="wave-special"><div class="wave-now"><div class="wave-big"><span class="sym">🌊</span><span>—</span></div><div class="main">Current conditions</div><div class="sub">Derzeit nicht verfügbar</div></div><div class="wave-chart-box"><div class="wave-chart-heading"><div class="wave-chart-title">🌊 Wellenhöhe · 8 Tage</div><a class="surfline-forecast" href="'+surflineForecasts[p.idx]+'" target="_blank" rel="noopener noreferrer">Surfline Forecast ↗</a></div><div class="muted small">Keine Modellprognose verfügbar</div></div></div>')}}));
  // Real observational data from a nearby DWD station, not a modeled local wind value.
  try{const d=await getJson(`https://api.brightsky.dev/current_weather?lat=${windReference.lat}&lon=${windReference.lon}&units=dwd&_=${Date.now()}`);const w=d.weather||{},source=(d.sources||[]).find(s=>s.id===w.source_id)||(d.sources||[])[0];const wind=w.wind_speed_10??w.wind_speed;const direction=w.wind_direction_10??w.wind_direction;const compass16=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];const compassName=['Nord','Nordnordost','Nordost','Ostnordost','Ost','Ostsüdost','Südost','Südsüdost','Süd','Südsüdwest','Südwest','Westsüdwest','West','Westnordwest','Nordwest','Nordnordwest'];const dirIndex=Number.isFinite(direction)?Math.round(((direction%360)+360)%360/22.5)%16:null;const compass=dirIndex===null?'unbekannt':compass16[dirIndex]+' ('+compassName[dirIndex]+')';const ts=w.timestamp?new Date(w.timestamp):null;if(!Number.isFinite(wind))throw Error('Windmesswert fehlt');const age=ts?(Date.now()-ts.getTime())/3600000:null;setSpecial(4,`<strong>💨 ${fmtNum(wind,1)} km/h</strong><small>Windmessung · ${compass}${Number.isFinite(direction)?' · '+Math.round(direction)+'°':''}</small><small>Bezugspunkt: ${windReference.name} · Messstation: ${source?.station_name||'DWD-Station in der Umgebung'}${Number.isFinite(source?.distance)?' ('+fmtNum(source.distance/1000,1)+' km entfernt)':''}${ts?' · '+ts.toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):''}${age!==null&&age>2?' · ältere Messung':''}</small>`);}catch{setSpecial(4,'<strong>💨 —</strong><small>Bezugspunkt Windshausen / Erl · DWD-Stationsmessung derzeit nicht abrufbar · keine Modellwerte eingesetzt</small>')}
 }
-$('favorites').innerHTML=places.map((p,i)=>i===1||i===2?`<div class="favorite wave-favorite"><div class="wave-place"><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`:`<div class="favorite"><div><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`).join('');
+$('favorites').innerHTML=places.map((p,i)=>i===1||i===2||i===3?`<div class="favorite wave-favorite"><div class="wave-place"><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`:`<div class="favorite"><div><button data-index="${i}">${p.name}</button><small>${p.country}</small></div><div class="value" id="special-${i}"><small>Lädt …</small></div></div>`).join('');
 $('favorites').addEventListener('click',e=>{const b=e.target.closest('button[data-index]');if(b)loadWeather(places[Number(b.dataset.index)])});
 let suggestionResults=[],searchTimer=null,searchController=null,activeSuggestion=-1;
 const input=$('searchInput'),suggestions=$('searchSuggestions');
