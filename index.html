@@ -228,6 +228,19 @@
  .levanto-favorite .levanto-webcam span{font-size:7px}
  .levanto-favorite .wave-chart-heading .surfline-forecast{font-size:9px}
 }
+
+/* SURFTOWN: eigene, mobilefreundliche Buchungskarte */
+.surftown-content{padding:16px 20px 18px}
+.surftown-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.surftown-date{font-size:14px;font-weight:750;color:#315975}
+.surftown-open{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:750;border-radius:12px;background:#eaf4ff;padding:9px 12px;white-space:nowrap}
+.surftown-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:15px}
+.surftown-session{min-width:0;padding:12px;border-radius:13px;border:1px solid #dfe9f2;background:#f7faff}
+.surftown-session strong{display:block;font-size:16px}
+.surftown-session small{display:block;color:var(--muted);font-size:12px;line-height:1.5}
+.surftown-unavailable{grid-column:1/-1;padding:14px;border-radius:13px;background:#f7faff;border:1px solid #dfe9f2;color:#63788f;font-size:13px}
+.surftown-disclaimer{font-size:12px;color:var(--muted);margin-top:11px}
+@media(max-width:650px){.surftown-content{padding:12px 14px 15px}.surftown-top{align-items:stretch}.surftown-list{grid-template-columns:1fr;gap:6px;margin-top:10px}.surftown-open{font-size:12px}.surftown-session{padding:8px 10px}.surftown-session strong{font-size:14px}}
 </style>
 </head><body>
 <header><div class="brand">☀️ Passis <span>Wetter</span></div><form id="searchForm" autocomplete="off"><div class="search-wrap"><input id="searchInput" placeholder="Stadt weltweit suchen …" aria-label="Ort suchen" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false" required><div id="searchSuggestions" class="suggestions" role="listbox" hidden></div></div><button type="submit">Suchen</button></form><button id="locationBtn" type="button">⌖ Standort</button></header>
@@ -244,6 +257,13 @@
     </div>
   </section>
   <section class="card full"><h2>📍 Meine Orte & Spezialwerte</h2><div class="favorites" id="favorites"></div></section>
+  <section class="card full" id="surftown-calendar"><h2>🏄 SURFTOWN Buchungskalender</h2>
+    <div class="surftown-content">
+      <div class="surftown-top"><div><div class="surftown-date" id="surftown-today">Heute</div><div class="muted small">Nächste 3 verfügbare Sessions</div></div><a class="surftown-open" href="https://booking.surftown.de/de/LessonPackage" target="_blank" rel="noopener noreferrer">Buchungskalender öffnen ↗</a></div>
+      <div class="surftown-list" id="surftown-sessions" aria-live="polite"><div class="surftown-unavailable">Live-Sessions sind noch nicht mit einer verlässlichen Datenquelle verbunden. Bitte prüfe die verfügbaren Termine im offiziellen Buchungskalender.</div></div>
+      <div class="surftown-disclaimer">Sessions hängen von Surflevel und Teilnehmerzahl ab. Es werden keine unbestätigten Termine angezeigt.</div>
+    </div>
+  </section>
   <section class="card"><h2>🌊 Wellenkarte</h2><iframe class="map" id="waves" loading="lazy" title="Meereswellenkarte"></iframe><div class="mapnote" style="padding:12px 18px">Wellenmodell · Mittelmeeransicht mit Zentrum bei Nizza – Italien und Spanien im Blick</div></section>
  </div>
 </main>
@@ -821,5 +841,37 @@ window.addEventListener('resize',()=>{
 });
 function onReturn(){if(document.hidden||Date.now()-lastRefresh<60000)return;lastRefresh=Date.now();refreshAll()}
 document.addEventListener('visibilitychange',onReturn);window.addEventListener('pageshow',e=>{if(e.persisted)onReturn()});
+
+// SURFTOWN: optionaler Datenfeed. Niemals erfundene Buchungszeiten darstellen.
+const surftownBookingUrl='https://booking.surftown.de/de/LessonPackage';
+function surftownLocalToday(){
+ const d=new Date();
+ $('surftown-today').textContent='Heute · '+new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(d);
+}
+function surftownNoData(){
+ $('surftown-sessions').innerHTML='<div class="surftown-unavailable">Die nächsten drei Buchungstermine können derzeit nicht automatisch abgerufen werden. Öffne den offiziellen SURFTOWN-Kalender, um die aktuellen Sessions für dein Surflevel zu sehen.</div>';
+}
+async function loadSurftownSessions(){
+ surftownLocalToday();
+ try{
+  const response=await fetch('./data/surftown-sessions.json?_='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw new Error('Kein Datenfeed');
+  const data=await response.json();
+  // Nur Daten eines separat angebundenen, zuverlässigen Datenfeeds ausgeben.
+  if(!Array.isArray(data.sessions))throw new Error('Keine Sessions');
+  const rows=data.sessions.filter(s=>s && typeof s.start==='string' && Number.isFinite(Date.parse(s.start)) && Date.parse(s.start)>Date.now() && typeof s.level==='string').sort((a,b)=>Date.parse(a.start)-Date.parse(b.start)).slice(0,3);
+  if(!rows.length){surftownNoData();return;}
+  const list=$('surftown-sessions');list.replaceChildren();
+  for(const s of rows){
+   const box=document.createElement('div');box.className='surftown-session';
+   const date=document.createElement('small');date.textContent=new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',weekday:'short',day:'2-digit',month:'2-digit'}).format(new Date(s.start));
+   const time=document.createElement('strong');time.textContent=new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',hour:'2-digit',minute:'2-digit'}).format(new Date(s.start))+' Uhr';
+   const level=document.createElement('small');level.textContent=s.level;
+   box.append(date,time,level);list.append(box);
+  }
+ }catch(e){surftownNoData();}
+}
+loadSurftownSessions();
+setInterval(()=>{if(!document.hidden)loadSurftownSessions()},15*60*1000);
 </script>
 </body></html>
