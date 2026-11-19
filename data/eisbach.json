@@ -1,9 +1,9 @@
 {
   "station": "München Himmelreichbrücke / Eisbach",
-  "water_level_cm": 136.0,
+  "water_level_cm": 135.0,
   "discharge_m3s": null,
-  "observed_at": "2026-11-19T22:45:00+01:00",
-  "observed_at_label": "19.11.2026 22:45",
+  "observed_at": "2026-11-19T23:45:00+01:00",
+  "observed_at_label": "19.11.2026 23:45",
   "source": "https://www.gkd.bayern.de/de/fluesse/wasserstand/kelheim/muenchen-himmelreichbruecke-16515005/messwerte",
-  "retrieved_at": "2026-11-19T21:53:46.211868+00:00"
+  "retrieved_at": "2026-11-19T22:51:52.323262+00:00"
 }
