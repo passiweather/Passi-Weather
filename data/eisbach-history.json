@@ -1,48 +1,8 @@
 {
   "station": "München Himmelreichbrücke / Eisbach",
   "source": "https://www.hnd.bayern.de/pegel/donau_bis_kelheim/muenchen-himmelreichbruecke-16515005/tabelle?days=7&methode=wasserstand&setdiskr=60",
-  "updated_at": "2026-11-27T04:59:56.509329+00:00",
+  "updated_at": "2026-11-27T14:59:36.786083+00:00",
   "values": [
-    {
-      "time": "2026-11-22T06:00:00+01:00",
-      "water_level_cm": 135.0
-    },
-    {
-      "time": "2026-11-22T07:00:00+01:00",
-      "water_level_cm": 135.0
-    },
-    {
-      "time": "2026-11-22T08:00:00+01:00",
-      "water_level_cm": 136.0
-    },
-    {
-      "time": "2026-11-22T09:00:00+01:00",
-      "water_level_cm": 135.0
-    },
-    {
-      "time": "2026-11-22T10:00:00+01:00",
-      "water_level_cm": 135.0
-    },
-    {
-      "time": "2026-11-22T11:00:00+01:00",
-      "water_level_cm": 135.0
-    },
-    {
-      "time": "2026-11-22T12:00:00+01:00",
-      "water_level_cm": 134.0
-    },
-    {
-      "time": "2026-11-22T13:00:00+01:00",
-      "water_level_cm": 133.0
-    },
-    {
-      "time": "2026-11-22T14:00:00+01:00",
-      "water_level_cm": 133.0
-    },
-    {
-      "time": "2026-11-22T15:00:00+01:00",
-      "water_level_cm": 133.0
-    },
     {
       "time": "2026-11-22T16:00:00+01:00",
       "water_level_cm": 133.0
@@ -482,6 +442,46 @@
     {
       "time": "2026-11-27T05:00:00+01:00",
       "water_level_cm": 137.0
+    },
+    {
+      "time": "2026-11-27T06:00:00+01:00",
+      "water_level_cm": 137.0
+    },
+    {
+      "time": "2026-11-27T07:00:00+01:00",
+      "water_level_cm": 138.0
+    },
+    {
+      "time": "2026-11-27T08:00:00+01:00",
+      "water_level_cm": 137.0
+    },
+    {
+      "time": "2026-11-27T09:00:00+01:00",
+      "water_level_cm": 136.0
+    },
+    {
+      "time": "2026-11-27T10:00:00+01:00",
+      "water_level_cm": 136.0
+    },
+    {
+      "time": "2026-11-27T11:00:00+01:00",
+      "water_level_cm": 140.0
+    },
+    {
+      "time": "2026-11-27T12:00:00+01:00",
+      "water_level_cm": 140.0
+    },
+    {
+      "time": "2026-11-27T13:00:00+01:00",
+      "water_level_cm": 135.0
+    },
+    {
+      "time": "2026-11-27T14:00:00+01:00",
+      "water_level_cm": 139.0
+    },
+    {
+      "time": "2026-11-27T15:00:00+01:00",
+      "water_level_cm": 138.0
     }
   ]
 }
